@@ -8,90 +8,140 @@
     </svg>`,
     chart: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
       <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+    </svg>`,
+    dashboard: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+    </svg>`,
+    routes: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M3 3h18v2H3V3zm0 16h18v2H3v-2zm0-8h18v2H3v-2z"/>
+    </svg>`,
+    analytics: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1.57 16H6.57L12 13.4l2.19 2.19 2.44-2.44L19 15.73V19zm0-4.76l-2.37-2.37-2.44 2.44L12 12.12 6.57 17H5V5h14v9.24z"/>
+    </svg>`,
+    settings: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
     </svg>`
   };
+
+  let isNavExpanded = true;
 </script>
 
-<div class="dashboard">
-  <h1 class="dashboard-title">Logistics Dashboard</h1>
+<div class="layout">
+  <nav class:expanded={isNavExpanded}>
+    <div class="nav-header">
+      <button class="toggle-nav" on:click={() => isNavExpanded = !isNavExpanded}>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+        </svg>
+      </button>
+      {#if isNavExpanded}
+        <h1>Waybill</h1>
+      {/if}
+    </div>
 
-  <!-- Summary Cards -->
-  <div class="summary-cards">
-    <div class="card">
-      <div class="card-header">
-        <span class="icon">
-          {@html icons.truck}
-        </span>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">
+        <span class="nav-icon">{@html icons.dashboard}</span>
+        {#if isNavExpanded}<span>Dashboard</span>{/if}
+      </a>
+      <a href="/routes" class="nav-link">
+        <span class="nav-icon">{@html icons.routes}</span>
+        {#if isNavExpanded}<span>Routes</span>{/if}
+      </a>
+      <a href="/analytics" class="nav-link">
+        <span class="nav-icon">{@html icons.analytics}</span>
+        {#if isNavExpanded}<span>Analytics</span>{/if}
+      </a>
+      <a href="/settings" class="nav-link">
+        <span class="nav-icon">{@html icons.settings}</span>
+        {#if isNavExpanded}<span>Settings</span>{/if}
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="dashboard">
+      <h1 class="dashboard-title">Logistics Dashboard</h1>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="card">
+          <div class="card-header">
+            <span class="icon">
+              {@html icons.truck}
+            </span>
+            <h2>Active Trips</h2>
+          </div>
+          <p class="number">24</p>
+          <p class="subtitle">8 arriving today</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="icon">
+              {@html icons.people}
+            </span>
+            <h2>Drivers on Duty</h2>
+          </div>
+          <p class="number">18</p>
+          <p class="subtitle">85% of fleet active</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="icon">
+              {@html icons.chart}
+            </span>
+            <h2>Deliveries Today</h2>
+          </div>
+          <p class="number">42</p>
+          <p class="subtitle">93% on time</p>
+        </div>
+      </div>
+
+      <!-- Active Trips -->
+      <div class="card section">
         <h2>Active Trips</h2>
-      </div>
-      <p class="number">24</p>
-      <p class="subtitle">8 arriving today</p>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="icon">
-          {@html icons.people}
-        </span>
-        <h2>Drivers on Duty</h2>
-      </div>
-      <p class="number">18</p>
-      <p class="subtitle">85% of fleet active</p>
-    </div>
-
-    <div class="card">
-      <div class="card-header">
-        <span class="icon">
-          {@html icons.chart}
-        </span>
-        <h2>Deliveries Today</h2>
-      </div>
-      <p class="number">42</p>
-      <p class="subtitle">93% on time</p>
-    </div>
-  </div>
-
-  <!-- Active Trips -->
-  <div class="card section">
-    <h2>Active Trips</h2>
-    <div class="trips">
-      {#each Array(3) as _, i}
-        <div class="trip-item">
-          <div class="avatar">JD</div>
-          <div class="trip-info">
-            <p class="route">Chicago, IL → Detroit, MI</p>
-            <p class="details">John Doe • Truck #1234</p>
-          </div>
-          <div class="status">
-            <span class="chip success">On Schedule</span>
-            <div class="eta-container">
-              <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
-              </svg>
-              <span class="eta-text">2:30 PM</span>
+        <div class="trips">
+          {#each Array(3) as _, i}
+            <div class="trip-item">
+              <div class="avatar">JD</div>
+              <div class="trip-info">
+                <p class="route">Chicago, IL → Detroit, MI</p>
+                <p class="details">John Doe • Truck #1234</p>
+              </div>
+              <div class="status">
+                <span class="chip success">On Schedule</span>
+                <div class="eta-container">
+                  <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+                  </svg>
+                  <span class="eta-text">2:30 PM</span>
+                </div>
+              </div>
             </div>
-          </div>
+          {/each}
         </div>
-      {/each}
-    </div>
-  </div>
+      </div>
 
-  <!-- Recent Deliveries -->
-  <div class="card section">
-    <h2>Recent Deliveries</h2>
-    <div class="deliveries">
-      {#each Array(3) as _, i}
-        <div class="delivery-item">
-          <div class="avatar">MS</div>
-          <div class="delivery-info">
-            <p class="route">New York, NY → Boston, MA</p>
-            <p class="details">Mike Smith • Completed at 10:45 AM</p>
-          </div>
-          <span class="chip info">Delivered</span>
+      <!-- Recent Deliveries -->
+      <div class="card section">
+        <h2>Recent Deliveries</h2>
+        <div class="deliveries">
+          {#each Array(3) as _, i}
+            <div class="delivery-item">
+              <div class="avatar">MS</div>
+              <div class="delivery-info">
+                <p class="route">New York, NY → Boston, MA</p>
+                <p class="details">Mike Smith • Completed at 10:45 AM</p>
+              </div>
+              <span class="chip info">Delivered</span>
+            </div>
+          {/each}
         </div>
-      {/each}
+      </div>
     </div>
-  </div>
+  </main>
 </div>
 
 <style>
@@ -451,6 +501,134 @@
     .eta-container {
       font-size: 0.85rem;
       padding: 0.3rem 0.6rem;
+    }
+  }
+
+  .layout {
+    display: flex;
+    min-height: 100vh;
+  }
+
+  nav {
+    background: white;
+    width: 80px;
+    transition: width 0.3s ease;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  nav.expanded {
+    width: 240px;
+  }
+
+  .nav-header {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .nav-header h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    white-space: nowrap;
+  }
+
+  .toggle-nav {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .toggle-nav:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+  }
+
+  .nav-links {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    color: #64748b;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+  }
+
+  .nav-link.active {
+    background: #818cf8;
+    color: white;
+  }
+
+  .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  main {
+    flex: 1;
+    background: #f0f4ff;
+    min-width: 0;
+  }
+
+  @media (max-width: 768px) {
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      border-right: none;
+      border-top: 1px solid #e2e8f0;
+      z-index: 100;
+    }
+
+    nav.expanded {
+      width: 100%;
+    }
+
+    .nav-header {
+      display: none;
+    }
+
+    .nav-links {
+      flex-direction: row;
+      justify-content: space-around;
+      padding: 0.5rem;
+    }
+
+    .nav-link {
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    main {
+      padding-bottom: 80px;
     }
   }
 </style>
