@@ -3,6 +3,8 @@
   import Card from '$lib/components/Card.svelte';
   import MetricCard from '$lib/components/MetricCard.svelte';
   import { icons } from '$lib/icons';
+  import PieChart from '$lib/components/PieChart.svelte';
+  import LineChart from '$lib/components/LineChart.svelte';
   
   let isNavExpanded = true;
 
@@ -40,6 +42,34 @@
     { from: "New York", to: "Boston", trips: 132, revenue: "$42,900" },
     { from: "Los Angeles", to: "San Francisco", trips: 128, revenue: "$51,200" }
   ];
+
+  const costData = [
+    { label: 'Fuel', value: 42, color: '#10b981' },
+    { label: 'Maintenance', value: 28, color: '#ef4444' },
+    { label: 'Labor', value: 22, color: '#8b5cf6' },
+    { label: 'Other', value: 8, color: '#64748b' }
+  ];
+
+  const performanceData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        label: 'Delivery Times',
+        data: [24, 28, 26, 32, 29, 24, 25],
+        color: '#6366f1'
+      },
+      {
+        label: 'Fuel Consumption',
+        data: [18, 22, 19, 24, 21, 18, 19],
+        color: '#10b981'
+      },
+      {
+        label: 'Operating Costs',
+        data: [12, 15, 13, 17, 14, 12, 13],
+        color: '#f59e0b'
+      }
+    ]
+  };
 </script>
 
 <Layout {isNavExpanded}>
@@ -84,9 +114,7 @@
                   <option>Last Quarter</option>
                 </select>
               </div>
-              <div class="chart-placeholder">
-                <p>Line chart showing key performance metrics over time</p>
-              </div>
+              <LineChart data={performanceData} />
             </div>
           </Card>
 
@@ -114,26 +142,36 @@
         <Card title="Cost Breakdown" icon={icons.analytics}>
           <div class="cost-analysis">
             <div class="cost-chart">
-              <div class="chart-placeholder">
-                <p>Pie chart showing cost distribution</p>
-              </div>
+              <PieChart data={costData} />
             </div>
             <div class="cost-legend">
               <div class="legend-item">
                 <span class="dot fuel"></span>
-                <span>Fuel (42%)</span>
+                <span class="legend-text">
+                  <span class="legend-label">Fuel</span>
+                  <span class="legend-value">42%</span>
+                </span>
               </div>
               <div class="legend-item">
                 <span class="dot maintenance"></span>
-                <span>Maintenance (28%)</span>
+                <span class="legend-text">
+                  <span class="legend-label">Maintenance</span>
+                  <span class="legend-value">28%</span>
+                </span>
               </div>
               <div class="legend-item">
                 <span class="dot labor"></span>
-                <span>Labor (22%)</span>
+                <span class="legend-text">
+                  <span class="legend-label">Labor</span>
+                  <span class="legend-value">22%</span>
+                </span>
               </div>
               <div class="legend-item">
                 <span class="dot other"></span>
-                <span>Other (8%)</span>
+                <span class="legend-text">
+                  <span class="legend-label">Other</span>
+                  <span class="legend-value">8%</span>
+                </span>
               </div>
             </div>
           </div>
@@ -314,14 +352,50 @@
   .cost-analysis {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    align-items: center;
+    gap: 3rem;
+    align-items: start;
+    padding: 1rem;
+  }
+
+  .cost-chart {
+    min-height: 300px;
   }
 
   .cost-legend {
     display: flex;
     flex-direction: column;
+    gap: 1.25rem;
+    padding: 1rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
     gap: 1rem;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
+
+  .legend-label {
+    font-weight: 500;
+  }
+
+  .legend-value {
+    color: #64748b;
   }
 
   .table-header .center {
@@ -355,6 +429,17 @@
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
+
+    .cost-analysis {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .cost-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
   }
 
   @media (max-width: 480px) {
@@ -372,6 +457,10 @@
     }
 
     .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .cost-legend {
       grid-template-columns: 1fr;
     }
   }

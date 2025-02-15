@@ -39,6 +39,7 @@
 		"@material-design-icons/svg": "^0.14.15",
 		"@mui/icons-material": "^6.4.4",
 		"@mui/material": "^6.4.4",
-		"@sveltejs/svelte-virtual-list": "^3.0.1"
+		"@sveltejs/svelte-virtual-list": "^3.0.1",
+		"chart.js": "^4.4.7"
 	}
 }
