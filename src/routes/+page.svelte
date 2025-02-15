@@ -143,6 +143,9 @@
     max-width: 1400px;
     margin: 0 auto;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
   }
 
   .dashboard-title {
@@ -333,7 +336,7 @@
   }
 
   .section {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   .section:last-child {
@@ -407,6 +410,7 @@
   @media (max-width: 768px) {
     .dashboard {
       padding: 1rem;
+      gap: 1rem;
     }
 
     .dashboard-title {
