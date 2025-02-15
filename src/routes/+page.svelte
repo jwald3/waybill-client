@@ -1,5 +1,15 @@
 <script lang="ts">
-  // Remove the Card import since we're not using it
+  const icons = {
+    truck: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+      <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+    </svg>`,
+    people: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+    </svg>`,
+    chart: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+      <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>
+    </svg>`
+  };
 </script>
 
 <div class="dashboard">
@@ -9,7 +19,9 @@
   <div class="summary-cards">
     <div class="card">
       <div class="card-header">
-        <span class="icon">🚚</span>
+        <span class="icon">
+          {@html icons.truck}
+        </span>
         <h2>Active Trips</h2>
       </div>
       <p class="number">24</p>
@@ -18,7 +30,9 @@
 
     <div class="card">
       <div class="card-header">
-        <span class="icon">👤</span>
+        <span class="icon">
+          {@html icons.people}
+        </span>
         <h2>Drivers on Duty</h2>
       </div>
       <p class="number">18</p>
@@ -27,7 +41,9 @@
 
     <div class="card">
       <div class="card-header">
-        <span class="icon">📈</span>
+        <span class="icon">
+          {@html icons.chart}
+        </span>
         <h2>Deliveries Today</h2>
       </div>
       <p class="number">42</p>
@@ -75,9 +91,53 @@
 
 <style>
   :global(body) {
-    background: #f0f4ff;
-    background: linear-gradient(135deg, #f0f4ff 0%, #e0e7ff 100%);
+    background-color: #f0f4ff;
+    background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M96 36h-6l-6 6v6h6l6-6zM84 36H60v12h24zM56 36h-8v12h8zM40 36h-4v12h4zM96 52h-6l-6 6v6h6l6-6zM84 52H60v12h24zM56 52h-8v12h8zM40 52h-4v12h4z'/%3E%3Cpath d='M142 64h4v4h-4zM134 64h4v4h-4zM126 64h4v4h-4zM118 64h4v4h-4z'/%3E%3Cpath d='M96 84v-6l-6-6h-6v6l6 6zM84 84H60V72h24zM56 84h-8V72h8zM40 84h-4V72h4z'/%3E%3Cpath d='M142 96h4v4h-4zM134 96h4v4h-4zM126 96h4v4h-4zM118 96h4v4h-4z'/%3E%3Cpath d='M24 120v6l6 6h6v-6l-6-6zM60 120v12H36v-12zM88 120v12H64v-12zM104 120v12h-12v-12z'/%3E%3C/g%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.02'%3E%3Cpath d='M60 0l30 30-30 30L30 30zM0 60l30 30-30 30zM120 60l-30 30 30 30z'/%3E%3C/g%3E%3C/svg%3E");
+    background-position: center;
+    position: relative;
     color: #1e293b;
+  }
+
+  /* Add a subtle gradient overlay */
+  .dashboard::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at top right, 
+                rgba(99, 102, 241, 0.08) 0%, 
+                transparent 50%),
+              radial-gradient(circle at bottom left, 
+                rgba(244, 63, 94, 0.08) 0%, 
+                transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Add floating logistics icons */
+  .dashboard::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.02'%3E%3Cpath d='M50 0l10 10H40l10-10zm0 100l10-10H40l10 10zM0 50l10 10V40L0 50zm100 0l-10 10V40l10 10zM40 40h20v20H40z'/%3E%3C/g%3E%3C/svg%3E");
+    animation: float 60s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes float {
+    from {
+      transform: translateY(0) rotate(0deg);
+    }
+    to {
+      transform: translateY(-100%) rotate(360deg);
+    }
   }
 
   .dashboard {
@@ -159,7 +219,9 @@
   }
 
   .icon {
-    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #6366f1, #818cf8);
     color: white;
     padding: 1rem;
@@ -188,19 +250,48 @@
   .trip-item, .delivery-item {
     display: flex;
     align-items: center;
-    padding: 1.5rem;
+    padding: 1.25rem 1.5rem;
     border-bottom: 1px solid #e2e8f0;
     transition: all 0.2s ease;
+    gap: 1rem;
+  }
+
+  .trip-item:last-child, .delivery-item:last-child {
+    border-bottom: none;
   }
 
   .trip-item:hover, .delivery-item:hover {
     background: rgba(99, 102, 241, 0.03);
-    transform: translateX(8px);
-    border-radius: 12px;
+    transform: translateX(4px);
+  }
+
+  .trip-info, .delivery-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .route {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: max-content;
   }
 
   .avatar {
-    width: 50px;
+    min-width: 50px;
     height: 50px;
     background: linear-gradient(135deg, #6366f1, #818cf8);
     color: white;
@@ -213,22 +304,6 @@
     font-size: 1.1rem;
     box-shadow: 0 6px 12px rgba(99, 102, 241, 0.2);
     transform: rotate(-3deg);
-  }
-
-  .route {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #1e293b;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .route::after {
-    content: '→';
-    color: #6366f1;
-    font-weight: 700;
   }
 
   .details {
@@ -245,6 +320,7 @@
     letter-spacing: 0.5px;
     text-transform: uppercase;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
   }
 
   .chip.success {
@@ -255,6 +331,14 @@
   .chip.info {
     background: linear-gradient(135deg, #4338ca, #6366f1);
     color: white;
+  }
+
+  .section {
+    margin-bottom: 2rem;
+  }
+
+  .section:last-child {
+    margin-bottom: 0;
   }
 
   .section h2 {
@@ -276,10 +360,10 @@
     transform: rotate(-5deg);
   }
 
-  /* Scrollbar styling */
   .trips, .deliveries {
     max-height: 480px;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .trips::-webkit-scrollbar, .deliveries::-webkit-scrollbar {
@@ -311,6 +395,30 @@
 
     .number {
       font-size: 2.5rem;
+    }
+
+    .trip-item, .delivery-item {
+      padding: 1rem;
+      gap: 0.75rem;
+    }
+
+    .route {
+      font-size: 1rem;
+    }
+
+    .details {
+      font-size: 0.9rem;
+    }
+
+    .chip {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .avatar {
+      min-width: 40px;
+      height: 40px;
+      font-size: 1rem;
     }
   }
 </style>
