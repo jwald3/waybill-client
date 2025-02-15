@@ -314,9 +314,10 @@
 
   .main-column {
     display: grid;
-    grid-template-rows: 1.2fr 1fr;  /* Performance trends slightly larger than cost breakdown */
+    grid-template-rows: 1.5fr 1fr;  /* Increased ratio for performance trends */
     gap: 1.5rem;
     height: 100%;
+    min-height: 800px;  /* Ensure minimum height for better visualization */
   }
 
   .side-column {
@@ -327,10 +328,11 @@
   }
 
   .chart-container {
-    height: 100%;
-    padding: 1rem;
+    flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 0; /* Important for flex child scrolling */
+    padding: 1.5rem;
   }
 
   .cost-analysis {
@@ -351,10 +353,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
     background: #f8fafc;
     border-radius: 8px;
+    margin-bottom: 1rem;
+    flex-shrink: 0;
   }
 
   .chart-legend {
@@ -581,32 +584,19 @@
     font-size: 0.875rem;
   }
 
+  /* For the LineChart component wrapper */
+  :global(.chart-container > :global(.chart-wrapper)) {
+    flex: 1;
+    min-height: 0;
+  }
+
   @media (max-width: 1400px) {
     .main-content {
       grid-template-columns: 1fr;
     }
 
     .main-column {
-      grid-template-rows: auto;
-    }
-
-    .chart-container {
-      height: 400px;
-    }
-
-    .cost-analysis {
-      height: 350px;
-    }
-
-    .side-column {
-      grid-template-rows: auto;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    }
-
-    .routes-table,
-    .drivers-list,
-    .alerts-list {
-      max-height: 300px;
+      grid-template-rows: minmax(500px, auto) auto;
     }
   }
 
@@ -620,7 +610,7 @@
     }
 
     .chart-container {
-      height: 300px;
+      min-height: 400px;
     }
 
     .cost-analysis {

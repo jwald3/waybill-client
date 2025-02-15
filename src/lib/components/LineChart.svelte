@@ -46,12 +46,27 @@
               beginAtZero: true,
               grid: {
                 color: '#e2e8f0'
+              },
+              ticks: {
+                padding: 10,
+                maxTicksLimit: 6
               }
             },
             x: {
               grid: {
                 display: false
+              },
+              ticks: {
+                padding: 10
               }
+            }
+          },
+          layout: {
+            padding: {
+              top: 10,
+              right: 10,
+              bottom: 10,
+              left: 10
             }
           }
         }
@@ -69,6 +84,7 @@
 <style>
   .chart-wrapper {
     width: 100%;
-    height: 300px;
+    height: 100%;
+    min-height: 300px;
   }
 </style> 

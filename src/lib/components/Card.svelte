@@ -20,6 +20,9 @@
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .card-header {
@@ -27,6 +30,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1.5rem 1.5rem 0;
+    flex-shrink: 0;
   }
 
   .icon-wrapper {
@@ -52,7 +56,10 @@
   }
 
   .card-content {
-    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
 
   @media (max-width: 768px) {
