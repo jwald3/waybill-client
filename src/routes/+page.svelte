@@ -64,7 +64,12 @@
           </div>
           <div class="status">
             <span class="chip success">On Schedule</span>
-            <p class="eta">ETA: 2:30 PM</p>
+            <div class="eta-container">
+              <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
+                <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+              </svg>
+              <span class="eta-text">2:30 PM</span>
+            </div>
           </div>
         </div>
       {/each}
@@ -288,6 +293,7 @@
     flex-direction: column;
     align-items: flex-end;
     min-width: max-content;
+    gap: 0.5rem;
   }
 
   .avatar {
@@ -384,6 +390,27 @@
     background: #94a3b8;
   }
 
+  .eta-container {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: #f8fafc;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .clock-icon {
+    color: #6366f1;
+  }
+
+  .eta-text {
+    letter-spacing: 0.5px;
+  }
+
   @media (max-width: 768px) {
     .dashboard {
       padding: 1rem;
@@ -419,6 +446,11 @@
       min-width: 40px;
       height: 40px;
       font-size: 1rem;
+    }
+
+    .eta-container {
+      font-size: 0.85rem;
+      padding: 0.3rem 0.6rem;
     }
   }
 </style>
