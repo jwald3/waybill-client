@@ -1,6 +1,9 @@
 <script lang="ts">
 	import '../app.css';
+	import { theme } from '$lib/stores/theme';
 	let { children } = $props();
 </script>
 
-{@render children()}
+<div data-theme={$theme}>
+	{@render children()}
+</div>

@@ -2,7 +2,21 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  import { theme, type Theme } from '$lib/stores/theme';
+  
   let isNavExpanded = true;
+  
+  const themes: { value: Theme; label: string; }[] = [
+    { value: 'indigo', label: 'Indigo (Default)' },
+    { value: 'emerald', label: 'Emerald' },
+    { value: 'rose', label: 'Rose' },
+    { value: 'amber', label: 'Amber' }
+  ];
+
+  function handleThemeChange(event: Event) {
+    const select = event.target as HTMLSelectElement;
+    theme.set(select.value as Theme);
+  }
 </script>
 
 <Layout {isNavExpanded}>
@@ -55,6 +69,22 @@
             </div>
             <button class="edit-button">Configure</button>
           </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Color Theme</h3>
+              <p>Choose your preferred color scheme</p>
+            </div>
+            <select 
+              class="theme-select" 
+              value={$theme} 
+              on:change={handleThemeChange}
+            >
+              {#each themes as theme}
+                <option value={theme.value}>{theme.label}</option>
+              {/each}
+            </select>
+          </div>
         </div>
       </Card>
     </div>
@@ -84,7 +114,7 @@
     left: 0;
     width: 100px;
     height: 6px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     border-radius: 3px;
   }
 
@@ -131,16 +161,49 @@
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
-    color: #6366f1;
+    color: var(--theme-color);
     font-weight: 500;
     transition: all 0.2s ease;
     cursor: pointer;
   }
 
   .edit-button:hover {
-    background: #6366f1;
-    border-color: #6366f1;
-    color: white;
+    background: var(--theme-color);
+    border-color: var(--theme-color);
+  }
+
+  .theme-select {
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: var(--theme-color);
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .theme-select:hover {
+    border-color: var(--theme-color);
+  }
+
+  :global([data-theme='indigo']) {
+    --theme-color: #6366f1;
+    --theme-gradient: linear-gradient(90deg, #6366f1, #818cf8);
+  }
+
+  :global([data-theme='emerald']) {
+    --theme-color: #10b981;
+    --theme-gradient: linear-gradient(90deg, #10b981, #34d399);
+  }
+
+  :global([data-theme='rose']) {
+    --theme-color: #f43f5e;
+    --theme-gradient: linear-gradient(90deg, #f43f5e, #fb7185);
+  }
+
+  :global([data-theme='amber']) {
+    --theme-color: #f59e0b;
+    --theme-gradient: linear-gradient(90deg, #f59e0b, #fbbf24);
   }
 
   @media (max-width: 768px) {

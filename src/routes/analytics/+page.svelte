@@ -80,7 +80,7 @@
     left: 0;
     width: 100px;
     height: 6px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     border-radius: 3px;
   }
 
@@ -100,7 +100,7 @@
 
   .chart-placeholder {
     background: #f8fafc;
-    border: 2px dashed #e2e8f0;
+    border: 2px dashed color-mix(in srgb, var(--theme-color) 20%, transparent);
     border-radius: 12px;
     padding: 3rem;
     display: flex;
@@ -108,6 +108,18 @@
     justify-content: center;
     color: #64748b;
     font-style: italic;
+  }
+
+  .metric-value {
+    color: var(--theme-color);
+  }
+
+  .metric-trend.positive {
+    color: #10b981;
+  }
+
+  .metric-trend.negative {
+    color: #ef4444;
   }
 
   @media (max-width: 768px) {

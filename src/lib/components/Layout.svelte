@@ -49,17 +49,14 @@
   }
 
   nav {
+    width: 280px;
     background: white;
-    width: 80px;
-    transition: width 0.3s ease;
     border-right: 1px solid #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    transition: width 0.3s ease;
   }
 
   nav.expanded {
-    width: 240px;
+    width: 280px;
   }
 
   .nav-header {
@@ -117,8 +114,8 @@
   }
 
   .nav-link.active {
-    background: #818cf8;
-    color: white;
+    background: color-mix(in srgb, var(--theme-color) 15%, transparent);
+    color: var(--theme-color);
   }
 
   .nav-icon {
@@ -129,8 +126,7 @@
 
   main {
     flex: 1;
-    background: #f0f4ff;
-    min-width: 0;
+    background: #f8fafc;
   }
 
   @media (max-width: 768px) {
@@ -169,5 +165,15 @@
     main {
       padding-bottom: 80px;
     }
+  }
+
+  /* Add theme styles for active navigation items */
+  :global(.nav-item.active) {
+    background: color-mix(in srgb, var(--theme-color) 15%, transparent);
+    color: var(--theme-color);
+  }
+
+  :global(.nav-item:hover) {
+    background: color-mix(in srgb, var(--theme-color) 10%, transparent);
   }
 </style> 

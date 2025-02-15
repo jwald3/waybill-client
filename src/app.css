@@ -1,1 +1,61 @@
 @import 'tailwindcss';
+
+/* Add to your existing app.css */
+:root {
+  /* Default theme (will be overridden by data-theme attributes) */
+  --theme-color: #6366f1;
+  --theme-gradient: linear-gradient(90deg, #6366f1, #818cf8);
+}
+
+/* Common themed elements */
+.themed-text {
+  color: var(--theme-color);
+}
+
+.themed-bg {
+  background-color: var(--theme-color);
+}
+
+.themed-border {
+  border-color: var(--theme-color);
+}
+
+.themed-gradient {
+  background: var(--theme-gradient);
+}
+
+/* Button styles */
+.primary-button {
+  background: var(--theme-color);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover {
+  background: color-mix(in srgb, var(--theme-color) 90%, black);
+}
+
+.secondary-button {
+  background: color-mix(in srgb, var(--theme-color) 15%, transparent);
+  color: var(--theme-color);
+}
+
+.secondary-button:hover {
+  background: color-mix(in srgb, var(--theme-color) 25%, transparent);
+}
+
+/* Links */
+a.themed-link {
+  color: var(--theme-color);
+  text-decoration: none;
+}
+
+a.themed-link:hover {
+  text-decoration: underline;
+}
+
+/* Focus states */
+.themed-focus:focus-visible {
+  outline: 2px solid var(--theme-color);
+  outline-offset: 2px;
+}

@@ -90,7 +90,7 @@
 <style>
   :global(body) {
     background-color: #f0f4ff;
-    background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M96 36h-6l-6 6v6h6l6-6zM84 36H60v12h24zM56 36h-8v12h8zM40 36h-4v12h4zM96 52h-6l-6 6v6h6l6-6zM84 52H60v12h24zM56 52h-8v12h8zM40 52h-4v12h4z'/%3E%3Cpath d='M142 64h4v4h-4zM134 64h4v4h-4zM126 64h4v4h-4zM118 64h4v4h-4z'/%3E%3Cpath d='M96 84v-6l-6-6h-6v6l6 6zM84 84H60V72h24zM56 84h-8V72h8zM40 84h-4V72h4z'/%3E%3Cpath d='M142 96h4v4h-4zM134 96h4v4h-4zM126 96h4v4h-4zM118 96h4v4h-4z'/%3E%3Cpath d='M24 120v6l6 6h6v-6l-6-6zM60 120v12H36v-12zM88 120v12H64v-12zM104 120v12h-12v-12z'/%3E%3C/g%3E%3C/svg%3E"),
+    background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='var(--theme-color)' fill-opacity='0.03'%3E%3Cpath d='M96 36h-6l-6 6v6h6l6-6zM84 36H60v12h24zM56 36h-8v12h8zM40 36h-4v12h4zM96 52h-6l-6 6v6h6l6-6zM84 52H60v12h24zM56 52h-8v12h8zM40 52h-4v12h4z'/%3E%3Cpath d='M142 64h4v4h-4zM134 64h4v4h-4zM126 64h4v4h-4zM118 64h4v4h-4z'/%3E%3Cpath d='M96 84v-6l-6-6h-6v6l6 6zM84 84H60V72h24zM56 84h-8V72h8zM40 84h-4V72h4z'/%3E%3Cpath d='M142 96h4v4h-4zM134 96h4v4h-4zM126 96h4v4h-4zM118 96h4v4h-4z'/%3E%3Cpath d='M24 120v6l6 6h6v-6l-6-6zM60 120v12H36v-12zM88 120v12H64v-12zM104 120v12h-12v-12z'/%3E%3C/g%3E%3C/svg%3E"),
       url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.02'%3E%3Cpath d='M60 0l30 30-30 30L30 30zM0 60l30 30-30 30zM120 60l-30 30 30 30z'/%3E%3C/g%3E%3C/svg%3E");
     background-position: center;
     position: relative;
@@ -106,10 +106,10 @@
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at top right, 
-                rgba(99, 102, 241, 0.08) 0%, 
+                color-mix(in srgb, var(--theme-color) 8%, transparent) 0%, 
                 transparent 50%),
               radial-gradient(circle at bottom left, 
-                rgba(244, 63, 94, 0.08) 0%, 
+                color-mix(in srgb, var(--theme-color) 8%, transparent) 0%, 
                 transparent 50%);
     pointer-events: none;
     z-index: -1;
@@ -123,7 +123,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236366f1' fill-opacity='0.02'%3E%3Cpath d='M50 0l10 10H40l10-10zm0 100l10-10H40l10 10zM0 50l10 10V40L0 50zm100 0l-10 10V40l10 10zM40 40h20v20H40z'/%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='var(--theme-color)' fill-opacity='0.02'%3E%3Cpath d='M50 0l10 10H40l10-10zm0 100l10-10H40l10 10zM0 50l10 10V40L0 50zm100 0l-10 10V40l10 10zM40 40h20v20H40z'/%3E%3C/g%3E%3C/svg%3E");
     animation: float 60s linear infinite;
     pointer-events: none;
     z-index: -1;
@@ -161,7 +161,7 @@
     left: 0;
     width: 100px;
     height: 6px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     border-radius: 3px;
   }
 
@@ -178,7 +178,7 @@
     padding: 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
                 0 12px 16px rgba(0, 0, 0, 0.05),
-                0 0 0 1px rgba(99, 102, 241, 0.08);
+                0 0 0 1px color-mix(in srgb, var(--theme-color) 8%, transparent);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
@@ -191,14 +191,14 @@
     left: 0;
     width: 100%;
     height: 6px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
   }
 
   .card:hover {
     transform: translateY(-6px) scale(1.01);
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.06),
                 0 20px 30px rgba(0, 0, 0, 0.07),
-                0 0 0 2px rgba(99, 102, 241, 0.1);
+                0 0 0 2px color-mix(in srgb, var(--theme-color) 10%, transparent);
   }
 
   .card-header {
@@ -220,7 +220,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     color: white;
     padding: 1rem;
     border-radius: 16px;
@@ -232,7 +232,7 @@
     font-size: 4rem;
     font-weight: 800;
     margin: 0.75rem 0;
-    background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+    background: var(--theme-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
@@ -259,7 +259,7 @@
   }
 
   .trip-item:hover, .delivery-item:hover {
-    background: rgba(99, 102, 241, 0.03);
+    background: color-mix(in srgb, var(--theme-color) 3%, transparent);
     transform: translateX(4px);
   }
 
@@ -292,7 +292,7 @@
   .avatar {
     min-width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     color: white;
     border-radius: 14px;
     display: flex;
@@ -301,12 +301,12 @@
     margin-right: 1.25rem;
     font-weight: 600;
     font-size: 1.1rem;
-    box-shadow: 0 6px 12px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 6px 12px color-mix(in srgb, var(--theme-color) 20%, transparent);
     transform: rotate(-3deg);
   }
 
   .details {
-    color: #6366f1;
+    color: var(--theme-color);
     font-size: 1rem;
     font-weight: 500;
   }
@@ -328,7 +328,7 @@
   }
 
   .chip.info {
-    background: linear-gradient(135deg, #4338ca, #6366f1);
+    background: var(--theme-gradient);
     color: white;
   }
 
@@ -354,7 +354,7 @@
     display: block;
     width: 6px;
     height: 28px;
-    background: linear-gradient(180deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     border-radius: 3px;
     transform: rotate(-5deg);
   }
@@ -397,7 +397,7 @@
   }
 
   .clock-icon {
-    color: #6366f1;
+    color: var(--theme-color);
   }
 
   .eta-text {
@@ -445,5 +445,14 @@
       font-size: 0.85rem;
       padding: 0.3rem 0.6rem;
     }
+  }
+
+  .route-meta {
+    color: var(--theme-color);
+  }
+
+  .tool-button:hover {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
   }
 </style>

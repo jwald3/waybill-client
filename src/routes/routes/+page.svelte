@@ -65,7 +65,7 @@
     left: 0;
     width: 100px;
     height: 6px;
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: var(--theme-gradient);
     border-radius: 3px;
   }
 
@@ -113,7 +113,7 @@
     display: flex;
     gap: 1rem;
     font-size: 0.875rem;
-    color: #6366f1;
+    color: var(--theme-color);
   }
 
   .status-badge {
@@ -147,8 +147,8 @@
 
   .tool-button:hover {
     background: #f8fafc;
-    border-color: #6366f1;
-    color: #6366f1;
+    border-color: var(--theme-color);
+    color: var(--theme-color);
   }
 
   @media (max-width: 768px) {
