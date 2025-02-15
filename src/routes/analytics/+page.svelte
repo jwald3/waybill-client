@@ -70,6 +70,49 @@
       }
     ]
   };
+
+  // Add driver performance data
+  const topDrivers = [
+    { 
+      name: "John Smith",
+      avatar: "JS",
+      deliveries: 42,
+      rating: 4.9,
+      onTime: "98%"
+    },
+    {
+      name: "Maria Garcia",
+      avatar: "MG",
+      deliveries: 38,
+      rating: 4.8,
+      onTime: "96%"
+    },
+    {
+      name: "David Chen",
+      avatar: "DC",
+      deliveries: 35,
+      rating: 4.8,
+      onTime: "95%"
+    }
+  ];
+
+  const recentAlerts = [
+    {
+      type: 'warning',
+      message: 'Fuel consumption above average on Route CHI-DET',
+      time: '2h ago'
+    },
+    {
+      type: 'success',
+      message: 'All drivers completed safety training',
+      time: '4h ago'
+    },
+    {
+      type: 'error',
+      message: 'Maintenance due for Truck #1234',
+      time: '6h ago'
+    }
+  ];
 </script>
 
 <Layout {isNavExpanded}>
@@ -79,18 +122,17 @@
     </header>
 
     <div class="analytics-content">
-      <!-- Metrics Section -->
-      <section class="metrics-section">
-        <div class="metrics-grid">
-          {#each metrics as metric}
-            <MetricCard {...metric} />
-          {/each}
-        </div>
-      </section>
+      <!-- Metrics Grid -->
+      <div class="metrics-grid">
+        {#each metrics as metric}
+          <MetricCard {...metric} />
+        {/each}
+      </div>
 
-      <!-- Charts Section -->
-      <section class="charts-section">
-        <div class="analytics-grid">
+      <!-- Main Content Grid -->
+      <div class="main-content">
+        <!-- Left Column -->
+        <div class="main-column">
           <Card title="Performance Trends" icon={icons.chart}>
             <div class="chart-container">
               <div class="chart-header">
@@ -118,6 +160,47 @@
             </div>
           </Card>
 
+          <Card title="Cost Breakdown" icon={icons.analytics}>
+            <div class="cost-analysis">
+              <div class="cost-chart">
+                <PieChart data={costData} />
+              </div>
+              <div class="cost-legend">
+                <div class="legend-item">
+                  <span class="dot fuel"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">Fuel</span>
+                    <span class="legend-value">42%</span>
+                  </span>
+                </div>
+                <div class="legend-item">
+                  <span class="dot maintenance"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">Maintenance</span>
+                    <span class="legend-value">28%</span>
+                  </span>
+                </div>
+                <div class="legend-item">
+                  <span class="dot labor"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">Labor</span>
+                    <span class="legend-value">22%</span>
+                  </span>
+                </div>
+                <div class="legend-item">
+                  <span class="dot other"></span>
+                  <span class="legend-text">
+                    <span class="legend-label">Other</span>
+                    <span class="legend-value">8%</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        <!-- Right Column -->
+        <div class="side-column">
           <Card title="Top Performing Routes" icon={icons.truck}>
             <div class="routes-table">
               <div class="table-header">
@@ -134,94 +217,86 @@
               {/each}
             </div>
           </Card>
-        </div>
-      </section>
 
-      <!-- Cost Analysis Section -->
-      <section class="cost-section">
-        <Card title="Cost Breakdown" icon={icons.analytics}>
-          <div class="cost-analysis">
-            <div class="cost-chart">
-              <PieChart data={costData} />
+          <Card title="Driver Performance" icon={icons.people}>
+            <div class="drivers-list">
+              {#each topDrivers as driver}
+                <div class="driver-item">
+                  <div class="driver-info">
+                    <div class="avatar">{driver.avatar}</div>
+                    <div class="details">
+                      <span class="name">{driver.name}</span>
+                      <span class="stats">
+                        {driver.deliveries} deliveries • {driver.onTime} on-time
+                      </span>
+                    </div>
+                  </div>
+                  <div class="rating">
+                    <span class="rating-value">{driver.rating}</span>
+                    <span class="rating-label">rating</span>
+                  </div>
+                </div>
+              {/each}
             </div>
-            <div class="cost-legend">
-              <div class="legend-item">
-                <span class="dot fuel"></span>
-                <span class="legend-text">
-                  <span class="legend-label">Fuel</span>
-                  <span class="legend-value">42%</span>
-                </span>
-              </div>
-              <div class="legend-item">
-                <span class="dot maintenance"></span>
-                <span class="legend-text">
-                  <span class="legend-label">Maintenance</span>
-                  <span class="legend-value">28%</span>
-                </span>
-              </div>
-              <div class="legend-item">
-                <span class="dot labor"></span>
-                <span class="legend-text">
-                  <span class="legend-label">Labor</span>
-                  <span class="legend-value">22%</span>
-                </span>
-              </div>
-              <div class="legend-item">
-                <span class="dot other"></span>
-                <span class="legend-text">
-                  <span class="legend-label">Other</span>
-                  <span class="legend-value">8%</span>
-                </span>
-              </div>
+          </Card>
+
+          <Card title="Recent Alerts" icon={icons.alert}>
+            <div class="alerts-list">
+              {#each recentAlerts as alert}
+                <div class="alert-item">
+                  <div class="alert-content">
+                    <div class="alert-icon {alert.type}">
+                      {#if alert.type === 'warning'}
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                          <path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/>
+                        </svg>
+                      {:else if alert.type === 'success'}
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                        </svg>
+                      {:else}
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                      {/if}
+                    </div>
+                    <div class="alert-details">
+                      <span class="alert-message">{alert.message}</span>
+                      <span class="alert-time">{alert.time}</span>
+                    </div>
+                  </div>
+                </div>
+              {/each}
             </div>
-          </div>
-        </Card>
-      </section>
+          </Card>
+        </div>
+      </div>
     </div>
   </div>
 </Layout>
 
 <style>
   .analytics {
-    max-width: 1400px;
+    max-width: 1800px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
     padding: 2rem;
   }
 
   .analytics-header {
-    padding-bottom: 1rem;
+    margin-bottom: 2rem;
   }
 
   .analytics-title {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     color: #1e293b;
     font-weight: 800;
-    position: relative;
     letter-spacing: -1px;
-  }
-
-  .analytics-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 80px;
-    height: 4px;
-    background: var(--theme-gradient);
-    border-radius: 2px;
   }
 
   .analytics-content {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
-  }
-
-  .metrics-section {
-    margin-top: 1rem;
+    gap: 2rem;
   }
 
   .metrics-grid {
@@ -230,53 +305,71 @@
     gap: 1.5rem;
   }
 
-  .charts-section {
-    margin-top: 1rem;
-  }
-
-  .analytics-grid {
+  .main-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
   }
 
-  .cost-section {
-    margin-top: 1rem;
+  .main-column {
+    display: grid;
+    grid-template-rows: 1.2fr 1fr;  /* Performance trends slightly larger than cost breakdown */
+    gap: 1.5rem;
+    height: 100%;
   }
 
-  .chart-placeholder {
-    background: #f8fafc;
-    border: 2px dashed color-mix(in srgb, var(--theme-color) 20%, transparent);
-    border-radius: 12px;
-    padding: 3rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #64748b;
-    font-style: italic;
+  .side-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    height: 100%;
   }
 
   .chart-container {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cost-analysis {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2rem;
+    padding: 1rem;
+    height: 100%;
+  }
+
+  .routes-table,
+  .drivers-list,
+  .alerts-list {
+    overflow-y: auto;
   }
 
   .chart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
   }
 
   .chart-legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .legend-item {
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #475569;
+    font-weight: 500;
   }
 
   .dot {
@@ -300,21 +393,17 @@
     background: white;
   }
 
-  .routes-table {
-    width: 100%;
-    overflow-x: auto;
-  }
-
   .table-header, .table-row {
     display: grid;
     grid-template-columns: minmax(200px, 2fr) minmax(80px, 1fr) minmax(100px, 1fr);
     gap: 1.5rem;
-    min-width: 400px;
-    padding: 0.75rem 1.25rem;
+    padding: 0.875rem 1.25rem;
     align-items: center;
   }
 
   .table-header {
+    position: sticky;
+    top: 0;
     background: #f8fafc;
     border-radius: 8px;
     font-weight: 600;
@@ -349,55 +438,6 @@
     text-align: right;
   }
 
-  .cost-analysis {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 3rem;
-    align-items: start;
-    padding: 1rem;
-  }
-
-  .cost-chart {
-    min-height: 300px;
-  }
-
-  .cost-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1rem;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .legend-text {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex: 1;
-    font-size: 0.95rem;
-    color: #1e293b;
-  }
-
-  .legend-label {
-    font-weight: 500;
-  }
-
-  .legend-value {
-    color: #64748b;
-  }
-
   .table-header .center {
     text-align: center;
   }
@@ -406,62 +446,190 @@
     text-align: right;
   }
 
+  .drivers-list {
+    height: 275px;
+    overflow-y: auto;
+  }
+
+  .driver-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .driver-item:last-child {
+    border-bottom: none;
+  }
+
+  .driver-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    background: var(--theme-gradient);
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    transform: rotate(-3deg);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .name {
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .stats {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+  }
+
+  .rating-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #10b981;
+  }
+
+  .rating-label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .alerts-list {
+    height: 275px;
+    overflow-y: auto;
+  }
+
+  .alert-item {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .alert-item:last-child {
+    border-bottom: none;
+  }
+
+  .alert-content {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .alert-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .alert-icon.warning {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  .alert-icon.success {
+    background: #dcfce7;
+    color: #059669;
+  }
+
+  .alert-icon.error {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  .alert-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+  }
+
+  .alert-message {
+    color: #1e293b;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .alert-time {
+    color: #64748b;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 1400px) {
+    .main-content {
+      grid-template-columns: 1fr;
+    }
+
+    .main-column {
+      grid-template-rows: auto;
+    }
+
+    .chart-container {
+      height: 400px;
+    }
+
+    .cost-analysis {
+      height: 350px;
+    }
+
+    .side-column {
+      grid-template-rows: auto;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    }
+
+    .routes-table,
+    .drivers-list,
+    .alerts-list {
+      max-height: 300px;
+    }
+  }
+
   @media (max-width: 768px) {
     .analytics {
-      padding: 1.5rem;
-      gap: 1.5rem;
-    }
-
-    .analytics-content {
-      gap: 2rem;
-    }
-
-    .analytics-title {
-      font-size: 2rem;
+      padding: 1rem;
     }
 
     .metrics-grid {
       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem;
     }
 
-    .analytics-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+    .chart-container {
+      height: 300px;
     }
 
     .cost-analysis {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      height: auto;
     }
 
-    .cost-legend {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .analytics {
-      padding: 1rem;
-      gap: 1.25rem;
-    }
-
-    .analytics-content {
-      gap: 1.5rem;
-    }
-
-    .analytics-title {
-      font-size: 1.75rem;
-    }
-
-    .metrics-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .cost-legend {
-      grid-template-columns: 1fr;
+    .cost-chart {
+      height: 300px;
     }
   }
 </style> 

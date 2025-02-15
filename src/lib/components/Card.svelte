@@ -20,14 +20,13 @@
     background: white;
     border-radius: 16px;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    padding: 1.5rem;
   }
 
   .card-header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 1.5rem 1.5rem 0;
   }
 
   .icon-wrapper {
@@ -50,5 +49,19 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: #1e293b;
+  }
+
+  .card-content {
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .card-header {
+      padding: 1.25rem 1.25rem 0;
+    }
+
+    .card-content {
+      padding: 1.25rem;
+    }
   }
 </style> 
