@@ -93,9 +93,9 @@
           <Card title="Top Performing Routes" icon={icons.truck}>
             <div class="routes-table">
               <div class="table-header">
-                <span class="header-route">Route</span>
-                <span class="header-trips">Trips</span>
-                <span class="header-revenue">Revenue</span>
+                <span>Route</span>
+                <span class="center">Trips</span>
+                <span class="right">Revenue</span>
               </div>
               {#each topRoutes as route}
                 <div class="table-row">
@@ -322,6 +322,14 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+  }
+
+  .table-header .center {
+    text-align: center;
+  }
+
+  .table-header .right {
+    text-align: right;
   }
 
   @media (max-width: 768px) {
