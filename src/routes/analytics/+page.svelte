@@ -166,34 +166,15 @@
                 <PieChart data={costData} />
               </div>
               <div class="cost-legend">
-                <div class="legend-item">
-                  <span class="dot fuel"></span>
-                  <span class="legend-text">
-                    <span class="legend-label">Fuel</span>
-                    <span class="legend-value">42%</span>
-                  </span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot maintenance"></span>
-                  <span class="legend-text">
-                    <span class="legend-label">Maintenance</span>
-                    <span class="legend-value">28%</span>
-                  </span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot labor"></span>
-                  <span class="legend-text">
-                    <span class="legend-label">Labor</span>
-                    <span class="legend-value">22%</span>
-                  </span>
-                </div>
-                <div class="legend-item">
-                  <span class="dot other"></span>
-                  <span class="legend-text">
-                    <span class="legend-label">Other</span>
-                    <span class="legend-value">8%</span>
-                  </span>
-                </div>
+                {#each costData as item}
+                  <div class="cost-legend-item">
+                    <div class="cost-legend-color" style="background-color: {item.color}"></div>
+                    <div class="cost-legend-details">
+                      <span class="cost-legend-label">{item.label}</span>
+                      <span class="cost-legend-value">{item.value}%</span>
+                    </div>
+                  </div>
+                {/each}
               </div>
             </div>
           </Card>
@@ -339,8 +320,11 @@
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     gap: 2rem;
-    padding: 1rem;
+    padding: 1.5rem;
     height: 100%;
+    align-items: center;
+    background: linear-gradient(to bottom right, #ffffff, #f8fafc);
+    border-radius: 12px;
   }
 
   .routes-table,
@@ -590,6 +574,68 @@
     min-height: 0;
   }
 
+  .cost-chart {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cost-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .cost-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .cost-legend-item:hover {
+    background: #f8fafc;
+    transform: translateX(4px);
+  }
+
+  .cost-legend-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .cost-legend-item:hover .cost-legend-color {
+    transform: scale(1.2);
+  }
+
+  .cost-legend-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+  }
+
+  .cost-legend-label {
+    font-weight: 500;
+    color: #1e293b;
+  }
+
+  .cost-legend-value {
+    font-weight: 600;
+    color: #64748b;
+  }
+
   @media (max-width: 1400px) {
     .main-content {
       grid-template-columns: 1fr;
@@ -614,12 +660,24 @@
     }
 
     .cost-analysis {
-      grid-template-columns: 1fr;
-      height: auto;
+      background: white;
+      padding: 1rem;
+    }
+
+    .cost-legend {
+      box-shadow: none;
+      padding: 1rem;
     }
 
     .cost-chart {
-      height: 300px;
+      min-height: 200px;
+    }
+
+    .cost-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 0.75rem;
+      padding: 0.75rem;
     }
   }
 </style> 
