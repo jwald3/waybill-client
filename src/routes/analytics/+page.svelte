@@ -44,102 +44,121 @@
 
 <Layout {isNavExpanded}>
   <div class="analytics">
-    <h1 class="analytics-title">Analytics & Insights</h1>
+    <header class="analytics-header">
+      <h1 class="analytics-title">Analytics & Insights</h1>
+    </header>
 
-    <div class="metrics-grid">
-      {#each metrics as metric}
-        <MetricCard {...metric} />
-      {/each}
-    </div>
-
-    <div class="analytics-grid">
-      <Card title="Performance Trends" icon={icons.chart} className="section">
-        <div class="chart-container">
-          <div class="chart-header">
-            <div class="chart-legend">
-              <span class="legend-item">
-                <span class="dot delivery"></span>
-                Delivery Times
-              </span>
-              <span class="legend-item">
-                <span class="dot fuel"></span>
-                Fuel Consumption
-              </span>
-              <span class="legend-item">
-                <span class="dot cost"></span>
-                Operating Costs
-              </span>
-            </div>
-            <select class="time-range">
-              <option>Last 7 Days</option>
-              <option>Last 30 Days</option>
-              <option>Last Quarter</option>
-            </select>
-          </div>
-          <div class="chart-placeholder">
-            <p>Line chart showing key performance metrics over time</p>
-          </div>
-        </div>
-      </Card>
-
-      <Card title="Top Performing Routes" icon={icons.truck} className="section">
-        <div class="routes-table">
-          <div class="table-header">
-            <span class="header-route">Route</span>
-            <span class="header-trips">Trips</span>
-            <span class="header-revenue">Revenue</span>
-          </div>
-          {#each topRoutes as route}
-            <div class="table-row">
-              <span class="route-name">{route.from} → {route.to}</span>
-              <span class="trips">{route.trips}</span>
-              <span class="revenue">{route.revenue}</span>
-            </div>
+    <div class="analytics-content">
+      <!-- Metrics Section -->
+      <section class="metrics-section">
+        <div class="metrics-grid">
+          {#each metrics as metric}
+            <MetricCard {...metric} />
           {/each}
         </div>
-      </Card>
-    </div>
+      </section>
 
-    <Card title="Cost Breakdown" icon={icons.analytics} className="section">
-      <div class="cost-analysis">
-        <div class="cost-chart">
-          <div class="chart-placeholder">
-            <p>Pie chart showing cost distribution</p>
-          </div>
+      <!-- Charts Section -->
+      <section class="charts-section">
+        <div class="analytics-grid">
+          <Card title="Performance Trends" icon={icons.chart}>
+            <div class="chart-container">
+              <div class="chart-header">
+                <div class="chart-legend">
+                  <span class="legend-item">
+                    <span class="dot delivery"></span>
+                    Delivery Times
+                  </span>
+                  <span class="legend-item">
+                    <span class="dot fuel"></span>
+                    Fuel Consumption
+                  </span>
+                  <span class="legend-item">
+                    <span class="dot cost"></span>
+                    Operating Costs
+                  </span>
+                </div>
+                <select class="time-range">
+                  <option>Last 7 Days</option>
+                  <option>Last 30 Days</option>
+                  <option>Last Quarter</option>
+                </select>
+              </div>
+              <div class="chart-placeholder">
+                <p>Line chart showing key performance metrics over time</p>
+              </div>
+            </div>
+          </Card>
+
+          <Card title="Top Performing Routes" icon={icons.truck}>
+            <div class="routes-table">
+              <div class="table-header">
+                <span class="header-route">Route</span>
+                <span class="header-trips">Trips</span>
+                <span class="header-revenue">Revenue</span>
+              </div>
+              {#each topRoutes as route}
+                <div class="table-row">
+                  <span class="route-name">{route.from} → {route.to}</span>
+                  <span class="trips">{route.trips}</span>
+                  <span class="revenue">{route.revenue}</span>
+                </div>
+              {/each}
+            </div>
+          </Card>
         </div>
-        <div class="cost-legend">
-          <div class="legend-item">
-            <span class="dot fuel"></span>
-            <span>Fuel (42%)</span>
+      </section>
+
+      <!-- Cost Analysis Section -->
+      <section class="cost-section">
+        <Card title="Cost Breakdown" icon={icons.analytics}>
+          <div class="cost-analysis">
+            <div class="cost-chart">
+              <div class="chart-placeholder">
+                <p>Pie chart showing cost distribution</p>
+              </div>
+            </div>
+            <div class="cost-legend">
+              <div class="legend-item">
+                <span class="dot fuel"></span>
+                <span>Fuel (42%)</span>
+              </div>
+              <div class="legend-item">
+                <span class="dot maintenance"></span>
+                <span>Maintenance (28%)</span>
+              </div>
+              <div class="legend-item">
+                <span class="dot labor"></span>
+                <span>Labor (22%)</span>
+              </div>
+              <div class="legend-item">
+                <span class="dot other"></span>
+                <span>Other (8%)</span>
+              </div>
+            </div>
           </div>
-          <div class="legend-item">
-            <span class="dot maintenance"></span>
-            <span>Maintenance (28%)</span>
-          </div>
-          <div class="legend-item">
-            <span class="dot labor"></span>
-            <span>Labor (22%)</span>
-          </div>
-          <div class="legend-item">
-            <span class="dot other"></span>
-            <span>Other (8%)</span>
-          </div>
-        </div>
-      </div>
-    </Card>
+        </Card>
+      </section>
+    </div>
   </div>
 </Layout>
 
 <style>
   .analytics {
-    padding: 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2rem;
+  }
+
+  .analytics-header {
+    padding-bottom: 1rem;
   }
 
   .analytics-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
+    font-size: 2.5rem;
     color: #1e293b;
     font-weight: 800;
     position: relative;
@@ -151,24 +170,40 @@
     position: absolute;
     bottom: -12px;
     left: 0;
-    width: 100px;
-    height: 6px;
+    width: 80px;
+    height: 4px;
     background: var(--theme-gradient);
-    border-radius: 3px;
+    border-radius: 2px;
+  }
+
+  .analytics-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .metrics-section {
+    margin-top: 1rem;
   }
 
   .metrics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 2rem;
+  }
+
+  .charts-section {
+    margin-top: 1rem;
   }
 
   .analytics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
     gap: 2rem;
-    margin-top: 2rem;
+  }
+
+  .cost-section {
+    margin-top: 1rem;
   }
 
   .chart-placeholder {
@@ -291,17 +326,16 @@
 
   @media (max-width: 768px) {
     .analytics {
-      padding: 1rem;
+      padding: 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .analytics-content {
+      gap: 2rem;
     }
 
     .analytics-title {
       font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .analytics-title::after {
-      width: 80px;
-      height: 4px;
     }
 
     .metrics-grid {
@@ -311,61 +345,26 @@
 
     .analytics-grid {
       grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .chart-header {
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .chart-legend {
-      justify-content: space-between;
-    }
-
-    .time-range {
-      width: 100%;
-    }
-
-    .cost-analysis {
-      grid-template-columns: 1fr;
       gap: 1.5rem;
-    }
-
-    .cost-legend {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-    }
-
-    .chart-placeholder {
-      padding: 2rem 1rem;
     }
   }
 
   @media (max-width: 480px) {
+    .analytics {
+      padding: 1rem;
+      gap: 1.25rem;
+    }
+
+    .analytics-content {
+      gap: 1.5rem;
+    }
+
     .analytics-title {
       font-size: 1.75rem;
     }
 
     .metrics-grid {
       grid-template-columns: 1fr;
-    }
-
-    .chart-legend {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .cost-legend {
-      grid-template-columns: 1fr;
-    }
-
-    .table-header, .table-row {
-      padding: 0.75rem 1rem;
-      gap: 1rem;
-      font-size: 0.9rem;
     }
   }
 </style> 
