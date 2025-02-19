@@ -17,9 +17,11 @@
 
 <style>
   .card {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
+                0 12px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -52,7 +54,7 @@
   h2 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 
   .card-content {
@@ -70,5 +72,10 @@
     .card-content {
       padding: 1.25rem;
     }
+  }
+
+  [data-color-mode="dark"] .card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 12px 16px rgba(0, 0, 0, 0.1);
   }
 </style> 

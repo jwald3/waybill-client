@@ -1,6 +1,7 @@
 <script lang="ts">
   import { icons } from '$lib/icons';
   import { page } from '$app/stores';
+  import ThemeToggle from './ThemeToggle.svelte';
   export let isNavExpanded = true;
 </script>
 
@@ -14,6 +15,9 @@
       </button>
       {#if isNavExpanded}
         <h1>Waybill</h1>
+        <div class="nav-tools">
+          <ThemeToggle />
+        </div>
       {/if}
     </div>
 
@@ -50,8 +54,8 @@
 
   nav {
     width: 280px;
-    background: white;
-    border-right: 1px solid #e2e8f0;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
     transition: width 0.3s ease;
   }
 
@@ -64,20 +68,21 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
   }
 
   .nav-header h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #1e293b;
+    color: var(--text-primary);
     white-space: nowrap;
   }
 
   .toggle-nav {
     background: none;
     border: none;
-    color: #64748b;
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 8px;
@@ -85,8 +90,8 @@
   }
 
   .toggle-nav:hover {
-    background: #f1f5f9;
-    color: #1e293b;
+    background: var(--surface-color);
+    color: var(--text-primary);
   }
 
   .nav-links {
@@ -101,7 +106,7 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    color: #64748b;
+    color: var(--text-secondary);
     text-decoration: none;
     border-radius: 12px;
     transition: all 0.2s ease;
@@ -109,8 +114,8 @@
   }
 
   .nav-link:hover {
-    background: #f1f5f9;
-    color: #1e293b;
+    background: var(--surface-color);
+    color: var(--text-primary);
   }
 
   .nav-link.active {
@@ -126,7 +131,7 @@
 
   main {
     flex: 1;
-    background: #f8fafc;
+    background: var(--bg-primary);
   }
 
   @media (max-width: 768px) {
@@ -137,7 +142,7 @@
       width: 100%;
       height: auto;
       border-right: none;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--border-color);
       z-index: 100;
     }
 
@@ -175,5 +180,12 @@
 
   :global(.nav-item:hover) {
     background: color-mix(in srgb, var(--theme-color) 10%, transparent);
+  }
+
+  .nav-tools {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
   }
 </style> 

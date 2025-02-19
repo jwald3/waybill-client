@@ -1,6 +1,26 @@
 @import 'tailwindcss';
 
-/* Add to your existing app.css */
+/* Light mode variables */
+[data-color-mode="light"] {
+  --bg-primary: #f0f4ff;
+  --bg-secondary: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  --surface-color: #f8fafc;
+}
+
+/* Dark mode variables */
+[data-color-mode="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --surface-color: #1e293b;
+}
+
+/* Theme colors remain the same */
 :root {
   /* Default theme (will be overridden by data-theme attributes) */
   --theme-color: #6366f1;
@@ -58,4 +78,15 @@ a.themed-link:hover {
 .themed-focus:focus-visible {
   outline: 2px solid var(--theme-color);
   outline-offset: 2px;
+}
+
+/* Apply color mode variables */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.card, .metric-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
 }

@@ -29,12 +29,12 @@
 
 <style>
   .metric-card {
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 16px;
     padding: 1.75rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
                 0 12px 16px rgba(0, 0, 0, 0.05),
-                0 0 0 1px color-mix(in srgb, var(--theme-color) 8%, transparent);
+                0 0 0 1px var(--border-color);
     transition: all 0.3s ease;
     height: 100%;
   }
@@ -78,7 +78,7 @@
   h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #475569;
+    color: var(--text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -155,5 +155,11 @@
     .metric-info {
       gap: 0.5rem;
     }
+  }
+
+  [data-color-mode="dark"] .metric-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 12px 16px rgba(0, 0, 0, 0.1),
+                0 0 0 1px var(--border-color);
   }
 </style> 
