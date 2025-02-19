@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { theme, type Theme, colorMode } from '$lib/stores/theme';
+  import { theme, type Theme, colorMode, getThemeVariables } from '$lib/stores/theme';
   
   let isNavExpanded = true;
   
@@ -19,7 +19,7 @@
   }
 
   function toggleColorMode() {
-    $colorMode = $colorMode === 'light' ? 'dark' : 'light';
+    colorMode.set($colorMode === 'light' ? 'dark' : 'light');
   }
 </script>
 
@@ -84,8 +84,8 @@
               value={$theme} 
               on:change={handleThemeChange}
             >
-              {#each themes as theme}
-                <option value={theme.value}>{theme.label}</option>
+              {#each themes as themeOption}
+                <option value={themeOption.value}>{themeOption.label}</option>
               {/each}
             </select>
           </div>

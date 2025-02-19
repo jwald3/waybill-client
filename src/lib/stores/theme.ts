@@ -16,17 +16,39 @@ export interface ThemeVariables {
   'theme-gradient': string;
 }
 
-// Define theme configurations
-export const themeConfig: Record<ColorMode, ThemeVariables> = {
+// Define color theme configurations
+export const colorThemes: Record<Theme, { light: string; dark: string; gradient: string }> = {
+  indigo: {
+    light: '#6366f1',
+    dark: '#818cf8',
+    gradient: 'linear-gradient(90deg, #6366f1, #818cf8)'
+  },
+  emerald: {
+    light: '#10b981',
+    dark: '#34d399',
+    gradient: 'linear-gradient(90deg, #10b981, #34d399)'
+  },
+  rose: {
+    light: '#f43f5e',
+    dark: '#fb7185',
+    gradient: 'linear-gradient(90deg, #f43f5e, #fb7185)'
+  },
+  amber: {
+    light: '#f59e0b',
+    dark: '#fbbf24',
+    gradient: 'linear-gradient(90deg, #f59e0b, #fbbf24)'
+  }
+};
+
+// Define base theme configurations
+export const baseThemeConfig: Record<ColorMode, Omit<ThemeVariables, 'theme-color' | 'theme-gradient'>> = {
   light: {
     'bg-primary': '#f0f4ff',
     'bg-secondary': '#ffffff',
     'text-primary': '#1e293b',
     'text-secondary': '#64748b',
     'border-color': '#e2e8f0',
-    'surface-color': '#f8fafc',
-    'theme-color': '#6366f1',
-    'theme-gradient': 'linear-gradient(90deg, #6366f1, #818cf8)'
+    'surface-color': '#f8fafc'
   },
   dark: {
     'bg-primary': '#0f172a',
@@ -34,9 +56,7 @@ export const themeConfig: Record<ColorMode, ThemeVariables> = {
     'text-primary': '#e2e8f0',
     'text-secondary': '#94a3b8',
     'border-color': '#334155',
-    'surface-color': '#1e293b',
-    'theme-color': '#818cf8',
-    'theme-gradient': 'linear-gradient(90deg, #818cf8, #6366f1)'
+    'surface-color': '#1e293b'
   }
 };
 
@@ -55,6 +75,18 @@ const initialColorMode = browser ?
 export const theme = writable<Theme>(initialTheme);
 export const colorMode = writable<ColorMode>(initialColorMode);
 
+// Make getThemeVariables exportable
+export function getThemeVariables(mode: ColorMode, selectedTheme: Theme): ThemeVariables {
+  const baseVariables = baseThemeConfig[mode];
+  const themeColors = colorThemes[selectedTheme];
+  
+  return {
+    ...baseVariables,
+    'theme-color': mode === 'light' ? themeColors.light : themeColors.dark,
+    'theme-gradient': themeColors.gradient
+  };
+}
+
 // Update localStorage and apply theme variables when theme or colorMode changes
 if (browser) {
   theme.subscribe(value => {
@@ -65,11 +97,5 @@ if (browser) {
   colorMode.subscribe(value => {
     localStorage.setItem('colorMode', value);
     document.documentElement.setAttribute('data-color-mode', value);
-    
-    // Apply theme variables
-    const variables = themeConfig[value];
-    Object.entries(variables).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
   });
 } 
