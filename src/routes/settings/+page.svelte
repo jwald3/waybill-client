@@ -146,46 +146,67 @@
   .settings-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
+    padding: 1.5rem;
   }
 
   .setting-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    background: var(--surface-color);
+    padding: 1.25rem;
+    background: var(--bg-secondary);
     border-radius: 12px;
     transition: all 0.2s ease;
-    border: 1px solid var(--border-color);
+    border: 1px solid transparent;
+    position: relative;
+  }
+
+  .setting-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: -0.625rem;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+    opacity: 0.5;
   }
 
   .setting-item:hover {
-    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
+    background: color-mix(in srgb, var(--theme-color) 2%, var(--surface-color));
+    border-color: color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     transform: translateX(4px);
+  }
+
+  .setting-info {
+    flex: 1;
+    padding-right: 1.5rem;
   }
 
   .setting-info h3 {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.375rem;
   }
 
   .setting-info p {
     color: var(--text-secondary);
     font-size: 0.9rem;
+    line-height: 1.4;
   }
 
   .action-button {
-    padding: 0.5rem 1rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    padding: 0.625rem 1.25rem;
+    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     border-radius: 8px;
     color: var(--theme-color);
     font-weight: 500;
     transition: all 0.2s ease;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   .action-button:hover {
@@ -196,32 +217,39 @@
   }
 
   .theme-select {
-    padding: 0.5rem 1rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    padding: 0.625rem 1.25rem;
+    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     border-radius: 8px;
     color: var(--text-primary);
     font-weight: 500;
     cursor: pointer;
     min-width: 160px;
+    transition: all 0.2s ease;
   }
 
   .theme-select:hover {
     border-color: var(--theme-color);
+    background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
   }
 
   .mode-toggle {
     position: relative;
-    width: 100px;
-    height: 36px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 18px;
+    width: 110px;
+    height: 38px;
+    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+    border-radius: 19px;
     cursor: pointer;
     padding: 4px;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+  }
+
+  .mode-toggle:hover {
+    border-color: var(--theme-color);
+    background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
   }
 
   .toggle-slider {
@@ -268,8 +296,17 @@
       grid-template-columns: 1fr;
     }
 
+    .settings-section {
+      padding: 1rem;
+      gap: 1rem;
+    }
+
     .setting-item {
-      padding: 1.25rem;
+      padding: 1rem;
+    }
+
+    .setting-info {
+      padding-right: 1rem;
     }
 
     .setting-info h3 {
