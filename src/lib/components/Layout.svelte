@@ -41,7 +41,7 @@
     </div>
   </nav>
 
-  <main>
+  <main class:nav-expanded={isNavExpanded}>
     <slot />
   </main>
 </div>
@@ -50,13 +50,19 @@
   .layout {
     display: flex;
     min-height: 100vh;
+    position: relative;
   }
 
   nav {
-    width: 280px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 80px;
     background: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
     transition: width 0.3s ease;
+    z-index: 10;
   }
 
   nav.expanded {
@@ -132,18 +138,25 @@
   main {
     flex: 1;
     background: var(--bg-primary);
+    padding-left: 80px;
+    transition: padding-left 0.3s ease;
+    width: 100%;
+  }
+
+  main.nav-expanded {
+    padding-left: 280px;
   }
 
   @media (max-width: 768px) {
     nav {
       position: fixed;
+      top: auto;
       bottom: 0;
       left: 0;
       width: 100%;
       height: auto;
       border-right: none;
       border-top: 1px solid var(--border-color);
-      z-index: 100;
     }
 
     nav.expanded {
@@ -168,7 +181,12 @@
     }
 
     main {
+      padding-left: 0;
       padding-bottom: 80px;
+    }
+
+    main.nav-expanded {
+      padding-left: 0;
     }
   }
 

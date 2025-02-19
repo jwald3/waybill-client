@@ -46,7 +46,7 @@
     </div>
 
     <!-- Active Trips -->
-    <Card title="Active Trips" className="section">
+    <Card title="Active Trips" icon={icons.truck} className="section">
       <div class="trips">
         {#each Array(3) as _, i}
           <div class="trip-item">
@@ -70,7 +70,7 @@
     </Card>
 
     <!-- Recent Deliveries -->
-    <Card title="Recent Deliveries" className="section">
+    <Card title="Recent Deliveries" icon={icons.truck} className="section">
       <div class="deliveries">
         {#each Array(3) as _, i}
           <div class="delivery-item">
