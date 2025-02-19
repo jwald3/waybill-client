@@ -2,7 +2,35 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  
   let isNavExpanded = true;
+  
+  const routes = [
+    {
+      id: '1001',
+      driver: 'John Doe',
+      route: 'Chicago → Detroit → Cleveland',
+      status: 'In Progress',
+      stops: 3,
+      distance: '450 miles'
+    },
+    {
+      id: '1002',
+      driver: 'Mike Smith',
+      route: 'New York → Boston → Portland',
+      status: 'Starting Soon',
+      stops: 3,
+      distance: '420 miles'
+    },
+    {
+      id: '1003',
+      driver: 'Sarah Johnson',
+      route: 'Seattle → Portland → San Francisco',
+      status: 'Completed',
+      stops: 3,
+      distance: '808 miles'
+    }
+  ];
 </script>
 
 <Layout {isNavExpanded}>
@@ -11,31 +39,66 @@
 
     <div class="routes-grid">
       <Card title="Active Routes" icon={icons.truck}>
-        <div class="route-list">
-          {#each Array(3) as _, i}
+        <div class="routes-section">
+          {#each routes as route}
             <div class="route-item">
-              <div class="route-info">
-                <h3>Route #{i + 1001}</h3>
-                <p class="route-details">Chicago → Detroit → Cleveland</p>
-                <div class="route-meta">
-                  <span class="driver">John Doe</span>
-                  <span class="stops">3 stops</span>
-                  <span class="distance">450 miles</span>
-                </div>
+              <div class="avatar">
+                {route.driver.split(' ').map(n => n[0]).join('')}
               </div>
-              <div class="route-status">
-                <span class="status-badge active">In Progress</span>
+              <div class="route-info">
+                <div class="route-header">
+                  <h3>Route #{route.id}</h3>
+                  <span class="chip {route.status === 'In Progress' ? 'success' : 
+                                   route.status === 'Starting Soon' ? 'warning' : 'info'}">
+                    {route.status}
+                  </span>
+                </div>
+                <p class="route-path">{route.route}</p>
+                <div class="route-meta">
+                  <span class="meta-item">
+                    <span class="icon">{@html icons.map}</span>
+                    {route.stops} stops
+                  </span>
+                  <span class="meta-item">
+                    <span class="icon">{@html icons.distance}</span>
+                    {route.distance}
+                  </span>
+                  <span class="meta-item">
+                    <span class="icon">{@html icons.person}</span>
+                    {route.driver}
+                  </span>
+                </div>
               </div>
             </div>
           {/each}
         </div>
       </Card>
 
-      <Card title="Route Planning" icon={icons.routes}>
-        <div class="planning-tools">
-          <button class="tool-button">Create New Route</button>
-          <button class="tool-button">Import Routes</button>
-          <button class="tool-button">Route Optimization</button>
+      <Card title="Route Planning" icon={icons.settings}>
+        <div class="routes-section">
+          <div class="planning-item">
+            <div class="setting-info">
+              <h3>Create New Route</h3>
+              <p>Plan and schedule a new delivery route</p>
+            </div>
+            <button class="action-button">Create New Route</button>
+          </div>
+
+          <div class="planning-item">
+            <div class="setting-info">
+              <h3>Import Routes</h3>
+              <p>Import route data from external sources</p>
+            </div>
+            <button class="action-button">Import Routes</button>
+          </div>
+
+          <div class="planning-item">
+            <div class="setting-info">
+              <h3>Route Optimization</h3>
+              <p>Optimize existing routes for efficiency</p>
+            </div>
+            <button class="action-button">Optimize</button>
+          </div>
         </div>
       </Card>
     </div>
@@ -71,96 +134,171 @@
 
   .routes-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
   }
 
-  .route-list {
+  .routes-section {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
+    padding: 1.5rem;
   }
 
-  .route-item {
+  .route-item, .planning-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    position: relative;
+  }
+
+  .route-item:not(:last-child)::after,
+  .planning-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: -0.625rem;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border-color);
+    opacity: 0.5;
+  }
+
+  .route-item:hover, .planning-item:hover {
+    background: color-mix(in srgb, var(--theme-color) 2%, var(--surface-color));
+    border-color: color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+    transform: translateX(4px);
+  }
+
+  .avatar {
+    min-width: 50px;
+    height: 50px;
+    background: var(--theme-gradient);
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.25rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 12px color-mix(in srgb, var(--theme-color) 20%, transparent);
+    transform: rotate(-3deg);
+  }
+
+  .route-info {
+    flex: 1;
+  }
+
+  .route-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem;
-    background: var(--surface-color);
-    border-radius: 12px;
-    transition: all 0.2s ease;
-    border: 1px solid var(--border-color);
-  }
-
-  .route-item:hover {
-    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
-    transform: translateX(4px);
-    border-color: var(--theme-color);
-  }
-
-  .route-info h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
     margin-bottom: 0.5rem;
   }
 
-  .route-details {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    margin-bottom: 0.75rem;
+  .route-header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .route-path {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
   }
 
   .route-meta {
     display: flex;
-    gap: 1rem;
-    font-size: 0.875rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .meta-item .icon {
+    display: flex;
+    align-items: center;
     color: var(--theme-color);
   }
 
-  .status-badge {
+  .chip {
     padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
-  .status-badge.active {
+  .chip.success {
     background: linear-gradient(135deg, #059669, #10b981);
     color: white;
   }
 
-  .planning-tools {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .chip.warning {
+    background: linear-gradient(135deg, #d97706, #fbbf24);
+    color: white;
   }
 
-  .tool-button {
-    padding: 1rem;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
+  .chip.info {
+    background: var(--theme-gradient);
+    color: white;
+  }
+
+  .planning-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .setting-info {
+    flex: 1;
+    padding-right: 1.5rem;
+  }
+
+  .setting-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--text-primary);
+    margin-bottom: 0.375rem;
+  }
+
+  .setting-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .action-button {
+    padding: 0.625rem 1.25rem;
+    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+    border-radius: 8px;
+    color: var(--theme-color);
     font-weight: 500;
     transition: all 0.2s ease;
     cursor: pointer;
+    white-space: nowrap;
   }
 
-  .tool-button:hover {
-    background: var(--surface-color);
+  .action-button:hover {
+    background: var(--theme-color);
     border-color: var(--theme-color);
-    color: var(--theme-color);
+    color: white;
     transform: translateY(-2px);
-  }
-
-  [data-color-mode="dark"] .route-item {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-                0 12px 16px rgba(0, 0, 0, 0.1);
-  }
-
-  [data-color-mode="dark"] .tool-button {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -170,26 +308,41 @@
 
     .routes-title {
       font-size: 2rem;
+      margin-bottom: 2rem;
     }
 
     .routes-grid {
       grid-template-columns: 1fr;
+      gap: 1rem;
     }
 
-    .route-item {
-      padding: 1.25rem;
+    .routes-section {
+      padding: 1rem;
+      gap: 1rem;
     }
 
-    .route-info h3 {
-      font-size: 1.1rem;
+    .route-item, .planning-item {
+      padding: 1rem;
     }
 
-    .route-details {
+    .route-meta {
+      gap: 1rem;
+    }
+
+    .avatar {
+      min-width: 40px;
+      height: 40px;
+      font-size: 1rem;
+      margin-right: 1rem;
+    }
+
+    .setting-info {
+      padding-right: 1rem;
+    }
+
+    .action-button {
+      padding: 0.5rem 1rem;
       font-size: 0.9rem;
-    }
-
-    .tool-button {
-      padding: 0.875rem;
     }
   }
 </style> 
