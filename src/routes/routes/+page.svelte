@@ -52,7 +52,7 @@
   .routes-title {
     font-size: 3rem;
     margin-bottom: 3rem;
-    color: #1e293b;
+    color: var(--text-primary);
     font-weight: 800;
     position: relative;
     letter-spacing: -1px;
@@ -86,25 +86,27 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    background: #f8fafc;
+    background: var(--surface-color);
     border-radius: 12px;
     transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
   }
 
   .route-item:hover {
-    background: #f1f5f9;
+    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
     transform: translateX(4px);
+    border-color: var(--theme-color);
   }
 
   .route-info h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
   }
 
   .route-details {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 1rem;
     margin-bottom: 0.75rem;
   }
@@ -124,8 +126,8 @@
   }
 
   .status-badge.active {
-    background: #dcfce7;
-    color: #059669;
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: white;
   }
 
   .planning-tools {
@@ -136,19 +138,29 @@
 
   .tool-button {
     padding: 1rem;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    color: #1e293b;
+    color: var(--text-primary);
     font-weight: 500;
     transition: all 0.2s ease;
     cursor: pointer;
   }
 
   .tool-button:hover {
-    background: #f8fafc;
+    background: var(--surface-color);
     border-color: var(--theme-color);
     color: var(--theme-color);
+    transform: translateY(-2px);
+  }
+
+  [data-color-mode="dark"] .route-item {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 12px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  [data-color-mode="dark"] .tool-button {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -162,6 +174,22 @@
 
     .routes-grid {
       grid-template-columns: 1fr;
+    }
+
+    .route-item {
+      padding: 1.25rem;
+    }
+
+    .route-info h3 {
+      font-size: 1.1rem;
+    }
+
+    .route-details {
+      font-size: 0.9rem;
+    }
+
+    .tool-button {
+      padding: 0.875rem;
     }
   }
 </style> 
