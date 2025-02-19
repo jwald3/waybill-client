@@ -12,7 +12,8 @@ export const icons = {
     <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
   </svg>`,
   routes: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-    <path d="M3 3h18v2H3V3zm0 16h18v2H3v-2zm0-8h18v2H3v-2z"/>
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 2.88-2.88 7.19-5 9.88C9.92 16.21 7 11.85 7 9z"/>
+    <circle cx="12" cy="9" r="2.5"/>
   </svg>`,
   analytics: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1.57 16H6.57L12 13.4l2.19 2.19 2.44-2.44L19 15.73V19zm0-4.76l-2.37-2.37-2.44 2.44L12 12.12 6.57 17H5V5h14v9.24z"/>
