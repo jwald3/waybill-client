@@ -1,9 +1,12 @@
 <script lang="ts">
 	import '../app.css';
 	import { theme } from '$lib/stores/theme';
+	import ThemeProvider from '$lib/components/ThemeProvider.svelte';
 	let { children } = $props();
 </script>
 
-<div data-theme={$theme}>
-	{@render children()}
-</div>
+<ThemeProvider>
+	<div data-theme={$theme}>
+		{@render children()}
+	</div>
+</ThemeProvider>

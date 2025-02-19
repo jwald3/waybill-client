@@ -1,28 +1,14 @@
 @import 'tailwindcss';
 
-/* Light mode variables */
-[data-color-mode="light"] {
+/* Base theme variables are now handled by ThemeProvider */
+:root {
+  /* Default fallback values */
   --bg-primary: #f0f4ff;
   --bg-secondary: #ffffff;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --border-color: #e2e8f0;
   --surface-color: #f8fafc;
-}
-
-/* Dark mode variables */
-[data-color-mode="dark"] {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
-  --surface-color: #1e293b;
-}
-
-/* Theme colors remain the same */
-:root {
-  /* Default theme (will be overridden by data-theme attributes) */
   --theme-color: #6366f1;
   --theme-gradient: linear-gradient(90deg, #6366f1, #818cf8);
 }
@@ -42,6 +28,32 @@
 
 .themed-gradient {
   background: var(--theme-gradient);
+}
+
+/* Utility classes for dark mode */
+.dark-mode-transition {
+  transition: background-color 0.3s ease,
+              color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+/* Common component styles */
+.card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.bg-surface {
+  background-color: var(--surface-color);
 }
 
 /* Button styles */
