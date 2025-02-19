@@ -269,7 +269,7 @@
 
   .analytics-title {
     font-size: 2.25rem;
-    color: #1e293b;
+    color: var(--text-primary);
     font-weight: 800;
     letter-spacing: -1px;
   }
@@ -323,8 +323,9 @@
     padding: 1.5rem;
     height: 100%;
     align-items: center;
-    background: linear-gradient(to bottom right, #ffffff, #f8fafc);
+    background: var(--surface-color);
     border-radius: 12px;
+    border: 1px solid var(--border-color);
   }
 
   .routes-table,
@@ -338,10 +339,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem 1rem;
-    background: #f8fafc;
+    background: var(--surface-color);
     border-radius: 8px;
     margin-bottom: 1rem;
     flex-shrink: 0;
+    border: 1px solid var(--border-color);
   }
 
   .chart-legend {
@@ -355,7 +357,7 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    color: #475569;
+    color: var(--text-secondary);
     font-weight: 500;
   }
 
@@ -375,9 +377,9 @@
   .time-range {
     padding: 0.5rem;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    color: #64748b;
-    background: white;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
   }
 
   .table-header, .table-row {
@@ -391,17 +393,18 @@
   .table-header {
     position: sticky;
     top: 0;
-    background: #f8fafc;
+    background: var(--surface-color);
     border-radius: 8px;
     font-weight: 600;
-    color: #475569;
+    color: var(--text-secondary);
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    border: 1px solid var(--border-color);
   }
 
   .table-row {
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
   }
 
   .table-row:last-child {
@@ -409,13 +412,12 @@
   }
 
   .route-name {
-    font-weight: 500;
     color: var(--theme-color);
+    font-weight: 500;
   }
 
   .trips {
-    color: #64748b;
-    font-weight: 500;
+    color: var(--text-secondary);
     text-align: center;
   }
 
@@ -443,7 +445,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.25rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: 8px;
   }
 
   .driver-item:last-child {
@@ -477,12 +481,12 @@
 
   .name {
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 
   .stats {
     font-size: 0.875rem;
-    color: #64748b;
+    color: var(--text-secondary);
   }
 
   .rating {
@@ -500,7 +504,7 @@
 
   .rating-label {
     font-size: 0.75rem;
-    color: #64748b;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -512,7 +516,9 @@
 
   .alert-item {
     padding: 1rem 1.25rem;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: 8px;
   }
 
   .alert-item:last-child {
@@ -558,13 +564,13 @@
   }
 
   .alert-message {
-    color: #1e293b;
+    color: var(--text-primary);
     font-weight: 500;
     line-height: 1.4;
   }
 
   .alert-time {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 0.875rem;
   }
 
@@ -588,9 +594,9 @@
     flex-direction: column;
     gap: 0.75rem;
     padding: 1.25rem;
-    background: white;
+    background: var(--bg-secondary);
     border-radius: 12px;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    border: 1px solid var(--border-color);
   }
 
   .cost-legend-item {
@@ -598,13 +604,16 @@
     align-items: center;
     gap: 1rem;
     padding: 0.75rem;
+    background: var(--surface-color);
     border-radius: 8px;
+    border: 1px solid var(--border-color);
     transition: all 0.2s ease;
   }
 
   .cost-legend-item:hover {
-    background: #f8fafc;
+    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
     transform: translateX(4px);
+    border-color: var(--theme-color);
   }
 
   .cost-legend-color {
@@ -628,12 +637,12 @@
 
   .cost-legend-label {
     font-weight: 500;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 
   .cost-legend-value {
     font-weight: 600;
-    color: #64748b;
+    color: var(--text-secondary);
   }
 
   @media (max-width: 1400px) {
@@ -660,13 +669,14 @@
     }
 
     .cost-analysis {
-      background: white;
+      background: var(--surface-color);
       padding: 1rem;
     }
 
     .cost-legend {
       box-shadow: none;
       padding: 1rem;
+      background: var(--surface-color);
     }
 
     .cost-chart {
@@ -679,5 +689,60 @@
       gap: 0.75rem;
       padding: 0.75rem;
     }
+  }
+
+  /* Update chart styles */
+  :global(.chart-wrapper) {
+    background: var(--surface-color);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+  }
+
+  [data-color-mode="dark"] :global(.chart-wrapper) {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Update scrollbar styles for dark mode */
+  .routes-table::-webkit-scrollbar,
+  .drivers-list::-webkit-scrollbar,
+  .alerts-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .routes-table::-webkit-scrollbar-track,
+  .drivers-list::-webkit-scrollbar-track,
+  .alerts-list::-webkit-scrollbar-track {
+    background: var(--surface-color);
+    border-radius: 3px;
+  }
+
+  .routes-table::-webkit-scrollbar-thumb,
+  .drivers-list::-webkit-scrollbar-thumb,
+  .alerts-list::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+  }
+
+  .routes-table::-webkit-scrollbar-thumb:hover,
+  .drivers-list::-webkit-scrollbar-thumb:hover,
+  .alerts-list::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+  }
+
+  /* Update alert icons for dark mode */
+  [data-color-mode="dark"] .alert-icon.warning {
+    background: color-mix(in srgb, #d97706 15%, var(--surface-color));
+    color: #fbbf24;
+  }
+
+  [data-color-mode="dark"] .alert-icon.success {
+    background: color-mix(in srgb, #059669 15%, var(--surface-color));
+    color: #34d399;
+  }
+
+  [data-color-mode="dark"] .alert-icon.error {
+    background: color-mix(in srgb, #dc2626 15%, var(--surface-color));
+    color: #f87171;
   }
 </style> 

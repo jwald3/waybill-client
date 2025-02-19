@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Chart, type ChartConfiguration } from 'chart.js/auto';
+  import { colorMode } from '$lib/stores/theme';
 
   export let data: {
     label: string;
@@ -11,7 +12,11 @@
   let canvas: HTMLCanvasElement;
   let totalValue = data.reduce((sum, item) => sum + item.value, 0);
 
-  onMount(() => {
+  $: createChart(canvas, data, $colorMode);
+
+  function createChart(canvas: HTMLCanvasElement, data: any, mode: string) {
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     if (ctx) {
       const config: ChartConfiguration = {
@@ -36,7 +41,10 @@
           },
           plugins: {
             legend: {
-              display: false
+              display: false,
+              labels: {
+                color: mode === 'dark' ? '#94a3b8' : '#64748b'
+              }
             }
           },
           cutout: '65%',
@@ -46,7 +54,7 @@
 
       new Chart(ctx, config);
     }
-  });
+  }
 </script>
 
 <div class="chart-wrapper">
@@ -77,7 +85,7 @@
 
   .total-label {
     font-size: 0.875rem;
-    color: #64748b;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -85,6 +93,6 @@
   .total-value {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-primary);
   }
 </style> 

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { Chart, type ChartConfiguration } from 'chart.js/auto';
+  import { colorMode } from '$lib/stores/theme';
 
   export let data: {
     labels: string[];
@@ -13,9 +14,16 @@
 
   let canvas: HTMLCanvasElement;
 
-  onMount(() => {
+  $: createChart(canvas, data, $colorMode);
+
+  function createChart(canvas: HTMLCanvasElement, data: any, mode: string) {
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     if (ctx) {
+      const gridColor = mode === 'dark' ? '#334155' : '#e2e8f0';
+      const textColor = mode === 'dark' ? '#94a3b8' : '#64748b';
+
       const config: ChartConfiguration = {
         type: 'line',
         data: {
@@ -29,7 +37,7 @@
             fill: true,
             borderWidth: 2,
             pointRadius: 3,
-            pointBackgroundColor: 'white',
+            pointBackgroundColor: mode === 'dark' ? '#1e293b' : 'white',
             pointBorderWidth: 2,
           }))
         },
@@ -48,11 +56,12 @@
             y: {
               beginAtZero: true,
               grid: {
-                color: '#e2e8f0'
+                color: gridColor
               },
               ticks: {
                 padding: 10,
-                maxTicksLimit: 6
+                maxTicksLimit: 6,
+                color: textColor
               }
             },
             x: {
@@ -60,7 +69,8 @@
                 display: false
               },
               ticks: {
-                padding: 10
+                padding: 10,
+                color: textColor
               }
             }
           },
@@ -77,7 +87,7 @@
 
       new Chart(ctx, config);
     }
-  });
+  }
 </script>
 
 <div class="chart-wrapper">
