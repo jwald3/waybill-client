@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { theme, type Theme } from '$lib/stores/theme';
+  import { theme, type Theme, colorMode } from '$lib/stores/theme';
   
   let isNavExpanded = true;
   
@@ -16,6 +16,10 @@
   function handleThemeChange(event: Event) {
     const select = event.target as HTMLSelectElement;
     theme.set(select.value as Theme);
+  }
+
+  function toggleColorMode() {
+    $colorMode = $colorMode === 'light' ? 'dark' : 'light';
   }
 </script>
 
@@ -31,7 +35,7 @@
               <h3>Profile Information</h3>
               <p>Update your account details and preferences</p>
             </div>
-            <button class="edit-button">Edit</button>
+            <button class="action-button">Edit</button>
           </div>
           
           <div class="setting-item">
@@ -39,7 +43,7 @@
               <h3>Notification Preferences</h3>
               <p>Manage your notification settings</p>
             </div>
-            <button class="edit-button">Configure</button>
+            <button class="action-button">Configure</button>
           </div>
 
           <div class="setting-item">
@@ -47,7 +51,7 @@
               <h3>Security Settings</h3>
               <p>Update password and security preferences</p>
             </div>
-            <button class="edit-button">Manage</button>
+            <button class="action-button">Manage</button>
           </div>
         </div>
       </Card>
@@ -59,7 +63,7 @@
               <h3>Display Settings</h3>
               <p>Customize your dashboard appearance</p>
             </div>
-            <button class="edit-button">Customize</button>
+            <button class="action-button">Customize</button>
           </div>
 
           <div class="setting-item">
@@ -67,7 +71,7 @@
               <h3>Data Preferences</h3>
               <p>Manage data display and exports</p>
             </div>
-            <button class="edit-button">Configure</button>
+            <button class="action-button">Configure</button>
           </div>
 
           <div class="setting-item">
@@ -85,6 +89,21 @@
               {/each}
             </select>
           </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <h3>Dark Mode</h3>
+              <p>Toggle between light and dark interface</p>
+            </div>
+            <button 
+              class="mode-toggle" 
+              on:click={toggleColorMode}
+              class:dark={$colorMode === 'dark'}
+            >
+              <span class="toggle-slider"></span>
+              <span class="toggle-text">{$colorMode === 'light' ? 'Light' : 'Dark'}</span>
+            </button>
+          </div>
         </div>
       </Card>
     </div>
@@ -101,7 +120,7 @@
   .settings-title {
     font-size: 3rem;
     margin-bottom: 3rem;
-    color: #1e293b;
+    color: var(--text-primary);
     font-weight: 800;
     position: relative;
     letter-spacing: -1px;
@@ -135,31 +154,33 @@
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    background: #f8fafc;
+    background: var(--surface-color);
     border-radius: 12px;
     transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
   }
 
   .setting-item:hover {
-    background: #f1f5f9;
+    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
+    transform: translateX(4px);
   }
 
   .setting-info h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #1e293b;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
   }
 
   .setting-info p {
-    color: #64748b;
+    color: var(--text-secondary);
     font-size: 0.9rem;
   }
 
-  .edit-button {
+  .action-button {
     padding: 0.5rem 1rem;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
     color: var(--theme-color);
     font-weight: 500;
@@ -167,43 +188,71 @@
     cursor: pointer;
   }
 
-  .edit-button:hover {
+  .action-button:hover {
     background: var(--theme-color);
     border-color: var(--theme-color);
+    color: white;
+    transform: translateY(-2px);
   }
 
   .theme-select {
     padding: 0.5rem 1rem;
-    background: white;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    color: var(--theme-color);
+    color: var(--text-primary);
     font-weight: 500;
     cursor: pointer;
+    min-width: 160px;
   }
 
   .theme-select:hover {
     border-color: var(--theme-color);
   }
 
-  :global([data-theme='indigo']) {
-    --theme-color: #6366f1;
-    --theme-gradient: linear-gradient(90deg, #6366f1, #818cf8);
+  .mode-toggle {
+    position: relative;
+    width: 100px;
+    height: 36px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 18px;
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
   }
 
-  :global([data-theme='emerald']) {
-    --theme-color: #10b981;
-    --theme-gradient: linear-gradient(90deg, #10b981, #34d399);
+  .toggle-slider {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background: var(--theme-color);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    left: 4px;
   }
 
-  :global([data-theme='rose']) {
-    --theme-color: #f43f5e;
-    --theme-gradient: linear-gradient(90deg, #f43f5e, #fb7185);
+  .mode-toggle.dark .toggle-slider {
+    transform: translateX(64px);
   }
 
-  :global([data-theme='amber']) {
-    --theme-color: #f59e0b;
-    --theme-gradient: linear-gradient(90deg, #f59e0b, #fbbf24);
+  .toggle-text {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: 36px;
+    transition: opacity 0.3s ease;
+  }
+
+  .mode-toggle.dark .toggle-text {
+    margin-left: 12px;
+  }
+
+  [data-color-mode="dark"] .setting-item {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
+                0 12px 16px rgba(0, 0, 0, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -217,6 +266,23 @@
 
     .settings-grid {
       grid-template-columns: 1fr;
+    }
+
+    .setting-item {
+      padding: 1.25rem;
+    }
+
+    .setting-info h3 {
+      font-size: 1rem;
+    }
+
+    .setting-info p {
+      font-size: 0.85rem;
+    }
+
+    .action-button, .theme-select {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
     }
   }
 </style> 
