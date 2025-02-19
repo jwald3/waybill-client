@@ -170,9 +170,9 @@
 
   .summary-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .card {
@@ -405,6 +405,71 @@
 
   .eta-text {
     letter-spacing: 0.5px;
+  }
+
+  @media (min-width: 769px) and (max-width: 1200px) {
+    .dashboard {
+      padding: 1.5rem;
+      gap: 1.5rem;
+    }
+
+    .dashboard-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .summary-cards {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .card {
+      padding: 1.75rem;
+    }
+
+    .number {
+      font-size: 3.5rem;
+    }
+
+    .trip-item, .delivery-item {
+      padding: 1.25rem;
+      gap: 1rem;
+    }
+
+    .avatar {
+      min-width: 48px;
+      height: 48px;
+      margin-right: 1rem;
+    }
+
+    .route {
+      font-size: 1.05rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .status {
+      gap: 0.75rem;
+    }
+
+    .chip {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .eta-container {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      min-width: 110px;
+    }
+
+    .section {
+      margin-bottom: 1.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
   }
 
   @media (max-width: 768px) {
