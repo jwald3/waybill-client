@@ -165,11 +165,21 @@
 
       <Card title="Facility Types" icon={icons.truck}>
         <div class="stat">
-          <div class="type-distribution">
-            <span>Type A: {stats.typeA}</span>
-            <span>Type B: {stats.typeB}</span>
-            <span>Type C: {stats.typeC}</span>
+          <div class="type-stats">
+            <div class="type-stat type-a">
+              <span class="type-label">Type A</span>
+              <span class="type-value">{stats.typeA}</span>
+            </div>
+            <div class="type-stat type-b">
+              <span class="type-label">Type B</span>
+              <span class="type-value">{stats.typeB}</span>
+            </div>
+            <div class="type-stat type-c">
+              <span class="type-label">Type C</span>
+              <span class="type-value">{stats.typeC}</span>
+            </div>
           </div>
+          <p class="stat-label">Distribution by Type</p>
         </div>
       </Card>
     </div>
@@ -367,12 +377,44 @@
     font-size: 0.9rem;
   }
 
-  .type-distribution {
+  .type-stats {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    color: var(--text-primary);
-    font-size: 1.1rem;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .type-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+
+  .type-stat.type-a {
+    background: color-mix(in srgb, #15803d 10%, transparent);
+    color: #15803d;
+  }
+
+  .type-stat.type-b {
+    background: color-mix(in srgb, #1d4ed8 10%, transparent);
+    color: #1d4ed8;
+  }
+
+  .type-stat.type-c {
+    background: color-mix(in srgb, #854d0e 10%, transparent);
+    color: #854d0e;
+  }
+
+  .type-label {
+    font-size: 1rem;
+  }
+
+  .type-value {
+    font-size: 1.25rem;
+    font-weight: 600;
   }
 
   .facilities-list {
@@ -651,6 +693,22 @@
 
     .results-summary {
       padding: 1rem;
+    }
+
+    .type-stats {
+      gap: 0.5rem;
+    }
+
+    .type-stat {
+      padding: 0.625rem 0.875rem;
+    }
+
+    .type-label {
+      font-size: 0.9rem;
+    }
+
+    .type-value {
+      font-size: 1.125rem;
     }
   }
 </style> 
