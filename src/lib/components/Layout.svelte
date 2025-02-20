@@ -54,6 +54,10 @@
         <span class="nav-icon">{@html icons.facilities}</span>
         {#if isNavExpanded}<span>Facilities</span>{/if}
       </a>
+      <a href="/trucks" class="nav-link" class:active={$page.url.pathname === "/trucks"}>
+        <span class="nav-icon">{@html icons.truck}</span>
+        {#if isNavExpanded}<span>Trucks</span>{/if}
+      </a>
     </div>
   </nav>
 
