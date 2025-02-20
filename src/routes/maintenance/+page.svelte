@@ -149,6 +149,55 @@
       day: 'numeric'
     });
   }
+
+  // Search and filter state
+  let searchQuery = '';
+  let selectedServiceType: string = 'ALL';
+  let sortField: 'date' | 'cost' | 'truck_number' = 'date';
+  let sortDirection: 'asc' | 'desc' = 'desc';
+
+  // Service type options
+  const serviceTypes = ['ALL', 'ROUTINE_MAINTENANCE', 'REPAIR', 'EMERGENCY'];
+
+  // Filtered and sorted records
+  $: filteredRecords = maintenanceRecords
+    .filter(record => {
+      const matchesSearch = searchQuery === '' || 
+        record.truck.truck_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.truck.make.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.truck.model.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.notes.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        record.mechanic.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesType = selectedServiceType === 'ALL' || 
+        record.service_type === selectedServiceType;
+
+      return matchesSearch && matchesType;
+    })
+    .sort((a, b) => {
+      let comparison = 0;
+      switch (sortField) {
+        case 'date':
+          comparison = new Date(b.date).getTime() - new Date(a.date).getTime();
+          break;
+        case 'cost':
+          comparison = b.cost - a.cost;
+          break;
+        case 'truck_number':
+          comparison = a.truck.truck_number.localeCompare(b.truck.truck_number);
+          break;
+      }
+      return sortDirection === 'asc' ? -comparison : comparison;
+    });
+
+  function handleSort(field: typeof sortField) {
+    if (sortField === field) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortField = field;
+      sortDirection = 'desc';
+    }
+  }
 </script>
 
 <Layout {isNavExpanded}>
@@ -186,8 +235,68 @@
     </div>
 
     <Card title="Maintenance Records" icon={icons.maintenance}>
+      <div class="controls">
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search records..."
+            bind:value={searchQuery}
+            class="search-input"
+          />
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="filter-group">
+          <select 
+            bind:value={selectedServiceType}
+            class="filter-select"
+          >
+            {#each serviceTypes as type}
+              <option value={type}>
+                {type === 'ALL' ? 'All Types' : type.replace('_', ' ')}
+              </option>
+            {/each}
+          </select>
+
+          <div class="sort-buttons">
+            <button
+              class="sort-button"
+              class:active={sortField === 'date'}
+              class:asc={sortField === 'date' && sortDirection === 'asc'}
+              on:click={() => handleSort('date')}
+            >
+              Date {sortField === 'date' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+            <button
+              class="sort-button"
+              class:active={sortField === 'cost'}
+              class:asc={sortField === 'cost' && sortDirection === 'asc'}
+              on:click={() => handleSort('cost')}
+            >
+              Cost {sortField === 'cost' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+            <button
+              class="sort-button"
+              class:active={sortField === 'truck_number'}
+              class:asc={sortField === 'truck_number' && sortDirection === 'asc'}
+              on:click={() => handleSort('truck_number')}
+            >
+              Truck # {sortField === 'truck_number' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-summary">
+        Showing {filteredRecords.length} of {maintenanceRecords.length} records
+      </div>
+
       <div class="maintenance-list">
-        {#each maintenanceRecords as record}
+        {#each filteredRecords as record}
           <div class="maintenance-item">
             <div class="item-header">
               <div class="item-title">
@@ -430,6 +539,94 @@
     color: var(--theme-color);
   }
 
+  .controls {
+    padding: 1.5rem 1.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--theme-color);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    min-width: 200px;
+  }
+
+  .sort-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .sort-button {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .sort-button:hover {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .sort-button.active {
+    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .results-summary {
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
   @media (max-width: 768px) {
     .maintenance {
       padding: 1rem;
@@ -464,6 +661,33 @@
 
     .action-button {
       width: 100%;
+    }
+
+    .controls {
+      padding: 1rem 1rem 0;
+      flex-direction: column;
+    }
+
+    .search-box {
+      min-width: 100%;
+    }
+
+    .filter-group {
+      flex-direction: column;
+    }
+
+    .sort-buttons {
+      flex-wrap: wrap;
+    }
+
+    .sort-button {
+      flex: 1;
+      min-width: calc(50% - 0.25rem);
+      text-align: center;
+    }
+
+    .results-summary {
+      padding: 1rem;
     }
   }
 </style> 
