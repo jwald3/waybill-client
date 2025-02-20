@@ -46,6 +46,10 @@
         <span class="nav-icon">{@html icons.trips}</span>
         {#if isNavExpanded}<span>Trips</span>{/if}
       </a>
+      <a href="/drivers" class="nav-link" class:active={$page.url.pathname === "/drivers"}>
+        <span class="nav-icon">{@html icons.drivers}</span>
+        {#if isNavExpanded}<span>Drivers</span>{/if}
+      </a>
     </div>
   </nav>
 
