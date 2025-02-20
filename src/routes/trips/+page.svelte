@@ -95,6 +95,75 @@
   function formatNumber(num: number): string {
     return new Intl.NumberFormat('en-US').format(Math.round(num));
   }
+
+  // Pagination settings
+  let currentPage = 1;
+  const recordsPerPage = 5;
+
+  // Search and filter state
+  let searchQuery = '';
+  let selectedStatus: string = 'ALL';
+  let sortField: 'departure_time' | 'arrival_time' | 'trip_number' = 'departure_time';
+  let sortDirection: 'asc' | 'desc' = 'desc';
+
+  // Status options
+  const statusTypes = ['ALL', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'];
+
+  // Filtered and sorted records
+  $: filteredRecords = trips
+    .filter(trip => {
+      const matchesSearch = searchQuery === '' || 
+        trip.trip_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        trip.cargo.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        trip.location?.toLowerCase().includes(searchQuery.toLowerCase());
+
+      const matchesStatus = selectedStatus === 'ALL' || 
+        trip.status === selectedStatus;
+
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      let comparison = 0;
+      switch (sortField) {
+        case 'departure_time':
+          comparison = new Date(b.departure_time.scheduled).getTime() - new Date(a.departure_time.scheduled).getTime();
+          break;
+        case 'arrival_time':
+          comparison = new Date(b.arrival_time.scheduled).getTime() - new Date(a.arrival_time.scheduled).getTime();
+          break;
+        case 'trip_number':
+          comparison = a.trip_number.localeCompare(b.trip_number);
+          break;
+      }
+      return sortDirection === 'asc' ? -comparison : comparison;
+    });
+
+  // Update filtered records to include pagination
+  $: paginatedRecords = filteredRecords
+    .slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
+
+  $: totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+  function goToPage(page: number) {
+    if (page >= 1 && page <= totalPages) {
+      currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Reset to first page when filters change
+  $: if (searchQuery || selectedStatus) {
+    currentPage = 1;
+  }
+
+  function handleSort(field: typeof sortField) {
+    if (sortField === field) {
+      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortField = field;
+      sortDirection = 'desc';
+    }
+  }
 </script>
 
 <Layout {isNavExpanded}>
@@ -131,9 +200,69 @@
       </Card>
     </div>
 
-    <Card title="Active Trips" icon={icons.trips}>
+    <Card title="Trip Records" icon={icons.trips}>
+      <div class="controls">
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Search trips..."
+            bind:value={searchQuery}
+            class="search-input"
+          />
+          <span class="search-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="filter-group">
+          <select 
+            bind:value={selectedStatus}
+            class="filter-select"
+          >
+            {#each statusTypes as type}
+              <option value={type}>
+                {type === 'ALL' ? 'All Statuses' : type.replace('_', ' ')}
+              </option>
+            {/each}
+          </select>
+
+          <div class="sort-buttons">
+            <button
+              class="sort-button"
+              class:active={sortField === 'departure_time'}
+              class:asc={sortField === 'departure_time' && sortDirection === 'asc'}
+              on:click={() => handleSort('departure_time')}
+            >
+              Departure {sortField === 'departure_time' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+            <button
+              class="sort-button"
+              class:active={sortField === 'arrival_time'}
+              class:asc={sortField === 'arrival_time' && sortDirection === 'asc'}
+              on:click={() => handleSort('arrival_time')}
+            >
+              Arrival {sortField === 'arrival_time' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+            <button
+              class="sort-button"
+              class:active={sortField === 'trip_number'}
+              class:asc={sortField === 'trip_number' && sortDirection === 'asc'}
+              on:click={() => handleSort('trip_number')}
+            >
+              Trip # {sortField === 'trip_number' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="results-summary">
+        Showing {filteredRecords.length} of {trips.length} trips
+      </div>
+
       <div class="trips-list">
-        {#each trips as trip}
+        {#each paginatedRecords as trip}
           <div class="trip-item">
             <div class="trip-header">
               <div class="trip-title">
@@ -198,6 +327,61 @@
             </div>
           </div>
         {/each}
+      </div>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} trips
+        </div>
+        <div class="pagination-controls">
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(1)}
+            title="First page"
+          >
+            ««
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(currentPage - 1)}
+            title="Previous page"
+          >
+            «
+          </button>
+          
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+              <button 
+                class="page-button"
+                class:active={page === currentPage}
+                on:click={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            {:else if page === currentPage - 3 || page === currentPage + 3}
+              <span class="page-ellipsis">...</span>
+            {/if}
+          {/each}
+
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(currentPage + 1)}
+            title="Next page"
+          >
+            »
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(totalPages)}
+            title="Last page"
+          >
+            »»
+          </button>
+        </div>
       </div>
     </Card>
   </div>
@@ -434,6 +618,153 @@
     color: white;
   }
 
+  .controls {
+    padding: 1.5rem 1.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 300px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--theme-color);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    min-width: 200px;
+  }
+
+  .sort-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .sort-button {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .sort-button:hover {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .sort-button.active {
+    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .results-summary {
+    padding: 1rem 1.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .pagination {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pagination-info {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .page-button {
+    padding: 0.5rem 0.75rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .page-button:hover:not(:disabled) {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .page-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .page-button.active {
+    background: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
+  }
+
+  .page-ellipsis {
+    color: var(--text-secondary);
+    padding: 0 0.5rem;
+  }
+
   @media (max-width: 768px) {
     .trips {
       padding: 1rem;
@@ -474,6 +805,48 @@
 
     .note {
       padding: 0.5rem;
+    }
+
+    .controls {
+      padding: 1rem 1rem 0;
+      flex-direction: column;
+    }
+
+    .search-box {
+      min-width: 100%;
+    }
+
+    .filter-group {
+      flex-direction: column;
+    }
+
+    .sort-buttons {
+      flex-wrap: wrap;
+    }
+
+    .sort-button {
+      flex: 1;
+      min-width: calc(50% - 0.25rem);
+      text-align: center;
+    }
+
+    .results-summary {
+      padding: 1rem;
+    }
+
+    .pagination {
+      padding: 1rem;
+    }
+
+    .pagination-controls {
+      gap: 0.25rem;
+    }
+
+    .page-button {
+      padding: 0.4rem 0.6rem;
+      min-width: 2.2rem;
+      height: 2.2rem;
+      font-size: 0.85rem;
     }
   }
 </style> 
