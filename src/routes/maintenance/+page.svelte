@@ -36,96 +36,63 @@
     updated_at: string;
   }
 
-  // Dummy data matching API structure
-  const maintenanceRecords: MaintenanceLog[] = [
-    {
-      id: "67b0eceac7baa8eb47fafe76",
-      truck: {
-        id: "67b0d790c7baa8eb47fafe70",
-        truck_number: "A236286",
-        vin: "2352302832A235",
-        make: "Ford",
-        model: "F-750",
-        year: 2018,
-        license_plate: {
-          number: "CATS123",
-          state: "NY"
-        },
-        mileage: 150000,
-        status: "IN_TRANSIT",
-        trailer_type: "DRY_VAN",
-        capacity_tons: 5,
-        fuel_type: "DIESEL",
-        last_maintenance: "2024-02-15"
+  // Pagination settings
+  let currentPage = 1;
+  const recordsPerPage = 5;
+
+  // Generate more dummy records
+  const maintenanceRecords: MaintenanceLog[] = Array.from({ length: 25 }, (_, i) => ({
+    id: `67b0eceac7baa8eb47fafe${(76 + i).toString().padStart(2, '0')}`,
+    truck: {
+      id: `67b0d790c7baa8eb47fafe${(70 + i % 8).toString().padStart(2, '0')}`,
+      truck_number: ['A236286', 'B445789', 'C789012', 'D123456', 'E567890', 'F891234', 'G345678', 'H901234'][i % 8],
+      vin: `VIN${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
+      make: ['Ford', 'Peterbilt', 'Kenworth', 'Freightliner', 'Volvo', 'Mack'][i % 6],
+      model: ['F-750', '579', 'T680', 'Cascadia', 'VNL', 'Anthem'][i % 6],
+      year: 2018 + (i % 5),
+      license_plate: {
+        number: `TR${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+        state: ['NY', 'CA', 'TX', 'FL', 'IL', 'PA'][i % 6]
       },
-      date: "2024-03-15",
-      service_type: "ROUTINE_MAINTENANCE",
-      cost: 2085.29,
-      notes: "Regular 50,000 mile service check. Minor wear on brake pads.",
-      mechanic: "Alan Michaels",
-      location: "Golden Auto Shop, 239 N. Almond Street, Albany, New York",
-      created_at: "2024-02-15T19:37:14.299Z",
-      updated_at: "2024-02-15T19:37:14.299Z"
+      mileage: 75000 + (i * 5000),
+      status: ['IN_TRANSIT', 'MAINTENANCE', 'AVAILABLE'][i % 3],
+      trailer_type: ['DRY_VAN', 'REFRIGERATED', 'FLATBED'][i % 3],
+      capacity_tons: 5 + (i % 4),
+      fuel_type: 'DIESEL',
+      last_maintenance: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString().split('T')[0]
     },
-    {
-      id: "67b0eceac7baa8eb47fafe77",
-      truck: {
-        id: "67b0d790c7baa8eb47fafe71",
-        truck_number: "B445789",
-        vin: "78923HJKL456",
-        make: "Peterbilt",
-        model: "579",
-        year: 2020,
-        license_plate: {
-          number: "TRK4567",
-          state: "CA"
-        },
-        mileage: 98000,
-        status: "MAINTENANCE",
-        trailer_type: "REFRIGERATED",
-        capacity_tons: 8,
-        fuel_type: "DIESEL",
-        last_maintenance: "2024-01-20"
-      },
-      date: "2024-03-12",
-      service_type: "REPAIR",
-      cost: 3450.00,
-      notes: "Brake system inspection and repair. Replaced brake pads and rotors.",
-      mechanic: "Sarah Chen",
-      location: "TruckCare Center, 1234 Industry Ave, Los Angeles, California",
-      created_at: "2024-02-15T19:37:14.299Z",
-      updated_at: "2024-02-15T19:37:14.299Z"
-    },
-    {
-      id: "67b0eceac7baa8eb47fafe78",
-      truck: {
-        id: "67b0d790c7baa8eb47fafe72",
-        truck_number: "C789012",
-        vin: "ABCD123456789",
-        make: "Kenworth",
-        model: "T680",
-        year: 2021,
-        license_plate: {
-          number: "XYZ789",
-          state: "TX"
-        },
-        mileage: 75000,
-        status: "AVAILABLE",
-        trailer_type: "FLATBED",
-        capacity_tons: 6,
-        fuel_type: "DIESEL",
-        last_maintenance: "2024-02-01"
-      },
-      date: "2024-03-10",
-      service_type: "EMERGENCY",
-      cost: 1875.50,
-      notes: "Emergency repair for engine overheating. Replaced coolant and thermostat.",
-      mechanic: "Robert Martinez",
-      location: "Truck Masters, 567 Fleet Street, Houston, Texas",
-      created_at: "2024-02-15T19:37:14.299Z",
-      updated_at: "2024-02-15T19:37:14.299Z"
-    }
-  ];
+    date: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
+    service_type: ['ROUTINE_MAINTENANCE', 'REPAIR', 'EMERGENCY'][i % 3],
+    cost: 1500 + Math.random() * 3000,
+    notes: [
+      'Regular maintenance check. All systems normal.',
+      'Brake system inspection and repair.',
+      'Engine overheating issue resolved.',
+      'Transmission fluid replacement.',
+      'Tire rotation and replacement.',
+      'Air filter replacement and system check.',
+      'Electrical system diagnostics.',
+      'Suspension system maintenance.'
+    ][i % 8],
+    mechanic: [
+      'Alan Michaels',
+      'Sarah Chen',
+      'Robert Martinez',
+      'Jessica Thompson',
+      'Michael Rodriguez',
+      'Emily Parker'
+    ][i % 6],
+    location: [
+      'Golden Auto Shop, Albany, NY',
+      'TruckCare Center, Los Angeles, CA',
+      'Truck Masters, Houston, TX',
+      'Fleet Services, Miami, FL',
+      'Midwest Repairs, Chicago, IL',
+      'Eastern Transport, Philadelphia, PA'
+    ][i % 6],
+    created_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
+    updated_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString()
+  }));
 
   // Maintenance statistics
   const stats = {
@@ -189,6 +156,24 @@
       }
       return sortDirection === 'asc' ? -comparison : comparison;
     });
+
+  // Update filtered records to include pagination
+  $: paginatedRecords = filteredRecords
+    .slice((currentPage - 1) * recordsPerPage, currentPage * recordsPerPage);
+
+  $: totalPages = Math.ceil(filteredRecords.length / recordsPerPage);
+
+  function goToPage(page: number) {
+    if (page >= 1 && page <= totalPages) {
+      currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Reset to first page when filters change
+  $: if (searchQuery || selectedServiceType) {
+    currentPage = 1;
+  }
 
   function handleSort(field: typeof sortField) {
     if (sortField === field) {
@@ -296,7 +281,7 @@
       </div>
 
       <div class="maintenance-list">
-        {#each filteredRecords as record}
+        {#each paginatedRecords as record}
           <div class="maintenance-item">
             <div class="item-header">
               <div class="item-title">
@@ -335,6 +320,61 @@
             </div>
           </div>
         {/each}
+      </div>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+        </div>
+        <div class="pagination-controls">
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(1)}
+            title="First page"
+          >
+            ««
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(currentPage - 1)}
+            title="Previous page"
+          >
+            «
+          </button>
+          
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+              <button 
+                class="page-button"
+                class:active={page === currentPage}
+                on:click={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            {:else if page === currentPage - 3 || page === currentPage + 3}
+              <span class="page-ellipsis">...</span>
+            {/if}
+          {/each}
+
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(currentPage + 1)}
+            title="Next page"
+          >
+            »
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(totalPages)}
+            title="Last page"
+          >
+            »»
+          </button>
+        </div>
       </div>
     </Card>
   </div>
@@ -627,6 +667,65 @@
     border-bottom: 1px solid var(--border-color);
   }
 
+  .pagination {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .pagination-info {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .page-button {
+    padding: 0.5rem 0.75rem;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .page-button:hover:not(:disabled) {
+    border-color: var(--theme-color);
+    color: var(--theme-color);
+  }
+
+  .page-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .page-button.active {
+    background: var(--theme-color);
+    border-color: var(--theme-color);
+    color: white;
+  }
+
+  .page-ellipsis {
+    color: var(--text-secondary);
+    padding: 0 0.5rem;
+  }
+
   @media (max-width: 768px) {
     .maintenance {
       padding: 1rem;
@@ -688,6 +787,21 @@
 
     .results-summary {
       padding: 1rem;
+    }
+
+    .pagination {
+      padding: 1rem;
+    }
+
+    .pagination-controls {
+      gap: 0.25rem;
+    }
+
+    .page-button {
+      padding: 0.4rem 0.6rem;
+      min-width: 2.2rem;
+      height: 2.2rem;
+      font-size: 0.85rem;
     }
   }
 </style> 
