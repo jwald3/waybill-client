@@ -5,47 +5,150 @@
   
   let isNavExpanded = true;
 
-  // Dummy data for maintenance records
-  const maintenanceRecords = [
+  // Types matching API response
+  interface MaintenanceLog {
+    id: string;
+    truck: {
+      id: string;
+      truck_number: string;
+      vin: string;
+      make: string;
+      model: string;
+      year: number;
+      license_plate: {
+        number: string;
+        state: string;
+      };
+      mileage: number;
+      status: string;
+      trailer_type: string;
+      capacity_tons: number;
+      fuel_type: string;
+      last_maintenance: string;
+    };
+    date: string;
+    service_type: string;
+    cost: number;
+    notes: string;
+    mechanic: string;
+    location: string;
+    created_at: string;
+    updated_at: string;
+  }
+
+  // Dummy data matching API structure
+  const maintenanceRecords: MaintenanceLog[] = [
     {
-      id: 'M1001',
-      truck: 'Truck #1234',
-      type: 'Scheduled',
-      status: 'Due',
-      dueDate: '2024-03-15',
-      description: 'Regular 50,000 mile service',
-      priority: 'High',
-      assignedTo: 'Mike Smith'
+      id: "67b0eceac7baa8eb47fafe76",
+      truck: {
+        id: "67b0d790c7baa8eb47fafe70",
+        truck_number: "A236286",
+        vin: "2352302832A235",
+        make: "Ford",
+        model: "F-750",
+        year: 2018,
+        license_plate: {
+          number: "CATS123",
+          state: "NY"
+        },
+        mileage: 150000,
+        status: "IN_TRANSIT",
+        trailer_type: "DRY_VAN",
+        capacity_tons: 5,
+        fuel_type: "DIESEL",
+        last_maintenance: "2024-02-15"
+      },
+      date: "2024-03-15",
+      service_type: "ROUTINE_MAINTENANCE",
+      cost: 2085.29,
+      notes: "Regular 50,000 mile service check. Minor wear on brake pads.",
+      mechanic: "Alan Michaels",
+      location: "Golden Auto Shop, 239 N. Almond Street, Albany, New York",
+      created_at: "2024-02-15T19:37:14.299Z",
+      updated_at: "2024-02-15T19:37:14.299Z"
     },
     {
-      id: 'M1002',
-      truck: 'Truck #2156',
-      type: 'Repair',
-      status: 'In Progress',
-      dueDate: '2024-03-12',
-      description: 'Brake system inspection',
-      priority: 'Medium',
-      assignedTo: 'John Doe'
+      id: "67b0eceac7baa8eb47fafe77",
+      truck: {
+        id: "67b0d790c7baa8eb47fafe71",
+        truck_number: "B445789",
+        vin: "78923HJKL456",
+        make: "Peterbilt",
+        model: "579",
+        year: 2020,
+        license_plate: {
+          number: "TRK4567",
+          state: "CA"
+        },
+        mileage: 98000,
+        status: "MAINTENANCE",
+        trailer_type: "REFRIGERATED",
+        capacity_tons: 8,
+        fuel_type: "DIESEL",
+        last_maintenance: "2024-01-20"
+      },
+      date: "2024-03-12",
+      service_type: "REPAIR",
+      cost: 3450.00,
+      notes: "Brake system inspection and repair. Replaced brake pads and rotors.",
+      mechanic: "Sarah Chen",
+      location: "TruckCare Center, 1234 Industry Ave, Los Angeles, California",
+      created_at: "2024-02-15T19:37:14.299Z",
+      updated_at: "2024-02-15T19:37:14.299Z"
     },
     {
-      id: 'M1003',
-      truck: 'Truck #3789',
-      type: 'Emergency',
-      status: 'Completed',
-      dueDate: '2024-03-10',
-      description: 'Engine overheating issue',
-      priority: 'Critical',
-      assignedTo: 'Sarah Johnson'
+      id: "67b0eceac7baa8eb47fafe78",
+      truck: {
+        id: "67b0d790c7baa8eb47fafe72",
+        truck_number: "C789012",
+        vin: "ABCD123456789",
+        make: "Kenworth",
+        model: "T680",
+        year: 2021,
+        license_plate: {
+          number: "XYZ789",
+          state: "TX"
+        },
+        mileage: 75000,
+        status: "AVAILABLE",
+        trailer_type: "FLATBED",
+        capacity_tons: 6,
+        fuel_type: "DIESEL",
+        last_maintenance: "2024-02-01"
+      },
+      date: "2024-03-10",
+      service_type: "EMERGENCY",
+      cost: 1875.50,
+      notes: "Emergency repair for engine overheating. Replaced coolant and thermostat.",
+      mechanic: "Robert Martinez",
+      location: "Truck Masters, 567 Fleet Street, Houston, Texas",
+      created_at: "2024-02-15T19:37:14.299Z",
+      updated_at: "2024-02-15T19:37:14.299Z"
     }
   ];
 
   // Maintenance statistics
   const stats = {
-    scheduled: 12,
-    inProgress: 4,
-    completed: 28,
-    overdue: 2
+    routine: maintenanceRecords.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
+    repair: maintenanceRecords.filter(r => r.service_type === 'REPAIR').length,
+    emergency: maintenanceRecords.filter(r => r.service_type === 'EMERGENCY').length,
+    totalCost: maintenanceRecords.reduce((sum, record) => sum + record.cost, 0)
   };
+
+  function formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+
+  function formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
 </script>
 
 <Layout {isNavExpanded}>
@@ -53,69 +156,73 @@
     <h1 class="maintenance-title">Maintenance Management</h1>
 
     <div class="stats-grid">
-      <Card title="Scheduled" icon={icons.maintenance}>
+      <Card title="Routine Maintenance" icon={icons.maintenance}>
         <div class="stat-content">
-          <p class="stat-number">{stats.scheduled}</p>
-          <p class="stat-label">Upcoming services</p>
+          <p class="stat-number">{stats.routine}</p>
+          <p class="stat-label">Services</p>
         </div>
       </Card>
 
-      <Card title="In Progress" icon={icons.maintenance}>
+      <Card title="Repairs" icon={icons.maintenance}>
         <div class="stat-content">
-          <p class="stat-number">{stats.inProgress}</p>
+          <p class="stat-number">{stats.repair}</p>
           <p class="stat-label">Active repairs</p>
         </div>
       </Card>
 
-      <Card title="Completed" icon={icons.maintenance}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.completed}</p>
-          <p class="stat-label">This month</p>
+      <Card title="Emergency Services" icon={icons.maintenance}>
+        <div class="stat-content warning">
+          <p class="stat-number">{stats.emergency}</p>
+          <p class="stat-label">Critical issues</p>
         </div>
       </Card>
 
-      <Card title="Overdue" icon={icons.maintenance}>
-        <div class="stat-content warning">
-          <p class="stat-number">{stats.overdue}</p>
-          <p class="stat-label">Need attention</p>
+      <Card title="Total Costs" icon={icons.maintenance}>
+        <div class="stat-content">
+          <p class="stat-number">{formatCurrency(stats.totalCost)}</p>
+          <p class="stat-label">This period</p>
         </div>
       </Card>
     </div>
 
-    <Card title="Maintenance Schedule" icon={icons.maintenance}>
+    <Card title="Maintenance Records" icon={icons.maintenance}>
       <div class="maintenance-list">
         {#each maintenanceRecords as record}
           <div class="maintenance-item">
             <div class="item-header">
               <div class="item-title">
-                <h3>{record.truck}</h3>
-                <span class="chip {record.status.toLowerCase()}">{record.status}</span>
+                <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
+                <span class="chip {record.service_type.toLowerCase()}">{record.service_type.replace('_', ' ')}</span>
               </div>
-              <div class="item-priority {record.priority.toLowerCase()}">
-                {record.priority} Priority
+              <div class="cost">
+                {formatCurrency(record.cost)}
               </div>
             </div>
 
             <div class="item-details">
               <div class="detail">
-                <span class="label">Type:</span>
-                <span class="value">{record.type}</span>
+                <span class="label">Date:</span>
+                <span class="value">{formatDate(record.date)}</span>
               </div>
               <div class="detail">
-                <span class="label">Due Date:</span>
-                <span class="value">{record.dueDate}</span>
+                <span class="label">Mechanic:</span>
+                <span class="value">{record.mechanic}</span>
               </div>
               <div class="detail">
-                <span class="label">Assigned To:</span>
-                <span class="value">{record.assignedTo}</span>
+                <span class="label">Mileage:</span>
+                <span class="value">{record.truck.mileage.toLocaleString()} miles</span>
+              </div>
+              <div class="detail">
+                <span class="label">Location:</span>
+                <span class="value">{record.location}</span>
               </div>
             </div>
 
-            <p class="description">{record.description}</p>
+            <p class="description">{record.notes}</p>
 
             <div class="item-actions">
-              <button class="action-button">View Details</button>
-              <button class="action-button">Update Status</button>
+              <button class="action-button">View Full Details</button>
+              <button class="action-button">Update Record</button>
             </div>
           </div>
         {/each}
@@ -229,19 +336,19 @@
     text-transform: uppercase;
   }
 
-  .chip.due {
+  .chip.routine_maintenance {
+    background: #dbeafe;
+    color: #2563eb;
+  }
+
+  .chip.repair {
     background: #fef3c7;
     color: #d97706;
   }
 
-  .chip.completed {
-    background: #dcfce7;
-    color: #059669;
-  }
-
-  .chip.in.progress {
-    background: #dbeafe;
-    color: #3b82f6;
+  .chip.emergency {
+    background: #fee2e2;
+    color: #dc2626;
   }
 
   .item-priority {
@@ -315,6 +422,12 @@
   .action-button:hover {
     background: var(--theme-color);
     color: white;
+  }
+
+  .cost {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--theme-color);
   }
 
   @media (max-width: 768px) {
