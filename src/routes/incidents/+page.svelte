@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  import { formatLargeNumber, formatDate } from '$lib/utils/format';
   
   let isNavExpanded = true;
 
@@ -81,7 +82,9 @@
   // Stats calculation
   const stats = {
     total: incidents.length,
-    totalDamage: incidents.reduce((sum, inc) => sum + inc.damage_estimate, 0),
+    totalDamage: formatLargeNumber(
+      incidents.reduce((sum, inc) => sum + inc.damage_estimate, 0)
+    ),
     byType: {
       accidents: incidents.filter(i => i.type === 'TRAFFIC_ACCIDENT').length,
       mechanical: incidents.filter(i => i.type === 'MECHANICAL_FAILURE').length,
@@ -103,21 +106,6 @@
 
   // Incident types for filtering
   const incidentTypes = ['ALL', 'TRAFFIC_ACCIDENT', 'MECHANICAL_FAILURE', 'WEATHER_DELAY', 'CARGO_ISSUE', 'OTHER'];
-
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  }
-
-  function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  }
 
   // Filtered and sorted records
   $: filteredRecords = incidents
@@ -189,7 +177,7 @@
 
       <Card title="Total Damage" icon={icons.maintenance}>
         <div class="stat">
-          <p class="stat-value">{formatCurrency(stats.totalDamage)}</p>
+          <p class="stat-value">{stats.totalDamage}</p>
           <p class="stat-label">Estimated Costs</p>
         </div>
       </Card>
@@ -288,7 +276,7 @@
                 <span class="incident-date">{formatDate(incident.date)}</span>
               </div>
               <div class="incident-damage">
-                {formatCurrency(incident.damage_estimate)}
+                {formatLargeNumber(incident.damage_estimate)}
               </div>
             </div>
 
