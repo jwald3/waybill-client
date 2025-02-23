@@ -94,18 +94,34 @@
     updated_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString()
   }));
 
-  // Maintenance statistics
+  // Add this function near the top of the script section
+  function formatLargeNumber(num: number): string {
+    if (num >= 1000000) {
+      return `$${(num / 1000000).toFixed(1)}M`;
+    }
+    if (num >= 1000) {
+      return `$${(num / 1000).toFixed(1)}K`;
+    }
+    return formatCurrency(num);
+  }
+
+  // Update the stats calculation to use the new formatting
   const stats = {
     routine: maintenanceRecords.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
     repair: maintenanceRecords.filter(r => r.service_type === 'REPAIR').length,
     emergency: maintenanceRecords.filter(r => r.service_type === 'EMERGENCY').length,
-    totalCost: maintenanceRecords.reduce((sum, record) => sum + record.cost, 0)
+    totalCost: formatLargeNumber(
+      maintenanceRecords.reduce((sum, record) => sum + record.cost, 0)
+    )
   };
 
+  // Update the formatCurrency function to handle smaller numbers
   function formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   }
 
@@ -213,7 +229,7 @@
 
       <Card title="Total Costs" icon={icons.maintenance}>
         <div class="stat-content">
-          <p class="stat-number">{formatCurrency(stats.totalCost)}</p>
+          <p class="stat-number">{stats.totalCost}</p>
           <p class="stat-label">This period</p>
         </div>
       </Card>
