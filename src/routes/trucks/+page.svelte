@@ -52,10 +52,11 @@
 
   // Stats calculation
   const stats = {
-    total: trucks.length,
-    inTransit: trucks.filter(t => t.status === 'IN_TRANSIT').length,
-    maintenance: trucks.filter(t => t.status === 'MAINTENANCE').length,
-    available: trucks.filter(t => t.status === 'AVAILABLE').length
+    totalTrucks: trucks.length,
+    activeFleet: trucks.filter(t => t.status === 'IN_TRANSIT' || t.status === 'AVAILABLE').length,
+    fleetUtilization: Math.round(
+      (trucks.filter(t => t.status === 'IN_TRANSIT').length / trucks.length) * 100
+    )
   };
 
   // Pagination settings
@@ -145,28 +146,22 @@
     <div class="stats-grid">
       <Card title="Total Fleet" icon={icons.truck}>
         <div class="stat">
-          <p class="stat-value">{stats.total}</p>
-          <p class="stat-label">Total Trucks</p>
+          <p class="stat-value">{stats.totalTrucks}</p>
+          <p class="stat-label">Registered Trucks</p>
         </div>
       </Card>
 
-      <Card title="Fleet Status" icon={icons.truck}>
+      <Card title="Active Fleet" icon={icons.truck}>
         <div class="stat">
-          <div class="status-stats">
-            <div class="status-stat status-transit">
-              <span class="status-label">In Transit</span>
-              <span class="status-value">{stats.inTransit}</span>
-            </div>
-            <div class="status-stat status-maintenance">
-              <span class="status-label">In Maintenance</span>
-              <span class="status-value">{stats.maintenance}</span>
-            </div>
-            <div class="status-stat status-available">
-              <span class="status-label">Available</span>
-              <span class="status-value">{stats.available}</span>
-            </div>
-          </div>
-          <p class="stat-label">Current Distribution</p>
+          <p class="stat-value">{stats.activeFleet}</p>
+          <p class="stat-label">Available & In Transit</p>
+        </div>
+      </Card>
+
+      <Card title="Fleet Utilization" icon={icons.chart}>
+        <div class="stat">
+          <p class="stat-value with-suffix">{stats.fleetUtilization}<span class="suffix">%</span></p>
+          <p class="stat-label">Currently In Transit</p>
         </div>
       </Card>
     </div>
@@ -712,5 +707,17 @@
     .status-value {
       font-size: 1.125rem;
     }
+  }
+
+  .stat-value.with-suffix {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .suffix {
+    font-size: 1.5rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
   }
 </style> 
