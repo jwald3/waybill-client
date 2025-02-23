@@ -41,47 +41,76 @@
       {#if isExpanded}<span>Trucks</span>{/if}
     </a>
     
-    <!-- More menu for mobile -->
-    <button 
-      class="nav-link primary-nav more-menu-button" 
-      on:click={() => isMoreMenuOpen = !isMoreMenuOpen}
-      aria-label="More menu"
-    >
-      <span class="nav-icon">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-          <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-        </svg>
-      </span>
-      {#if isExpanded}<span>More</span>{/if}
-    </button>
+    <!-- Desktop secondary navigation -->
+    <div class="desktop-secondary-nav">
+      <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
+        <span class="nav-icon">{@html icons.routes}</span>
+        {#if isExpanded}<span>Routes</span>{/if}
+      </a>
+      <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
+        <span class="nav-icon">{@html icons.maintenance}</span>
+        {#if isExpanded}<span>Maintenance</span>{/if}
+      </a>
+      <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
+        <span class="nav-icon">{@html icons.analytics}</span>
+        {#if isExpanded}<span>Analytics</span>{/if}
+      </a>
+      <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
+        <span class="nav-icon">{@html icons.settings}</span>
+        {#if isExpanded}<span>Settings</span>{/if}
+      </a>
+      <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
+        <span class="nav-icon">{@html icons.facilities}</span>
+        {#if isExpanded}<span>Facilities</span>{/if}
+      </a>
+      <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
+        <span class="nav-icon">{@html icons.incidents}</span>
+        {#if isExpanded}<span>Incidents</span>{/if}
+      </a>
+    </div>
+    
+    <!-- Mobile more menu button and secondary nav -->
+    <div class="mobile-nav">
+      <button 
+        class="nav-link primary-nav more-menu-button" 
+        on:click={() => isMoreMenuOpen = !isMoreMenuOpen}
+        aria-label="More menu"
+      >
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+        </span>
+        {#if isExpanded}<span>More</span>{/if}
+      </button>
 
-    <!-- Secondary navigation items -->
-    <div class="secondary-nav" class:show={isMoreMenuOpen}>
-      <div class="more-menu">
-        <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
-          <span class="nav-icon">{@html icons.routes}</span>
-          <span>Routes</span>
-        </a>
-        <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
-          <span class="nav-icon">{@html icons.maintenance}</span>
-          <span>Maintenance</span>
-        </a>
-        <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
-          <span class="nav-icon">{@html icons.analytics}</span>
-          <span>Analytics</span>
-        </a>
-        <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
-          <span class="nav-icon">{@html icons.settings}</span>
-          <span>Settings</span>
-        </a>
-        <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
-          <span class="nav-icon">{@html icons.facilities}</span>
-          <span>Facilities</span>
-        </a>
-        <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
-          <span class="nav-icon">{@html icons.incidents}</span>
-          <span>Incidents</span>
-        </a>
+      <div class="secondary-nav" class:show={isMoreMenuOpen}>
+        <div class="more-menu">
+          <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
+            <span class="nav-icon">{@html icons.routes}</span>
+            <span>Routes</span>
+          </a>
+          <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
+            <span class="nav-icon">{@html icons.maintenance}</span>
+            <span>Maintenance</span>
+          </a>
+          <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
+            <span class="nav-icon">{@html icons.analytics}</span>
+            <span>Analytics</span>
+          </a>
+          <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
+            <span class="nav-icon">{@html icons.settings}</span>
+            <span>Settings</span>
+          </a>
+          <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
+            <span class="nav-icon">{@html icons.facilities}</span>
+            <span>Facilities</span>
+          </a>
+          <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
+            <span class="nav-icon">{@html icons.incidents}</span>
+            <span>Incidents</span>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -184,6 +213,16 @@
     cursor: pointer;
   }
 
+  .desktop-secondary-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mobile-nav {
+    display: none;
+  }
+
   @media (max-width: 768px) {
     nav {
       position: fixed;
@@ -225,6 +264,21 @@
       margin: 0 auto;
     }
 
+    .desktop-secondary-nav {
+      display: none;
+    }
+
+    .mobile-nav {
+      display: block;
+    }
+
+    .more-menu-button {
+      background: none;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+
     .secondary-nav {
       display: none;
       position: fixed;
@@ -258,10 +312,6 @@
 
     .more-menu .nav-icon {
       margin: 0;
-    }
-
-    .more-menu .nav-link {
-      display: flex;
     }
   }
 </style> 
