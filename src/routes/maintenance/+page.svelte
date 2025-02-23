@@ -416,12 +416,12 @@
 
   .stat-content {
     text-align: center;
-    padding: 1.5rem;
+    padding: 1rem 1.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 140px;
+    min-height: 120px;
   }
 
   .stat-content.warning .stat-number {
@@ -429,7 +429,7 @@
   }
 
   .stat-number {
-    font-size: 2rem;
+    font-size: 2.25rem;
     font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
@@ -442,8 +442,10 @@
 
   .stat-label {
     color: var(--text-secondary);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
   }
 
   .maintenance-list {
@@ -813,14 +815,23 @@
       font-size: 0.85rem;
     }
 
+    .stat-content {
+      padding: 0.875rem 1rem;
+      min-height: 100px;
+    }
+
     .stat-number {
-      font-size: 1.75rem;
+      font-size: 1.875rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
     }
   }
 
   @media (max-width: 480px) {
     .stat-number {
-      font-size: 1.5rem;
+      font-size: 1.625rem;
     }
   }
 </style> 

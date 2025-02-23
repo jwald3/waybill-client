@@ -5,10 +5,14 @@
 
 <div class="card">
   <div class="card-header">
-    <div class="icon-wrapper">
-      {@html icon}
+    <div class="header-content">
+      <div class="icon-wrapper">
+        <div class="icon">
+          {@html icon}
+        </div>
+      </div>
+      <h2>{title}</h2>
     </div>
-    <h2>{title}</h2>
   </div>
   <div class="card-content">
     <slot />
@@ -28,45 +32,65 @@
   }
 
   .card-header {
+    height: 64px;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 1.25rem;
+  }
+
+  .header-content {
+    height: 100%;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.5rem 1.5rem 0;
-    flex-shrink: 0;
+    gap: 0.75rem;
   }
 
   .icon-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     background: color-mix(in srgb, var(--theme-color) 15%, transparent);
+    flex-shrink: 0;
   }
 
-  .icon-wrapper :global(svg) {
-    width: 24px;
-    height: 24px;
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+
+  .icon :global(svg) {
+    width: 100%;
+    height: 100%;
     color: var(--theme-color);
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .card-content {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 0;
+    padding: 1.25rem;
   }
 
   @media (max-width: 768px) {
     .card-header {
-      padding: 1.25rem 1.25rem 0;
+      height: 56px;
     }
 
     .card-content {
