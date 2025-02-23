@@ -79,7 +79,7 @@
             <span>Facilities</span>
           </a>
           <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
-            <span class="nav-icon">{@html icons.maintenance}</span>
+            <span class="nav-icon">{@html icons.incidents}</span>
             <span>Incidents</span>
           </a>
         </div>
