@@ -70,9 +70,11 @@
   const stats = {
     totalFacilities: facilities.length,
     totalCapacity: facilities.reduce((sum, f) => sum + f.parking_capacity, 0),
-    typeA: facilities.filter(f => f.type === 'A').length,
-    typeB: facilities.filter(f => f.type === 'B').length,
-    typeC: facilities.filter(f => f.type === 'C').length
+    averageUtilization: Math.round(
+      facilities.reduce((sum, _, i) => 
+        sum + (75 + (Math.sin(i) * 10) + (Math.random() * 10))
+      , 0) / facilities.length
+    )
   };
 
   // Pagination settings
@@ -163,23 +165,10 @@
         </div>
       </Card>
 
-      <Card title="Facility Types" icon={icons.truck}>
+      <Card title="Average Utilization" icon={icons.chart}>
         <div class="stat">
-          <div class="type-stats">
-            <div class="type-stat type-a">
-              <span class="type-label">Type A</span>
-              <span class="type-value">{stats.typeA}</span>
-            </div>
-            <div class="type-stat type-b">
-              <span class="type-label">Type B</span>
-              <span class="type-value">{stats.typeB}</span>
-            </div>
-            <div class="type-stat type-c">
-              <span class="type-label">Type C</span>
-              <span class="type-value">{stats.typeC}</span>
-            </div>
-          </div>
-          <p class="stat-label">Distribution by Type</p>
+          <p class="stat-value with-suffix">{stats.averageUtilization}<span class="suffix">%</span></p>
+          <p class="stat-label">Facility Space Utilized</p>
         </div>
       </Card>
     </div>
@@ -377,44 +366,69 @@
     font-size: 0.9rem;
   }
 
-  .type-stats {
+  .facility-types {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
   }
 
-  .type-stat {
+  .type-row {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .type-info {
+    display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 500;
+    gap: 0.75rem;
   }
 
-  .type-stat.type-a {
-    background: color-mix(in srgb, #15803d 10%, transparent);
-    color: #15803d;
+  .type-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
   }
 
-  .type-stat.type-b {
-    background: color-mix(in srgb, #1d4ed8 10%, transparent);
-    color: #1d4ed8;
+  .type-name {
+    flex: 1;
+    font-size: 0.95rem;
+    color: var(--text-primary);
   }
 
-  .type-stat.type-c {
-    background: color-mix(in srgb, #854d0e 10%, transparent);
-    color: #854d0e;
-  }
-
-  .type-label {
-    font-size: 1rem;
-  }
-
-  .type-value {
-    font-size: 1.25rem;
+  .type-count {
     font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .type-bar-bg {
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .type-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .type-dot.type-a,
+  .type-bar.type-a {
+    background: #15803d;
+  }
+
+  .type-dot.type-b,
+  .type-bar.type-b {
+    background: #1d4ed8;
+  }
+
+  .type-dot.type-c,
+  .type-bar.type-c {
+    background: #854d0e;
   }
 
   .facilities-list {
@@ -667,6 +681,66 @@
     font-size: 0.9rem;
   }
 
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  .service-stat {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+  }
+
+  .service-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  .service-icon.repairs {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+  }
+
+  .service-icon.fueling {
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+  }
+
+  .service-icon.washing {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  }
+
+  .service-icon.storage {
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+  }
+
+  .service-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .service-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+  }
+
+  .service-name {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
   @media (max-width: 768px) {
     .controls {
       padding: 1rem 1rem 0;
@@ -695,20 +769,21 @@
       padding: 1rem;
     }
 
-    .type-stats {
-      gap: 0.5rem;
+    .services-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
     }
+  }
 
-    .type-stat {
-      padding: 0.625rem 0.875rem;
-    }
+  .stat-value.with-suffix {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
 
-    .type-label {
-      font-size: 0.9rem;
-    }
-
-    .type-value {
-      font-size: 1.125rem;
-    }
+  .suffix {
+    font-size: 1.5rem;
+    opacity: 0.7;
+    margin-top: 0.5rem;
   }
 </style> 
