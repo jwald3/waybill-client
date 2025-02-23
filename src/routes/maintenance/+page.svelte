@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   
   let isNavExpanded = true;
 
@@ -94,18 +95,7 @@
     updated_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString()
   }));
 
-  // Add this function near the top of the script section
-  function formatLargeNumber(num: number): string {
-    if (num >= 1000000) {
-      return `$${(num / 1000000).toFixed(1)}M`;
-    }
-    if (num >= 1000) {
-      return `$${(num / 1000).toFixed(1)}K`;
-    }
-    return formatCurrency(num);
-  }
-
-  // Update the stats calculation to use the new formatting
+  // Update the stats calculation
   const stats = {
     routine: maintenanceRecords.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
     repair: maintenanceRecords.filter(r => r.service_type === 'REPAIR').length,
@@ -114,24 +104,6 @@
       maintenanceRecords.reduce((sum, record) => sum + record.cost, 0)
     )
   };
-
-  // Update the formatCurrency function to handle smaller numbers
-  function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  }
-
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  }
 
   // Search and filter state
   let searchQuery = '';
