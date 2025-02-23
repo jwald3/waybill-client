@@ -78,6 +78,10 @@
             <span class="nav-icon">{@html icons.facilities}</span>
             <span>Facilities</span>
           </a>
+          <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
+            <span class="nav-icon">{@html icons.maintenance}</span>
+            <span>Incidents</span>
+          </a>
         </div>
       </div>
     </div>
