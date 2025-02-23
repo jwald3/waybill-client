@@ -417,6 +417,11 @@
   .stat-content {
     text-align: center;
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
   }
 
   .stat-content.warning .stat-number {
@@ -424,11 +429,15 @@
   }
 
   .stat-number {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
     margin-bottom: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
   }
 
   .stat-label {
@@ -802,6 +811,16 @@
       min-width: 2.2rem;
       height: 2.2rem;
       font-size: 0.85rem;
+    }
+
+    .stat-number {
+      font-size: 1.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stat-number {
+      font-size: 1.5rem;
     }
   }
 </style> 
