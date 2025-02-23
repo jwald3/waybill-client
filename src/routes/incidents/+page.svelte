@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { formatLargeNumber, formatDate } from '$lib/utils/format';
+  import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   
   let isNavExpanded = true;
 
@@ -164,54 +164,26 @@
 </script>
 
 <Layout {isNavExpanded}>
-  <div class="incidents">
-    <h1 class="incidents-title">Incident Reports</h1>
+  <div class="page">
+    <h1 class="page-title">Incident Reports</h1>
 
     <div class="stats-grid">
-      <Card title="Total Incidents" icon={icons.maintenance}>
-        <div class="stat">
-          <p class="stat-value">{stats.total}</p>
-          <p class="stat-label">Reported Incidents</p>
+      <Card title="Total Incidents" icon={icons.chart}>
+        <div class="stat-content">
+          <p class="stat-number themed-text">{stats.total}</p>
+          <p class="stat-label">Reported incidents</p>
         </div>
       </Card>
 
-      <Card title="Total Damage" icon={icons.maintenance}>
-        <div class="stat">
-          <p class="stat-value">{stats.totalDamage}</p>
-          <p class="stat-label">Estimated Costs</p>
-        </div>
-      </Card>
-
-      <Card title="Incident Types" icon={icons.maintenance}>
-        <div class="stat">
-          <div class="type-stats">
-            <div class="type-stat type-accident">
-              <span class="type-label">Accidents</span>
-              <span class="type-value">{stats.byType.accidents}</span>
-            </div>
-            <div class="type-stat type-mechanical">
-              <span class="type-label">Mechanical</span>
-              <span class="type-value">{stats.byType.mechanical}</span>
-            </div>
-            <div class="type-stat type-weather">
-              <span class="type-label">Weather</span>
-              <span class="type-value">{stats.byType.weather}</span>
-            </div>
-            <div class="type-stat type-cargo">
-              <span class="type-label">Cargo</span>
-              <span class="type-value">{stats.byType.cargo}</span>
-            </div>
-            <div class="type-stat type-other">
-              <span class="type-label">Other</span>
-              <span class="type-value">{stats.byType.other}</span>
-            </div>
-          </div>
-          <p class="stat-label">Distribution by Type</p>
+      <Card title="Total Damage Cost" icon={icons.chart}>
+        <div class="stat-content">
+          <p class="stat-number themed-text">{stats.totalDamage}</p>
+          <p class="stat-label">Estimated damage</p>
         </div>
       </Card>
     </div>
 
-    <Card title="Incident Records" icon={icons.maintenance}>
+    <Card title="Incident Log" icon={icons.incidents}>
       <div class="controls">
         <div class="search-box">
           <input
@@ -220,20 +192,15 @@
             placeholder="Search incidents..."
             bind:value={searchQuery}
           />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
         </div>
 
         <div class="filter-group">
           <select 
-            bind:value={selectedType}
             class="filter-select"
+            bind:value={selectedType}
           >
             {#each incidentTypes as type}
-              <option value={type}>{type === 'ALL' ? 'All Types' : type.replace('_', ' ')}</option>
+              <option value={type}>{type.replace(/_/g, ' ')}</option>
             {/each}
           </select>
 
@@ -252,13 +219,6 @@
             >
               Damage {sortField === 'damage_estimate' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
             </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'type'}
-              on:click={() => handleSort('type')}
-            >
-              Type {sortField === 'type' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
           </div>
         </div>
       </div>
@@ -272,501 +232,219 @@
           <div class="incident-item">
             <div class="incident-header">
               <div class="incident-title">
-                <span class="incident-type {incident.type.toLowerCase()}">{incident.type.replace('_', ' ')}</span>
+                <h3 class="themed-text">Incident #{incident.id}</h3>
                 <span class="incident-date">{formatDate(incident.date)}</span>
               </div>
-              <div class="incident-damage">
-                {formatLargeNumber(incident.damage_estimate)}
-              </div>
+              <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
             </div>
-
             <div class="incident-details">
               <div class="detail-group">
-                <span class="label">Description</span>
-                <span class="value">{incident.description}</span>
+                <span class="detail-label">Driver</span>
+                <span class="detail-value">{incident.driver.first_name} {incident.driver.last_name}</span>
               </div>
-
               <div class="detail-group">
-                <span class="label">Location</span>
-                <span class="value">{incident.location}</span>
+                <span class="detail-label">Location</span>
+                <span class="detail-value">{incident.location}</span>
               </div>
-
               <div class="detail-group">
-                <span class="label">Driver</span>
-                <span class="value">{incident.driver.first_name} {incident.driver.last_name}</span>
-              </div>
-
-              <div class="detail-group">
-                <span class="label">Vehicle</span>
-                <span class="value">{incident.truck.make} {incident.truck.model}</span>
-                <span class="sub-value">{incident.truck.truck_number}</span>
-              </div>
-
-              <div class="detail-group">
-                <span class="label">Trip</span>
-                <span class="value">{incident.trip.trip_number}</span>
-                <span class="sub-value">{incident.trip.status}</span>
+                <span class="detail-label">Damage Estimate</span>
+                <span class="detail-value themed-text">{formatCurrency(incident.damage_estimate)}</span>
               </div>
             </div>
-
-            <div class="incident-actions">
-              <button class="action-button">View Details</button>
-              <button class="action-button">Update Report</button>
-            </div>
+            <p class="incident-description">{incident.description}</p>
           </div>
         {/each}
       </div>
 
-      {#if totalPages > 1}
-        <div class="pagination">
-          <div class="pagination-controls">
-            <button
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(currentPage - 1)}
+      <div class="pagination">
+        <div class="pagination-controls">
+          <button 
+            class="page-button" 
+            disabled={currentPage === 1}
+            on:click={() => goToPage(1)}
+          >
+            First
+          </button>
+          <button 
+            class="page-button" 
+            disabled={currentPage === 1}
+            on:click={() => goToPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+          
+          {#each Array(totalPages) as _, i}
+            <button 
+              class="page-button" 
+              class:active={currentPage === i + 1}
+              on:click={() => goToPage(i + 1)}
             >
-              Previous
+              {i + 1}
             </button>
-
-            {#each Array(totalPages) as _, i}
-              {#if i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
-                <button
-                  class="page-button"
-                  class:active={currentPage === i + 1}
-                  on:click={() => goToPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
-                <span class="page-ellipsis">...</span>
-              {/if}
-            {/each}
-
-            <button
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(currentPage + 1)}
-            >
-              Next
-            </button>
-          </div>
+          {/each}
+          
+          <button 
+            class="page-button" 
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(currentPage + 1)}
+          >
+            Next
+          </button>
+          <button 
+            class="page-button" 
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(totalPages)}
+          >
+            Last
+          </button>
         </div>
-      {/if}
+      </div>
     </Card>
   </div>
 </Layout>
 
 <style>
-  .incidents {
-    padding: 2rem;
+  .page {
+    padding: var(--spacing-xl);
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
-  .incidents-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 2.5rem;
-    color: var(--text-primary);
+  .stat-content {
+    padding: var(--spacing-lg);
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-value {
-    font-size: 2.5rem;
+  .stat-number {
+    font-size: var(--font-size-3xl);
     font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--spacing-xs);
   }
 
   .stat-label {
     color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
-  .type-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .type-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    font-weight: 500;
-  }
-
-  .type-stat.type-accident {
-    background: color-mix(in srgb, #dc2626 10%, transparent);
-    color: #dc2626;
-  }
-
-  .type-stat.type-mechanical {
-    background: color-mix(in srgb, #2563eb 10%, transparent);
-    color: #2563eb;
-  }
-
-  .type-stat.type-weather {
-    background: color-mix(in srgb, #9333ea 10%, transparent);
-    color: #9333ea;
-  }
-
-  .type-stat.type-cargo {
-    background: color-mix(in srgb, #16a34a 10%, transparent);
-    color: #16a34a;
-  }
-
-  .type-stat.type-other {
-    background: color-mix(in srgb, #71717a 10%, transparent);
-    color: #71717a;
-  }
-
-  .type-label {
-    font-size: 1rem;
-  }
-
-  .type-value {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: var(--font-size-sm);
   }
 
   .incidents-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
   }
 
   .incident-item {
-    background: var(--bg-secondary);
+    padding: var(--spacing-lg);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
   }
 
   .incident-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
   }
 
   .incident-title {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: var(--spacing-md);
   }
 
-  .incident-type {
-    padding: 0.375rem 0.75rem;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .incident-type.traffic_accident {
-    background: color-mix(in srgb, #dc2626 10%, transparent);
-    color: #dc2626;
-  }
-
-  .incident-type.mechanical_failure {
-    background: color-mix(in srgb, #2563eb 10%, transparent);
-    color: #2563eb;
-  }
-
-  .incident-type.weather_delay {
-    background: color-mix(in srgb, #9333ea 10%, transparent);
-    color: #9333ea;
-  }
-
-  .incident-type.cargo_issue {
-    background: color-mix(in srgb, #16a34a 10%, transparent);
-    color: #16a34a;
-  }
-
-  .incident-type.other {
-    background: color-mix(in srgb, #71717a 10%, transparent);
-    color: #71717a;
+  .incident-title h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
   }
 
   .incident-date {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
   }
 
-  .incident-damage {
-    font-size: 1.25rem;
+  .status-chip {
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
     font-weight: 600;
-    color: var(--text-primary);
+    text-transform: uppercase;
+  }
+
+  .status-chip.traffic_accident {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
+  .status-chip.mechanical_failure {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  .status-chip.weather_delay {
+    background: #e0e7ff;
+    color: #4f46e5;
+  }
+
+  .status-chip.cargo_issue {
+    background: #f3e8ff;
+    color: #7c3aed;
+  }
+
+  .status-chip.other {
+    background: #f3f4f6;
+    color: #4b5563;
   }
 
   .incident-details {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
   }
 
   .detail-group {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--spacing-xs);
   }
 
-  .label {
-    font-size: 0.875rem;
+  .detail-label {
     color: var(--text-secondary);
+    font-size: var(--font-size-sm);
   }
 
-  .value {
+  .detail-value {
+    font-size: var(--font-size-md);
     font-weight: 500;
-    color: var(--text-primary);
   }
 
-  .sub-value {
-    font-size: 0.875rem;
+  .incident-description {
     color: var(--text-secondary);
-  }
-
-  .incident-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .action-button {
-    padding: 0.625rem 1.25rem;
-    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
-    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 8px;
-    color: var(--theme-color);
-    font-weight: 500;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-
-  .action-button:hover {
-    background: var(--theme-color);
-    color: white;
-  }
-
-  /* Include all the controls, pagination, and responsive styles */
-  .controls {
-    padding: 1.5rem 1.5rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1.5rem;
-  }
-
-  .search-box {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-  }
-
-  .search-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-  }
-
-  .filter-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .filter-select {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    min-width: 200px;
-  }
-
-  .sort-buttons {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .sort-button {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .sort-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .sort-button.active {
-    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .results-summary {
-    padding: 1rem 1.5rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .pagination {
-    padding: 1.5rem;
-    display: flex;
-    justify-content: center;
-  }
-
-  .pagination-controls {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .page-button {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .page-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .page-button.active {
-    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .page-ellipsis {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: var(--font-size-md);
+    line-height: 1.5;
   }
 
   @media (max-width: 768px) {
-    .incidents {
-      padding: 1rem;
-    }
-
-    .incidents-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .stats-grid {
-      grid-template-columns: 1fr;
+    .page {
+      padding: var(--spacing-md);
     }
 
     .incident-item {
-      padding: 1rem;
+      padding: var(--spacing-md);
     }
 
     .incident-header {
       flex-direction: column;
       align-items: flex-start;
-      gap: 0.75rem;
+      gap: var(--spacing-sm);
     }
 
     .incident-details {
       grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .incident-actions {
-      flex-direction: column;
-    }
-
-    .action-button {
-      width: 100%;
-      text-align: center;
-    }
-
-    .controls {
-      padding: 1rem 1rem 0;
-      flex-direction: column;
-    }
-
-    .search-box {
-      min-width: 100%;
-    }
-
-    .filter-group {
-      flex-direction: column;
-    }
-
-    .sort-buttons {
-      flex-wrap: wrap;
-    }
-
-    .sort-button {
-      flex: 1;
-      min-width: calc(50% - 0.25rem);
-      text-align: center;
-    }
-
-    .results-summary {
-      padding: 1rem;
-    }
-
-    .type-stats {
-      gap: 0.5rem;
-    }
-
-    .type-stat {
-      padding: 0.625rem 0.875rem;
-    }
-
-    .type-label {
-      font-size: 0.9rem;
-    }
-
-    .type-value {
-      font-size: 1.125rem;
     }
   }
 </style> 
