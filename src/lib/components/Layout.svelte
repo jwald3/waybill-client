@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import ThemeToggle from './ThemeToggle.svelte';
   export let isNavExpanded = true;
+  let isMoreMenuOpen = false;
 </script>
 
 <div class="layout">
@@ -22,42 +23,63 @@
     </div>
 
     <div class="nav-links">
-      <a href="/" class="nav-link" class:active={$page.url.pathname === "/"}>
+      <!-- Primary navigation items -->
+      <a href="/" class="nav-link primary-nav" class:active={$page.url.pathname === "/"}>
         <span class="nav-icon">{@html icons.dashboard}</span>
         {#if isNavExpanded}<span>Dashboard</span>{/if}
       </a>
-      <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
-        <span class="nav-icon">{@html icons.routes}</span>
-        {#if isNavExpanded}<span>Routes</span>{/if}
-      </a>
-      <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
-        <span class="nav-icon">{@html icons.maintenance}</span>
-        {#if isNavExpanded}<span>Maintenance</span>{/if}
-      </a>
-      <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
-        <span class="nav-icon">{@html icons.analytics}</span>
-        {#if isNavExpanded}<span>Analytics</span>{/if}
-      </a>
-      <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
-        <span class="nav-icon">{@html icons.settings}</span>
-        {#if isNavExpanded}<span>Settings</span>{/if}
-      </a>
-      <a href="/trips" class="nav-link" class:active={$page.url.pathname === "/trips"}>
+      <a href="/trips" class="nav-link primary-nav" class:active={$page.url.pathname === "/trips"}>
         <span class="nav-icon">{@html icons.trips}</span>
         {#if isNavExpanded}<span>Trips</span>{/if}
       </a>
-      <a href="/drivers" class="nav-link" class:active={$page.url.pathname === "/drivers"}>
+      <a href="/drivers" class="nav-link primary-nav" class:active={$page.url.pathname === "/drivers"}>
         <span class="nav-icon">{@html icons.drivers}</span>
         {#if isNavExpanded}<span>Drivers</span>{/if}
       </a>
-      <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
-        <span class="nav-icon">{@html icons.facilities}</span>
-        {#if isNavExpanded}<span>Facilities</span>{/if}
-      </a>
-      <a href="/trucks" class="nav-link" class:active={$page.url.pathname === "/trucks"}>
+      <a href="/trucks" class="nav-link primary-nav" class:active={$page.url.pathname === "/trucks"}>
         <span class="nav-icon">{@html icons.truck}</span>
         {#if isNavExpanded}<span>Trucks</span>{/if}
       </a>
+      
+      <!-- More menu for mobile -->
+      <button 
+        class="nav-link primary-nav more-menu-button" 
+        on:click={() => isMoreMenuOpen = !isMoreMenuOpen}
+        aria-label="More menu"
+      >
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+          </svg>
+        </span>
+        {#if isNavExpanded}<span>More</span>{/if}
+      </button>
+
+      <!-- Secondary navigation items -->
+      <div class="secondary-nav" class:show={isMoreMenuOpen}>
+        <div class="more-menu">
+          <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
+            <span class="nav-icon">{@html icons.routes}</span>
+            <span>Routes</span>
+          </a>
+          <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
+            <span class="nav-icon">{@html icons.maintenance}</span>
+            <span>Maintenance</span>
+          </a>
+          <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
+            <span class="nav-icon">{@html icons.analytics}</span>
+            <span>Analytics</span>
+          </a>
+          <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
+            <span class="nav-icon">{@html icons.settings}</span>
+            <span>Settings</span>
+          </a>
+          <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
+            <span class="nav-icon">{@html icons.facilities}</span>
+            <span>Facilities</span>
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -177,6 +199,7 @@
       height: auto;
       border-right: none;
       border-top: 1px solid var(--border-color);
+      background: var(--bg-primary);
     }
 
     nav.expanded {
@@ -190,19 +213,66 @@
     .nav-links {
       flex-direction: row;
       justify-content: space-around;
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
+      gap: 0;
     }
 
     .nav-link {
+      flex: 1;
       flex-direction: column;
       gap: 0.25rem;
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      justify-content: center;
+    }
+
+    .nav-icon {
+      margin: 0 auto;
+    }
+
+    .secondary-nav {
+      display: none;
+      position: fixed;
+      bottom: 64px;
+      left: 0;
+      width: 100%;
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-color);
+      padding: 0.5rem;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .secondary-nav.show {
+      display: block;
+    }
+
+    .more-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .more-menu .nav-link {
+      flex-direction: row;
       padding: 0.75rem;
-      font-size: 0.8rem;
+      font-size: 0.875rem;
+      justify-content: flex-start;
+    }
+
+    .more-menu .nav-icon {
+      margin: 0;
+    }
+
+    /* Show all nav links in the more menu */
+    .more-menu .nav-link {
+      display: flex;
     }
 
     main {
       padding-left: 0;
-      padding-bottom: 80px;
+      padding-bottom: 64px;
     }
 
     main.nav-expanded {
@@ -225,5 +295,12 @@
     right: 1.5rem;
     top: 50%;
     transform: translateY(-50%);
+  }
+
+  .more-menu-button {
+    background: none;
+    border: none;
+    width: 100%;
+    cursor: pointer;
   }
 </style> 
