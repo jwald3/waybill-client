@@ -1,15 +1,29 @@
 <script lang="ts">
   import { icons } from '$lib/icons';
   import { page } from '$app/stores';
+  import { writable } from 'svelte/store';
   import ThemeToggle from './ThemeToggle.svelte';
   
+  // Create a writable store with initial value from localStorage, defaulting to true
+  const sidebarExpanded = writable(
+    typeof localStorage !== 'undefined' 
+      ? localStorage.getItem('sidebarExpanded') !== 'false'
+      : true
+  );
+  
+  // Subscribe to changes and update localStorage
+  $: if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('sidebarExpanded', $sidebarExpanded.toString());
+  }
+  
   export let isExpanded = true;
+  $: isExpanded = $sidebarExpanded;
   let isMoreMenuOpen = false;
 </script>
 
 <nav class:expanded={isExpanded}>
   <div class="nav-header">
-    <button class="toggle-nav" on:click={() => isExpanded = !isExpanded}>
+    <button class="toggle-nav" on:click={() => $sidebarExpanded = !$sidebarExpanded}>
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
       </svg>
