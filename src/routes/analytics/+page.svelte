@@ -117,18 +117,26 @@
 
 <Layout {isNavExpanded}>
   <div class="analytics">
-    <header class="analytics-header">
-      <h1 class="analytics-title">Analytics & Insights</h1>
-    </header>
+    <h1 class="analytics-title">Analytics & Insights</h1>
+
+    <!-- Metrics Grid -->
+    <div class="stats-grid">
+      {#each metrics as metric}
+        <Card title={metric.title} icon={metric.icon}>
+          <div class="stat-content">
+            <p class="stat-number">{metric.value}</p>
+            <p class="stat-label">
+              {metric.trend.value}
+              <span class="trend {metric.trend.positive ? 'positive' : 'negative'}">
+                {metric.trend.positive ? '↑' : '↓'}
+              </span>
+            </p>
+          </div>
+        </Card>
+      {/each}
+    </div>
 
     <div class="analytics-content">
-      <!-- Metrics Grid -->
-      <div class="metrics-grid">
-        {#each metrics as metric}
-          <MetricCard {...metric} />
-        {/each}
-      </div>
-
       <!-- Main Content Grid -->
       <div class="main-content">
         <!-- Left Column -->
@@ -258,32 +266,70 @@
 
 <style>
   .analytics {
-    max-width: 1800px;
-    margin: 0 auto;
     padding: 2rem;
-  }
-
-  .analytics-header {
-    margin-bottom: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
   .analytics-title {
-    font-size: 2.25rem;
+    font-size: 3rem;
+    margin-bottom: 3rem;
     color: var(--text-primary);
     font-weight: 800;
+    position: relative;
     letter-spacing: -1px;
+  }
+
+  .analytics-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100px;
+    height: 6px;
+    background: var(--theme-gradient);
+    border-radius: 3px;
+  }
+
+  .stat-content {
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--theme-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .trend {
+    font-weight: 600;
+  }
+
+  .trend.positive {
+    color: #10b981;
+  }
+
+  .trend.negative {
+    color: #ef4444;
   }
 
   .analytics-content {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-  }
-
-  .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
   }
 
   .main-content {
@@ -660,8 +706,17 @@
       padding: 1rem;
     }
 
-    .metrics-grid {
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    .analytics-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .main-content {
+      grid-template-columns: 1fr;
+    }
+
+    .main-column {
+      grid-template-rows: minmax(500px, auto) auto;
     }
 
     .chart-container {

@@ -152,22 +152,22 @@
 
     <div class="stats-grid">
       <Card title="Total Facilities" icon={icons.truck}>
-        <div class="stat">
-          <p class="stat-value">{stats.totalFacilities}</p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.totalFacilities}</p>
           <p class="stat-label">Active Facilities</p>
         </div>
       </Card>
 
       <Card title="Total Capacity" icon={icons.truck}>
-        <div class="stat">
-          <p class="stat-value">{stats.totalCapacity.toLocaleString()}</p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
           <p class="stat-label">Parking Spaces</p>
         </div>
       </Card>
 
       <Card title="Average Utilization" icon={icons.chart}>
-        <div class="stat">
-          <p class="stat-value with-suffix">{stats.averageUtilization}<span class="suffix">%</span></p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
           <p class="stat-label">Facility Space Utilized</p>
         </div>
       </Card>
@@ -333,29 +333,38 @@
 <style>
   .facilities {
     padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
   .facilities-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    font-size: 3rem;
+    margin-bottom: 3rem;
     color: var(--text-primary);
+    font-weight: 800;
+    position: relative;
+    letter-spacing: -1px;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+  .facilities-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100px;
+    height: 6px;
+    background: var(--theme-gradient);
+    border-radius: 3px;
   }
 
-  .stat {
-    padding: 1rem;
+  .stat-content {
+    text-align: center;
+    padding: 1.5rem;
   }
 
-  .stat-value {
-    font-size: 2.5rem;
-    font-weight: 700;
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
     margin-bottom: 0.5rem;
@@ -363,7 +372,29 @@
 
   .stat-label {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .percent {
+    font-size: 1.5rem;
+    opacity: 0.7;
+    vertical-align: super;
+    margin-left: 0.25rem;
+  }
+
+  .facility-item {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+  }
+
+  .facility-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-color: var(--theme-color);
   }
 
   .facility-types {
@@ -436,13 +467,6 @@
     flex-direction: column;
     gap: 1rem;
     padding: 1.5rem;
-  }
-
-  .facility-item {
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background: var(--bg-secondary);
   }
 
   .facility-header {
@@ -742,6 +766,15 @@
   }
 
   @media (max-width: 768px) {
+    .facilities {
+      padding: 1rem;
+    }
+
+    .facilities-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+    }
+
     .controls {
       padding: 1rem 1rem 0;
       flex-direction: column;
@@ -773,17 +806,5 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
-  }
-
-  .stat-value.with-suffix {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .suffix {
-    font-size: 1.5rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
   }
 </style> 

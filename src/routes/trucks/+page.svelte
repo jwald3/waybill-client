@@ -145,22 +145,22 @@
 
     <div class="stats-grid">
       <Card title="Total Fleet" icon={icons.truck}>
-        <div class="stat">
-          <p class="stat-value">{stats.totalTrucks}</p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.totalTrucks}</p>
           <p class="stat-label">Registered Trucks</p>
         </div>
       </Card>
 
       <Card title="Active Fleet" icon={icons.truck}>
-        <div class="stat">
-          <p class="stat-value">{stats.activeFleet}</p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.activeFleet}</p>
           <p class="stat-label">Available & In Transit</p>
         </div>
       </Card>
 
       <Card title="Fleet Utilization" icon={icons.chart}>
-        <div class="stat">
-          <p class="stat-value with-suffix">{stats.fleetUtilization}<span class="suffix">%</span></p>
+        <div class="stat-content">
+          <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
           <p class="stat-label">Currently In Transit</p>
         </div>
       </Card>
@@ -318,29 +318,38 @@
 <style>
   .trucks {
     padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
   .trucks-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
+    font-size: 3rem;
+    margin-bottom: 3rem;
     color: var(--text-primary);
+    font-weight: 800;
+    position: relative;
+    letter-spacing: -1px;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+  .trucks-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 0;
+    width: 100px;
+    height: 6px;
+    background: var(--theme-gradient);
+    border-radius: 3px;
   }
 
-  .stat {
-    padding: 1rem;
+  .stat-content {
+    text-align: center;
+    padding: 1.5rem;
   }
 
-  .stat-value {
-    font-size: 2.5rem;
-    font-weight: 700;
+  .stat-number {
+    font-size: 3rem;
+    font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
     margin-bottom: 0.5rem;
@@ -348,47 +357,15 @@
 
   .stat-label {
     color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
-  .status-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .status-stat {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 500;
   }
 
-  .status-stat.status-transit {
-    background: color-mix(in srgb, #1d4ed8 10%, transparent);
-    color: #1d4ed8;
-  }
-
-  .status-stat.status-maintenance {
-    background: color-mix(in srgb, #dc2626 10%, transparent);
-    color: #dc2626;
-  }
-
-  .status-stat.status-available {
-    background: color-mix(in srgb, #15803d 10%, transparent);
-    color: #15803d;
-  }
-
-  .status-label {
-    font-size: 1rem;
-  }
-
-  .status-value {
-    font-size: 1.25rem;
-    font-weight: 600;
+  .percent {
+    font-size: 1.5rem;
+    opacity: 0.7;
+    vertical-align: super;
+    margin-left: 0.25rem;
   }
 
   .trucks-list {
@@ -399,10 +376,17 @@
   }
 
   .truck-item {
+    background: var(--bg-secondary);
+    border-radius: 12px;
     padding: 1.5rem;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    background: var(--bg-secondary);
+    transition: all 0.2s ease;
+  }
+
+  .truck-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-color: var(--theme-color);
   }
 
   .truck-header {
@@ -637,10 +621,6 @@
       margin-bottom: 2rem;
     }
 
-    .stats-grid {
-      grid-template-columns: 1fr;
-    }
-
     .truck-item {
       padding: 1rem;
     }
@@ -691,33 +671,5 @@
     .results-summary {
       padding: 1rem;
     }
-
-    .status-stats {
-      gap: 0.5rem;
-    }
-
-    .status-stat {
-      padding: 0.625rem 0.875rem;
-    }
-
-    .status-label {
-      font-size: 0.9rem;
-    }
-
-    .status-value {
-      font-size: 1.125rem;
-    }
-  }
-
-  .stat-value.with-suffix {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .suffix {
-    font-size: 1.5rem;
-    opacity: 0.7;
-    margin-top: 0.5rem;
   }
 </style> 
