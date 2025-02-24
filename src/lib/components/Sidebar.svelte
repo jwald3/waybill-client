@@ -1,34 +1,20 @@
 <script lang="ts">
   import { icons } from '$lib/icons';
   import { page } from '$app/stores';
-  import { writable } from 'svelte/store';
+  import { sidebarExpanded } from '$lib/stores/sidebar';
   import ThemeToggle from './ThemeToggle.svelte';
   
-  // Create a writable store with initial value from localStorage, defaulting to true
-  const sidebarExpanded = writable(
-    typeof localStorage !== 'undefined' 
-      ? localStorage.getItem('sidebarExpanded') !== 'false'
-      : true
-  );
-  
-  // Subscribe to changes and update localStorage
-  $: if (typeof localStorage !== 'undefined') {
-    localStorage.setItem('sidebarExpanded', $sidebarExpanded.toString());
-  }
-  
-  export let isExpanded = true;
-  $: isExpanded = $sidebarExpanded;
   let isMoreMenuOpen = false;
 </script>
 
-<nav class:expanded={isExpanded}>
+<nav class:expanded={$sidebarExpanded}>
   <div class="nav-header">
     <button class="toggle-nav" on:click={() => $sidebarExpanded = !$sidebarExpanded}>
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
       </svg>
     </button>
-    {#if isExpanded}
+    {#if $sidebarExpanded}
       <h1>Waybill</h1>
       <div class="nav-tools">
         <ThemeToggle />
@@ -40,46 +26,46 @@
     <!-- Primary navigation items -->
     <a href="/" class="nav-link primary-nav" class:active={$page.url.pathname === "/"}>
       <span class="nav-icon">{@html icons.dashboard}</span>
-      {#if isExpanded}<span>Dashboard</span>{/if}
+      {#if $sidebarExpanded}<span>Dashboard</span>{/if}
     </a>
     <a href="/trips" class="nav-link primary-nav" class:active={$page.url.pathname === "/trips"}>
       <span class="nav-icon">{@html icons.trips}</span>
-      {#if isExpanded}<span>Trips</span>{/if}
+      {#if $sidebarExpanded}<span>Trips</span>{/if}
     </a>
     <a href="/drivers" class="nav-link primary-nav" class:active={$page.url.pathname === "/drivers"}>
       <span class="nav-icon">{@html icons.drivers}</span>
-      {#if isExpanded}<span>Drivers</span>{/if}
+      {#if $sidebarExpanded}<span>Drivers</span>{/if}
     </a>
     <a href="/trucks" class="nav-link primary-nav" class:active={$page.url.pathname === "/trucks"}>
       <span class="nav-icon">{@html icons.truck}</span>
-      {#if isExpanded}<span>Trucks</span>{/if}
+      {#if $sidebarExpanded}<span>Trucks</span>{/if}
     </a>
     
     <!-- Desktop secondary navigation -->
     <div class="desktop-secondary-nav">
       <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
         <span class="nav-icon">{@html icons.routes}</span>
-        {#if isExpanded}<span>Routes</span>{/if}
+        {#if $sidebarExpanded}<span>Routes</span>{/if}
       </a>
       <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
         <span class="nav-icon">{@html icons.maintenance}</span>
-        {#if isExpanded}<span>Maintenance</span>{/if}
+        {#if $sidebarExpanded}<span>Maintenance</span>{/if}
       </a>
       <a href="/analytics" class="nav-link" class:active={$page.url.pathname === "/analytics"}>
         <span class="nav-icon">{@html icons.analytics}</span>
-        {#if isExpanded}<span>Analytics</span>{/if}
+        {#if $sidebarExpanded}<span>Analytics</span>{/if}
       </a>
       <a href="/settings" class="nav-link" class:active={$page.url.pathname === "/settings"}>
         <span class="nav-icon">{@html icons.settings}</span>
-        {#if isExpanded}<span>Settings</span>{/if}
+        {#if $sidebarExpanded}<span>Settings</span>{/if}
       </a>
       <a href="/facilities" class="nav-link" class:active={$page.url.pathname === "/facilities"}>
         <span class="nav-icon">{@html icons.facilities}</span>
-        {#if isExpanded}<span>Facilities</span>{/if}
+        {#if $sidebarExpanded}<span>Facilities</span>{/if}
       </a>
       <a href="/incidents" class="nav-link" class:active={$page.url.pathname === "/incidents"}>
         <span class="nav-icon">{@html icons.incidents}</span>
-        {#if isExpanded}<span>Incidents</span>{/if}
+        {#if $sidebarExpanded}<span>Incidents</span>{/if}
       </a>
     </div>
     
@@ -95,7 +81,7 @@
             <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
           </svg>
         </span>
-        {#if isExpanded}<span>More</span>{/if}
+        {#if $sidebarExpanded}<span>More</span>{/if}
       </button>
 
       <div class="secondary-nav" class:show={isMoreMenuOpen}>

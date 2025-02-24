@@ -1,12 +1,12 @@
 <script lang="ts">
   import Sidebar from './Sidebar.svelte';
-  let isNavExpanded = true;
+  import { sidebarExpanded } from '$lib/stores/sidebar';
 </script>
 
-<div class="layout">
-  <Sidebar isExpanded={isNavExpanded} />
+<div class="layout" class:sidebar-expanded={$sidebarExpanded}>
+  <Sidebar />
   
-  <main class:nav-expanded={isNavExpanded}>
+  <main>
     <slot />
   </main>
 </div>
@@ -21,23 +21,26 @@
   main {
     flex: 1;
     background: var(--bg-primary);
-    padding-left: 80px;
-    transition: padding-left 0.3s ease;
-    width: 100%;
+    margin-left: 80px;
+    width: calc(100% - 80px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
   }
 
-  main.nav-expanded {
-    padding-left: 280px;
+  .layout.sidebar-expanded main {
+    margin-left: 280px;
+    width: calc(100% - 280px);
   }
 
   @media (max-width: 768px) {
     main {
-      padding-left: 0;
+      margin-left: 0;
+      width: 100%;
       padding-bottom: 64px;
     }
 
-    main.nav-expanded {
-      padding-left: 0;
+    .layout.sidebar-expanded main {
+      margin-left: 0;
+      width: 100%;
     }
   }
 </style> 
