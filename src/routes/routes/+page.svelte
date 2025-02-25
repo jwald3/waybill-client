@@ -33,6 +33,10 @@
   ];
 </script>
 
+<svelte:head>
+  <title>Route Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="routes">
     <h1 class="routes-title">Route Management</h1>

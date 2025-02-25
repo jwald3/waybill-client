@@ -146,6 +146,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Facility Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="facilities">
     <h1 class="facilities-title">Facility Management</h1>

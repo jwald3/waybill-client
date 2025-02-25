@@ -139,6 +139,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Fleet Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="trucks">
     <h1 class="trucks-title">Fleet Management</h1>

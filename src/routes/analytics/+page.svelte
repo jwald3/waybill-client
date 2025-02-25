@@ -115,6 +115,10 @@
   ];
 </script>
 
+<svelte:head>
+  <title>Analytics & Insights | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="analytics">
     <h1 class="analytics-title">Analytics & Insights</h1>

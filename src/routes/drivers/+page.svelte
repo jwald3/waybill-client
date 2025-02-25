@@ -135,6 +135,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Driver Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="drivers">
     <h1 class="drivers-title">Driver Management</h1>

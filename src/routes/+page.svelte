@@ -5,6 +5,10 @@
   let isNavExpanded = true;
 </script>
 
+<svelte:head>
+  <title>Dashboard | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="dashboard">
     <h1 class="dashboard-title">Logistics Dashboard</h1>

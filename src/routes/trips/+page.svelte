@@ -166,6 +166,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Trip Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="trips">
     <h1 class="trips-title">Trip Management</h1>

@@ -23,6 +23,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Settings | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="settings">
     <h1 class="settings-title">Settings</h1>

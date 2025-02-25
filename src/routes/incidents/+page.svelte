@@ -163,6 +163,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Incident Reports | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="page">
     <h1 class="page-title">Incident Reports</h1>

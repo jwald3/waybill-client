@@ -173,6 +173,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Maintenance Management | Waybill</title>
+</svelte:head>
+
 <Layout {isNavExpanded}>
   <div class="maintenance">
     <h1 class="maintenance-title">Maintenance Management</h1>
