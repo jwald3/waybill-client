@@ -373,8 +373,8 @@
   }
 
   .stat-number {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
     margin-bottom: 0.5rem;
