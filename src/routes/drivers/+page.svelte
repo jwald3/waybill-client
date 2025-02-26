@@ -340,13 +340,6 @@
     margin: 0 auto;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
   .avatar {
     width: 48px;
     height: 48px;
@@ -477,10 +470,6 @@
   @media (max-width: 768px) {
     .drivers {
       padding: 1rem;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
     }
 
     .driver-details {

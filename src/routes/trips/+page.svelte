@@ -398,13 +398,6 @@
     margin: 0 auto;
   }
 
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
   .status-badge {
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -571,10 +564,6 @@
   @media (max-width: 768px) {
     .trips {
       padding: 1rem;
-    }
-
-    .stats-grid {
-      grid-template-columns: repeat(2, 1fr);
     }
 
     .trip-details {
