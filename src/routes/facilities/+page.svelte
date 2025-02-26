@@ -447,22 +447,6 @@
     gap: 1rem;
   }
 
-  .action-button {
-    padding: 0.625rem 1.25rem;
-    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
-    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 8px;
-    color: var(--theme-color);
-    font-weight: 500;
-    transition: all 0.2s ease;
-    cursor: pointer;
-  }
-
-  .action-button:hover {
-    background: var(--theme-color);
-    color: white;
-  }
-
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
