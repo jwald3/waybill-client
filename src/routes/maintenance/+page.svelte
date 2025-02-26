@@ -178,7 +178,7 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="maintenance">
+  <div class="page">
     <h1 class="page-title">Maintenance Management</h1>
 
     <div class="stats-grid">
@@ -373,12 +373,6 @@
 </Layout>
 
 <style>
-  .maintenance {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
   .chip {
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -507,10 +501,6 @@
   }
 
   @media (max-width: 768px) {
-    .maintenance {
-      padding: 1rem;
-    }
-
     .maintenance-item {
       padding: 1rem;
     }

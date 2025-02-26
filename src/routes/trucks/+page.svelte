@@ -144,7 +144,7 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="trucks">
+  <div class="page">
     <h1 class="page-title">Fleet Management</h1>
     <div class="stats-grid">
       <Card title="Total Fleet" icon={icons.truck}>
@@ -319,12 +319,6 @@
 </Layout>
 
 <style>
-  .trucks {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
   .stat-content {
     text-align: center;
     padding: 1.5rem;
@@ -454,10 +448,6 @@
   }
 
   @media (max-width: 768px) {
-    .trucks {
-      padding: 1rem;
-    }
-
     .truck-details {
       grid-template-columns: 1fr;
       gap: 1rem;

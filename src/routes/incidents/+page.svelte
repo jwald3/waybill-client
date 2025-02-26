@@ -313,12 +313,6 @@
 </Layout>
 
 <style>
-  .page {
-    padding: var(--spacing-xl);
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
   .incident-date {
     color: var(--text-secondary);
     font-size: var(--font-size-sm);
@@ -387,10 +381,6 @@
   }
 
   @media (max-width: 768px) {
-    .page {
-      padding: var(--spacing-md);
-    }
-
     .incident-details {
       grid-template-columns: 1fr;
     }

@@ -35,6 +35,13 @@
 }
 
 /* Reusable Classes */
+.page {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
 .page-title {
   font-size: var(--font-size-4xl);
   margin-bottom: var(--spacing-2xl);
@@ -289,6 +296,10 @@
     --spacing-xl: 1.5rem;
     --spacing-2xl: 2rem;
     --font-size-4xl: 2rem;
+  }
+
+  .page {
+    padding: 1rem;
   }
 
   .stats-grid {

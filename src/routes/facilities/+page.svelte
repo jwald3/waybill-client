@@ -151,7 +151,7 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="facilities">
+  <div class="page">
     <h1 class="page-title">Facility Management</h1>
 
     <div class="stats-grid">
@@ -335,12 +335,6 @@
 </Layout>
 
 <style>
-  .facilities {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
   .facility-types {
     display: flex;
     flex-direction: column;
@@ -583,10 +577,6 @@
   }
 
   @media (max-width: 768px) {
-    .facilities {
-      padding: 1rem;
-    }
-
     .controls {
       padding: 1rem 1rem 0;
       flex-direction: column;

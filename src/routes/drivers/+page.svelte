@@ -140,7 +140,7 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="drivers">
+  <div class="page">
     <h1 class="page-title">Driver Management</h1>
 
     <div class="stats-grid">
@@ -334,11 +334,6 @@
 </Layout>
 
 <style>
-  .drivers {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
 
   .avatar {
     width: 48px;
@@ -468,10 +463,6 @@
   }
 
   @media (max-width: 768px) {
-    .drivers {
-      padding: 1rem;
-    }
-
     .driver-details {
       grid-template-columns: 1fr;
       gap: 1rem;
