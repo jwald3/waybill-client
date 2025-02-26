@@ -191,6 +191,30 @@
   --shadow-lg: 0 12px 20px rgba(0, 0, 0, 0.15), 0 20px 30px rgba(0, 0, 0, 0.15);
 }
 
+/* Stats styling */
+.stat-content {
+  text-align: center;
+  padding: var(--spacing-lg);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-number {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--theme-color);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   :root {
@@ -226,5 +250,18 @@
     flex: 1;
     min-width: calc(50% - var(--spacing-sm));
     text-align: center;
+  }
+
+  .stat-content {
+    padding: var(--spacing-md);
+    min-height: 100px;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
   }
 } 

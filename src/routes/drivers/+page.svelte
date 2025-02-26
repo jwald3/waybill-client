@@ -367,24 +367,6 @@
     margin-bottom: 2rem;
   }
 
-  .stat-content {
-    padding: 1.5rem;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
   .avatar {
     width: 48px;
     height: 48px;

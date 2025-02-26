@@ -406,40 +406,6 @@
     margin-bottom: 2rem;
   }
 
-  .stat-content {
-    text-align: center;
-    padding: 1rem 1.25rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 120px;
-  }
-
-  .stat-content.warning .stat-number {
-    color: #ef4444;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-  }
-
   .maintenance-list {
     display: flex;
     flex-direction: column;

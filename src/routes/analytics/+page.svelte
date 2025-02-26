@@ -295,41 +295,6 @@
     border-radius: 3px;
   }
 
-  .stat-content {
-    text-align: center;
-    padding: 1.5rem;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .trend {
-    font-weight: 600;
-  }
-
-  .trend.positive {
-    color: #10b981;
-  }
-
-  .trend.negative {
-    color: #ef4444;
-  }
-
   .analytics-content {
     display: flex;
     flex-direction: column;

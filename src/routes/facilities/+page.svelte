@@ -361,32 +361,6 @@
     border-radius: 3px;
   }
 
-  .stat-content {
-    text-align: center;
-    padding: 1.5rem;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-
-  .percent {
-    font-size: 1.5rem;
-    opacity: 0.7;
-    vertical-align: super;
-    margin-left: 0.25rem;
-  }
-
   .facility-item {
     background: var(--bg-secondary);
     border-radius: 12px;

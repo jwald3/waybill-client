@@ -314,28 +314,6 @@
     margin: 0 auto;
   }
 
-  .stat-content {
-    padding: var(--spacing-lg);
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-
   .incidents-list {
     display: flex;
     flex-direction: column;
