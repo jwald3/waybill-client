@@ -247,17 +247,17 @@
               <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
             </div>
             <div class="record-details">
-              <div class="detail-group">
-                <span class="detail-label">Driver</span>
-                <span class="detail-value">{incident.driver.first_name} {incident.driver.last_name}</span>
+              <div class="detail">
+                <span class="label">Driver</span>
+                <span class="value">{incident.driver.first_name} {incident.driver.last_name}</span>
               </div>
-              <div class="detail-group">
-                <span class="detail-label">Location</span>
-                <span class="detail-value">{incident.location}</span>
+              <div class="detail">
+                <span class="label">Location</span>
+                <span class="value">{incident.location}</span>
               </div>
-              <div class="detail-group">
-                <span class="detail-label">Damage Estimate</span>
-                <span class="detail-value themed-text">{formatCurrency(incident.damage_estimate)}</span>
+              <div class="detail">
+                <span class="label">Damage Estimate</span>
+                <span class="value themed-text">{formatCurrency(incident.damage_estimate)}</span>
               </div>
             </div>
             <p class="incident-description">{incident.description}</p>
@@ -349,22 +349,6 @@
   .status-chip.other {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .detail-group {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
-
-  .detail-label {
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-  }
-
-  .detail-value {
-    font-size: var(--font-size-md);
-    font-weight: 500;
   }
 
   .incident-description {

@@ -371,22 +371,6 @@
     background: #dcfce7;
     color: #15803d;
   }
-  
-  .detail {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .value {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
 
   .sub-value {
     font-size: 0.875rem;

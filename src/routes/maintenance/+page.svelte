@@ -418,22 +418,6 @@
     color: #b91c1c;
   }
 
-  .detail {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .value {
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
   .description {
     color: var(--text-secondary);
     font-size: 0.95rem;
