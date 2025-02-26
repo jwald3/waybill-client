@@ -252,7 +252,7 @@
               </span>
             </div>
 
-            <div class="driver-details">
+            <div class="record-details">
               <div class="detail">
                 <span class="label">License</span>
                 <span class="value">{driver.license_number}</span>
@@ -334,7 +334,6 @@
 </Layout>
 
 <style>
-
   .avatar {
     width: 48px;
     height: 48px;
@@ -386,13 +385,6 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .driver-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   .detail {
@@ -463,11 +455,6 @@
   }
 
   @media (max-width: 768px) {
-    .driver-details {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
     .driver-actions {
       flex-direction: column;
     }

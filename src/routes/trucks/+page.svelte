@@ -238,7 +238,7 @@
               </span>
             </div>
 
-            <div class="truck-details">
+            <div class="record-details">
               <div class="detail">
                 <span class="label">Vehicle Info</span>
                 <span class="value">{truck.year} • VIN: {truck.vin}</span>
@@ -371,14 +371,7 @@
     background: #dcfce7;
     color: #15803d;
   }
-
-  .truck-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
+  
   .detail {
     display: flex;
     flex-direction: column;
@@ -448,11 +441,6 @@
   }
 
   @media (max-width: 768px) {
-    .truck-details {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
     .truck-actions {
       flex-direction: column;
     }

@@ -275,6 +275,13 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.record-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .page-ellipsis {
   color: var(--text-secondary);
   font-size: 0.9rem;
@@ -296,6 +303,11 @@
     --spacing-xl: 1.5rem;
     --spacing-2xl: 2rem;
     --font-size-4xl: 2rem;
+  }
+
+  .record-details {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .page {

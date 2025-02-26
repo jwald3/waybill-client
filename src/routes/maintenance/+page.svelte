@@ -285,7 +285,7 @@
               </div>
             </div>
 
-            <div class="item-details">
+            <div class="record-details">
               <div class="detail">
                 <span class="label">Date:</span>
                 <span class="value">{formatDate(record.date)}</span>
@@ -418,13 +418,6 @@
     color: #b91c1c;
   }
 
-  .item-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
   .detail {
     display: flex;
     flex-direction: column;
@@ -503,10 +496,6 @@
   @media (max-width: 768px) {
     .maintenance-item {
       padding: 1rem;
-    }
-
-    .item-details {
-      grid-template-columns: 1fr;
     }
 
     .item-actions {

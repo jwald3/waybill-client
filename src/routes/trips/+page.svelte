@@ -280,7 +280,7 @@
               {/if}
             </div>
 
-            <div class="trip-details">
+            <div class="record-details">
               <div class="detail-group">
                 <div class="detail">
                   <span class="label">Departure:</span>
@@ -429,13 +429,6 @@
     font-weight: 600;
   }
 
-  .trip-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
   .detail-group {
     display: flex;
     flex-direction: column;
@@ -556,11 +549,6 @@
   }
 
   @media (max-width: 768px) {
-    .trip-details {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
     .trip-actions {
       flex-direction: column;
     }

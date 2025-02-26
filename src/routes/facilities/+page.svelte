@@ -246,7 +246,7 @@
               </span>
             </div>
 
-            <div class="facility-details">
+            <div class="record-details">
               <div class="detail">
                 <span class="label">Address</span>
                 <span class="value">{facility.address.street}</span>
@@ -425,13 +425,6 @@
   .type-badge.type-c {
     background: #fef9c3;
     color: #854d0e;
-  }
-
-  .facility-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   .detail {

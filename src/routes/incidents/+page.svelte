@@ -246,7 +246,7 @@
               </div>
               <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
             </div>
-            <div class="incident-details">
+            <div class="record-details">
               <div class="detail-group">
                 <span class="detail-label">Driver</span>
                 <span class="detail-value">{incident.driver.first_name} {incident.driver.last_name}</span>
@@ -351,13 +351,6 @@
     color: #4b5563;
   }
 
-  .incident-details {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-  }
-
   .detail-group {
     display: flex;
     flex-direction: column;
@@ -379,11 +372,4 @@
     font-size: var(--font-size-md);
     line-height: 1.5;
   }
-
-  @media (max-width: 768px) {
-    .incident-details {
-      grid-template-columns: 1fr;
-    }
-  }
-  
 </style> 
