@@ -507,22 +507,6 @@
     color: var(--text-secondary);
   }
 
-  .filter-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .filter-select {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    min-width: 200px;
-  }
-
   @media (max-width: 768px) {
     .drivers {
       padding: 1rem;
@@ -558,10 +542,6 @@
 
     .search-box {
       min-width: 100%;
-    }
-
-    .filter-group {
-      flex-direction: column;
     }
   }
 </style> 

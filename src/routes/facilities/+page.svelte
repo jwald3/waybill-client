@@ -555,22 +555,6 @@
     color: var(--text-secondary);
   }
 
-  .filter-group {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .filter-select {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    min-width: 200px;
-  }
-
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -649,11 +633,7 @@
     .search-box {
       min-width: 100%;
     }
-
-    .filter-group {
-      flex-direction: column;
-    }
-
+    
     .services-grid {
       grid-template-columns: 1fr;
       gap: 1rem;
