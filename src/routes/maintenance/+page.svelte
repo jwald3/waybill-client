@@ -114,6 +114,13 @@
   // Service type options
   const serviceTypes = ['ALL', 'ROUTINE_MAINTENANCE', 'REPAIR', 'EMERGENCY'];
 
+  function formatServiceTypeLabel(type: string): string {
+    if (type === 'ALL') return 'All Types';
+    return type.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
   // Filtered and sorted records
   $: filteredRecords = maintenanceRecords
     .filter(record => {
@@ -233,9 +240,7 @@
             class="filter-select"
           >
             {#each serviceTypes as type}
-              <option value={type}>
-                {type === 'ALL' ? 'All Types' : type.replace('_', ' ')}
-              </option>
+              <option value={type}>{formatServiceTypeLabel(type)}</option>
             {/each}
           </select>
 
