@@ -84,6 +84,13 @@
     return new Intl.NumberFormat('en-US').format(num);
   }
 
+  function formatStatusLabel(status: string): string {
+    if (status === 'ALL') return 'All Statuses';
+    return status.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
   // Filtered and sorted records
   $: filteredRecords = trucks
     .filter(truck => {
@@ -191,7 +198,7 @@
             bind:value={selectedStatus}
           >
             {#each statusTypes as type}
-              <option value={type}>{type === 'ALL' ? 'All Statuses' : type.replace('_', ' ')}</option>
+              <option value={type}>{formatStatusLabel(type)}</option>
             {/each}
           </select>
 
