@@ -266,7 +266,7 @@
               </div>
             </div>
 
-            <div class="driver-actions">
+            <div class="record-actions">
               <button class="action-button">View Details</button>
               <button class="action-button">Edit</button>
               <button class="action-button">Update Status</button>
@@ -385,16 +385,5 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .driver-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .driver-actions {
-      flex-direction: column;
-    }
   }
 </style> 

@@ -306,7 +306,7 @@
 
             <p class="description">{record.notes}</p>
 
-            <div class="item-actions">
+            <div class="record-actions">
               <button class="action-button">View Full Details</button>
               <button class="action-button">Update Record</button>
             </div>
@@ -425,11 +425,6 @@
     margin-bottom: 1.5rem;
   }
 
-  .item-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
   .cost {
     font-size: 1.25rem;
     font-weight: 600;
@@ -439,10 +434,6 @@
   @media (max-width: 768px) {
     .maintenance-item {
       padding: 1rem;
-    }
-
-    .item-actions {
-      flex-direction: column;
     }
 
     .stat-content {

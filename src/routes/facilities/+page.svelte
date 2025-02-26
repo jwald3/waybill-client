@@ -274,7 +274,7 @@
               </div>
             </div>
 
-            <div class="facility-actions">
+            <div class="record-actions">
               <button class="action-button">View Details</button>
               <button class="action-button">Edit Facility</button>
               <button class="action-button">Schedule Maintenance</button>
@@ -440,11 +440,6 @@
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 500;
-  }
-
-  .facility-actions {
-    display: flex;
-    gap: 1rem;
   }
 
   .services-grid {

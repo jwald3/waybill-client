@@ -324,7 +324,7 @@
               </div>
             {/if}
 
-            <div class="trip-actions">
+            <div class="record-actions">
               <button class="action-button">View Details</button>
               <button class="action-button">Update Status</button>
               <button class="action-button">Add Note</button>
@@ -480,17 +480,7 @@
     line-height: 1.4;
   }
 
-  .trip-actions {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   @media (max-width: 768px) {
-    .trip-actions {
-      flex-direction: column;
-    }
-
     .note {
       padding: 0.5rem;
     }

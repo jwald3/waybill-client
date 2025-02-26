@@ -258,7 +258,7 @@
               </div>
             </div>
 
-            <div class="truck-actions">
+            <div class="record-actions">
               <button class="action-button">View Details</button>
               <button class="action-button">Schedule Maintenance</button>
               <button class="action-button">Update Status</button>
@@ -370,16 +370,5 @@
   .status-badge.available {
     background: #dcfce7;
     color: #15803d;
-  }
-
-  .truck-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .truck-actions {
-      flex-direction: column;
-    }
   }
 </style> 

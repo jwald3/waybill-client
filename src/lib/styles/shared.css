@@ -326,6 +326,11 @@
   padding-bottom: 1.5rem;
 }
 
+.record-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .action-button {
   padding: 0.625rem 1.25rem;
   background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
@@ -349,6 +354,10 @@
     --spacing-xl: 1.5rem;
     --spacing-2xl: 2rem;
     --font-size-4xl: 2rem;
+  }
+
+  .record-actions {
+    flex-direction: column;
   }
 
   .action-button {
