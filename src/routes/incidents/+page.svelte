@@ -161,6 +161,13 @@
       sortDirection = 'desc';
     }
   }
+
+  function formatIncidentTypeLabel(type: string): string {
+    if (type === 'ALL') return 'All Types';
+    return type.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  }
 </script>
 
 <svelte:head>
@@ -209,7 +216,7 @@
             bind:value={selectedType}
           >
             {#each incidentTypes as type}
-              <option value={type}>{type.replace(/_/g, ' ')}</option>
+              <option value={type}>{formatIncidentTypeLabel(type)}</option>
             {/each}
           </select>
 
