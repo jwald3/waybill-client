@@ -172,7 +172,7 @@
 
 <Layout {isNavExpanded}>
   <div class="trips">
-    <h1 class="trips-title">Trip Management</h1>
+    <h1 class="page-title">Trip Management</h1>
 
     <div class="stats-grid">
       <Card title="Active Trips" icon={icons.trips}>
@@ -398,26 +398,6 @@
     margin: 0 auto;
   }
 
-  .trips-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    position: relative;
-    letter-spacing: -1px;
-  }
-
-  .trips-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100px;
-    height: 6px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-  }
-
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -591,11 +571,6 @@
   @media (max-width: 768px) {
     .trips {
       padding: 1rem;
-    }
-
-    .trips-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
     }
 
     .stats-grid {

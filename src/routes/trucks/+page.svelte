@@ -145,8 +145,7 @@
 
 <Layout {isNavExpanded}>
   <div class="trucks">
-    <h1 class="trucks-title">Fleet Management</h1>
-
+    <h1 class="page-title">Fleet Management</h1>
     <div class="stats-grid">
       <Card title="Total Fleet" icon={icons.truck}>
         <div class="stat-content">
@@ -326,26 +325,6 @@
     margin: 0 auto;
   }
 
-  .trucks-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    position: relative;
-    letter-spacing: -1px;
-  }
-
-  .trucks-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100px;
-    height: 6px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-  }
-
   .stat-content {
     text-align: center;
     padding: 1.5rem;
@@ -477,11 +456,6 @@
   @media (max-width: 768px) {
     .trucks {
       padding: 1rem;
-    }
-
-    .trucks-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
     }
 
     .truck-details {

@@ -141,7 +141,7 @@
 
 <Layout {isNavExpanded}>
   <div class="drivers">
-    <h1 class="drivers-title">Driver Management</h1>
+    <h1 class="page-title">Driver Management</h1>
 
     <div class="stats-grid">
       <Card title="Active Drivers" icon={icons.drivers}>
@@ -340,26 +340,6 @@
     margin: 0 auto;
   }
 
-  .drivers-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    position: relative;
-    letter-spacing: -1px;
-  }
-
-  .drivers-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100px;
-    height: 6px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-  }
-
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -497,11 +477,6 @@
   @media (max-width: 768px) {
     .drivers {
       padding: 1rem;
-    }
-
-    .drivers-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
     }
 
     .stats-grid {
