@@ -236,7 +236,7 @@
       <div class="records-list">
         {#each paginatedRecords as facility}
           <div class="record-item">
-            <div class="facility-header">
+            <div class="record-header">
               <div class="record-title">
                 <h3>{facility.name}</h3>
                 <span class="facility-number">{facility.facility_number}</span>
@@ -424,13 +424,6 @@
   .type-dot.type-c,
   .type-bar.type-c {
     background: #854d0e;
-  }
-
-  .facility-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
   }
 
   .facility-number {

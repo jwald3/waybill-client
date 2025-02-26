@@ -275,7 +275,7 @@
       <div class="record-list">
         {#each paginatedRecords as record}
           <div class="record-item">
-            <div class="item-header">
+            <div class="record-header">
               <div class="record-title">
                 <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
                 <span class="chip {record.service_type.toLowerCase()}">{record.service_type.replace('_', ' ')}</span>
@@ -404,13 +404,6 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-  }
-
-  .item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
   }
 
   .chip {
@@ -678,12 +671,6 @@
 
     .maintenance-item {
       padding: 1rem;
-    }
-
-    .item-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
     }
 
     .item-details {

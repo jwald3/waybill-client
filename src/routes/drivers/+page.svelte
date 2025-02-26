@@ -237,7 +237,7 @@
       <div class="records-list">
         {#each paginatedRecords as driver}
           <div class="record-item">
-            <div class="driver-header">
+            <div class="record-header">
               <div class="record-title">
                 <div class="avatar">
                   {driver.first_name[0]}{driver.last_name[0]}
@@ -379,13 +379,6 @@
     font-weight: 600;
     font-size: 1.1rem;
     margin-right: 1rem;
-  }
-
-  .driver-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.5rem;
   }
 
   .driver-info h3 {
@@ -635,12 +628,6 @@
 
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    .driver-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
     }
 
     .driver-details {

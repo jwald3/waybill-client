@@ -268,7 +268,7 @@
       <div class="records-list">
         {#each paginatedRecords as trip}
           <div class="record-item">
-            <div class="trip-header">
+            <div class="record-header">
               <div class="record-title">
                 <h3>Trip #{trip.trip_number}</h3>
                 <span class="status-badge {trip.status.toLowerCase()}">
@@ -423,13 +423,6 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-  }
-
-  .trip-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
   }
 
   .status-badge {
@@ -729,12 +722,6 @@
 
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    .trip-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
     }
 
     .trip-details {
