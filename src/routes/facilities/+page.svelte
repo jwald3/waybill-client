@@ -542,19 +542,6 @@
     font-size: 0.95rem;
   }
 
-  .search-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-  }
-
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -633,7 +620,7 @@
     .search-box {
       min-width: 100%;
     }
-    
+
     .services-grid {
       grid-template-columns: 1fr;
       gap: 1rem;

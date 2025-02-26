@@ -588,19 +588,6 @@
     font-size: 0.95rem;
   }
 
-  .search-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-  }
-
   @media (max-width: 768px) {
     .trips {
       padding: 1rem;

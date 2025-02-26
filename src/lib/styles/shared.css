@@ -274,6 +274,14 @@
   padding: 0 0.5rem;
 }
 
+.search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   :root {
