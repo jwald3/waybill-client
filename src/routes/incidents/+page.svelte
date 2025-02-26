@@ -174,14 +174,14 @@
     <div class="stats-grid">
       <Card title="Total Incidents" icon={icons.chart}>
         <div class="stat-content">
-          <p class="stat-number themed-text">{stats.total}</p>
+          <p class="stat-number">{stats.total}</p>
           <p class="stat-label">Reported incidents</p>
         </div>
       </Card>
 
       <Card title="Total Damage Cost" icon={icons.chart}>
         <div class="stat-content">
-          <p class="stat-number themed-text">{stats.totalDamage}</p>
+          <p class="stat-number">{stats.totalDamage}</p>
           <p class="stat-label">Estimated damage</p>
         </div>
       </Card>
@@ -323,14 +323,17 @@
   }
 
   .stat-number {
-    font-size: var(--font-size-3xl);
-    font-weight: 700;
-    margin-bottom: var(--spacing-xs);
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--theme-color);
+    line-height: 1;
+    margin-bottom: 0.5rem;
   }
 
   .stat-label {
     color: var(--text-secondary);
-    font-size: var(--font-size-sm);
+    font-size: 0.95rem;
+    font-weight: 500;
   }
 
   .incidents-list {

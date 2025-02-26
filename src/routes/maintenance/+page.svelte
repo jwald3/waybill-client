@@ -421,7 +421,7 @@
   }
 
   .stat-number {
-    font-size: 2.25rem;
+    font-size: 3rem;
     font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
