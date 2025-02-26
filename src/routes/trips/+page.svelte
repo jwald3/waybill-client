@@ -164,6 +164,13 @@
       sortDirection = 'desc';
     }
   }
+
+  function formatStatusLabel(status: string): string {
+    if (status === 'ALL') return 'All Statuses';
+    return status.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  }
 </script>
 
 <svelte:head>
@@ -226,9 +233,7 @@
             class="filter-select"
           >
             {#each statusTypes as type}
-              <option value={type}>
-                {type === 'ALL' ? 'All Statuses' : type.replace('_', ' ')}
-              </option>
+              <option value={type}>{formatStatusLabel(type)}</option>
             {/each}
           </select>
 
