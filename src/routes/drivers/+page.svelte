@@ -408,12 +408,6 @@
     color: white;
   }
 
-  .search-box {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-  }
-
   @media (max-width: 768px) {
     .driver-actions {
       flex-direction: column;
@@ -422,10 +416,6 @@
     .action-button {
       width: 100%;
       text-align: center;
-    }
-
-    .search-box {
-      min-width: 100%;
     }
   }
 </style> 

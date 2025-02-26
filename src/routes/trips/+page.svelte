@@ -501,13 +501,7 @@
     background: var(--theme-color);
     color: white;
   }
-
-  .search-box {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-  }
-
+  
   @media (max-width: 768px) {
     .trip-actions {
       flex-direction: column;
@@ -520,10 +514,6 @@
 
     .note {
       padding: 0.5rem;
-    }
-
-    .search-box {
-      min-width: 100%;
     }
   }
 </style> 

@@ -463,12 +463,6 @@
     color: white;
   }
 
-  .search-box {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-  }
-
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -530,10 +524,6 @@
   }
 
   @media (max-width: 768px) {
-    .search-box {
-      min-width: 100%;
-    }
-
     .services-grid {
       grid-template-columns: 1fr;
       gap: 1rem;

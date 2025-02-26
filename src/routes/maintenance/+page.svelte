@@ -452,12 +452,6 @@
     color: var(--theme-color);
   }
 
-  .search-box {
-    flex: 1;
-    min-width: 300px;
-    position: relative;
-  }
-
   @media (max-width: 768px) {
     .maintenance-item {
       padding: 1rem;
@@ -469,10 +463,6 @@
 
     .action-button {
       width: 100%;
-    }
-
-    .search-box {
-      min-width: 100%;
     }
 
     .stat-content {
