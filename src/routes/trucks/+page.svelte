@@ -372,11 +372,6 @@
     color: #15803d;
   }
 
-  .sub-value {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
   .truck-actions {
     display: flex;
     gap: 1rem;

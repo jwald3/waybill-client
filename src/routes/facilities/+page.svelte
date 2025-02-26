@@ -427,11 +427,6 @@
     color: #854d0e;
   }
 
-  .sub-value {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
   .services-list {
     display: flex;
     flex-wrap: wrap;

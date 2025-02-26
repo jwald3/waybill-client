@@ -434,12 +434,7 @@
     flex-direction: column;
     gap: 1rem;
   }
-
-  .sub-value {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
+  
   .actual-time {
     font-size: 0.875rem;
     color: var(--theme-color);
