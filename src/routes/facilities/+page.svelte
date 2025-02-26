@@ -597,14 +597,6 @@
     border-color: var(--theme-color);
     color: var(--theme-color);
   }
-
-  .results-summary {
-    padding: 1rem 1.5rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    border-bottom: 1px solid var(--border-color);
-  }
-
   .pagination {
     padding: 1.5rem;
     display: flex;
@@ -734,10 +726,6 @@
       flex: 1;
       min-width: calc(50% - 0.25rem);
       text-align: center;
-    }
-
-    .results-summary {
-      padding: 1rem;
     }
 
     .services-grid {

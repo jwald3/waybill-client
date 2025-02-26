@@ -389,10 +389,6 @@
     .incident-details {
       grid-template-columns: 1fr;
     }
-
-    .results-summary {
-      padding: var(--spacing-md);
-    }
   }
 
   /* Remove any existing pagination styles and use shared styles instead */
@@ -460,12 +456,5 @@
       height: 2.2rem;
       font-size: 0.85rem;
     }
-  }
-
-  .results-summary {
-    padding: var(--spacing-md) var(--spacing-lg);
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-    border-bottom: 1px solid var(--border-color);
   }
 </style> 
