@@ -236,6 +236,17 @@
   border-color: var(--theme-color);
 }
 
+.record-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.record-title h3 {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {

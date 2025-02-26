@@ -238,7 +238,7 @@
         {#each paginatedRecords as driver}
           <div class="record-item">
             <div class="driver-header">
-              <div class="driver-title">
+              <div class="record-title">
                 <div class="avatar">
                   {driver.first_name[0]}{driver.last_name[0]}
                 </div>
@@ -386,11 +386,6 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
-  }
-
-  .driver-title {
-    display: flex;
-    align-items: center;
   }
 
   .driver-info h3 {

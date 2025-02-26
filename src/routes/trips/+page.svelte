@@ -269,7 +269,7 @@
         {#each paginatedRecords as trip}
           <div class="record-item">
             <div class="trip-header">
-              <div class="trip-title">
+              <div class="record-title">
                 <h3>Trip #{trip.trip_number}</h3>
                 <span class="status-badge {trip.status.toLowerCase()}">
                   {trip.status.replace('_', ' ')}
@@ -430,18 +430,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-  }
-
-  .trip-title {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .trip-title h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
   }
 
   .status-badge {

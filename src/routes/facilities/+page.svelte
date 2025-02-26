@@ -237,7 +237,7 @@
         {#each paginatedRecords as facility}
           <div class="record-item">
             <div class="facility-header">
-              <div class="facility-title">
+              <div class="record-title">
                 <h3>{facility.name}</h3>
                 <span class="facility-number">{facility.facility_number}</span>
               </div>
@@ -431,18 +431,6 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
-  }
-
-  .facility-title {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .facility-title h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
   }
 
   .facility-number {

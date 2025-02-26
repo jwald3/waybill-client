@@ -235,7 +235,7 @@
         {#each paginatedRecords as incident}
           <div class="record-item">
             <div class="incident-header">
-              <div class="incident-title">
+              <div class="record-title">
                 <h3 class="themed-text">Incident #{incident.id}</h3>
                 <span class="incident-date">{formatDate(incident.date)}</span>
               </div>
@@ -319,17 +319,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-md);
-  }
-
-  .incident-title {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-  }
-
-  .incident-title h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
   }
 
   .incident-date {

@@ -230,7 +230,7 @@
         {#each paginatedRecords as truck}
           <div class="record-item">
             <div class="truck-header">
-              <div class="truck-title">
+              <div class="record-title">
                 <h3>{truck.make} {truck.model}</h3>
                 <span class="truck-number">{truck.truck_number}</span>
               </div>
@@ -377,18 +377,6 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
-  }
-
-  .truck-title {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .truck-title h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
   }
 
   .truck-number {
