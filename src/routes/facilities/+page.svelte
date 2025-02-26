@@ -144,6 +144,15 @@
       sortDirection = 'desc';
     }
   }
+
+  function formatTypeLabel(type: string): string {
+    if (type === 'ALL') return 'All Types';
+    return `Type ${type}`;
+  }
+
+  function formatTypeBadge(type: string): string {
+    return `TYPE ${type}`;
+  }
 </script>
 
 <svelte:head>
@@ -199,7 +208,7 @@
             bind:value={selectedType}
           >
             {#each facilityTypes as type}
-              <option value={type}>{type === 'ALL' ? 'All Types' : `Type ${type}`}</option>
+              <option value={type}>{formatTypeLabel(type)}</option>
             {/each}
           </select>
 
@@ -242,7 +251,7 @@
                 <span class="facility-number">{facility.facility_number}</span>
               </div>
               <span class="type-badge type-{facility.type.toLowerCase()}">
-                Type {facility.type}
+                {formatTypeBadge(facility.type)}
               </span>
             </div>
 
