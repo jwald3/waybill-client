@@ -183,6 +183,15 @@
     white-space: nowrap;
   }
 
+  /* Update the nav-link styles when sidebar is not expanded */
+  nav:not(.expanded) .nav-link {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0 auto;
+    justify-content: center;
+  }
+
   .nav-link:hover {
     background: var(--surface-color);
     color: var(--text-primary);
@@ -197,6 +206,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
   }
 
   .nav-tools {
@@ -258,6 +270,16 @@
       padding: 0.5rem;
       font-size: 0.75rem;
       justify-content: center;
+      width: auto;
+      height: auto;
+    }
+
+    /* Reset the collapsed nav-link styles for mobile */
+    nav:not(.expanded) .nav-link {
+      width: auto;
+      height: auto;
+      padding: 0.5rem;
+      margin: 0;
     }
 
     .nav-icon {
