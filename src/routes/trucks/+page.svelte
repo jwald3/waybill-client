@@ -399,16 +399,6 @@
     position: relative;
   }
 
-  .search-input {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-  }
-
   @media (max-width: 768px) {
     .truck-actions {
       flex-direction: column;
