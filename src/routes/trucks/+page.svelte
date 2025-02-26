@@ -226,9 +226,9 @@
         Showing {paginatedRecords.length} of {filteredRecords.length} trucks
       </div>
 
-      <div class="trucks-list">
+      <div class="records-list">
         {#each paginatedRecords as truck}
-          <div class="truck-item">
+          <div class="record-item">
             <div class="truck-header">
               <div class="truck-title">
                 <h3>{truck.make} {truck.model}</h3>
@@ -370,27 +370,6 @@
     opacity: 0.7;
     vertical-align: super;
     margin-left: 0.25rem;
-  }
-
-  .trucks-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
-  }
-
-  .truck-item {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-  }
-
-  .truck-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-color: var(--theme-color);
   }
 
   .truck-header {
@@ -623,10 +602,6 @@
     .trucks-title {
       font-size: 2rem;
       margin-bottom: 2rem;
-    }
-
-    .truck-item {
-      padding: 1rem;
     }
 
     .truck-header {

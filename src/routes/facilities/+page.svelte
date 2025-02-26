@@ -233,9 +233,9 @@
         Showing {paginatedRecords.length} of {filteredRecords.length} facilities
       </div>
 
-      <div class="facilities-list">
+      <div class="records-list">
         {#each paginatedRecords as facility}
-          <div class="facility-item">
+          <div class="record-item">
             <div class="facility-header">
               <div class="facility-title">
                 <h3>{facility.name}</h3>
@@ -361,20 +361,6 @@
     border-radius: 3px;
   }
 
-  .facility-item {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-  }
-
-  .facility-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-color: var(--theme-color);
-  }
-
   .facility-types {
     display: flex;
     flex-direction: column;
@@ -438,13 +424,6 @@
   .type-dot.type-c,
   .type-bar.type-c {
     background: #854d0e;
-  }
-
-  .facilities-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.5rem;
   }
 
   .facility-header {

@@ -234,9 +234,9 @@
         Showing {filteredRecords.length} of {drivers.length} drivers
       </div>
 
-      <div class="drivers-list">
+      <div class="records-list">
         {#each paginatedRecords as driver}
-          <div class="driver-item">
+          <div class="record-item">
             <div class="driver-header">
               <div class="driver-title">
                 <div class="avatar">
@@ -379,11 +379,6 @@
     font-weight: 600;
     font-size: 1.1rem;
     margin-right: 1rem;
-  }
-
-  .driver-item {
-    padding: 1.5rem;
-    border-bottom: 1px solid var(--border-color);
   }
 
   .driver-header {
@@ -645,10 +640,6 @@
 
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    .driver-item {
-      padding: 1rem;
     }
 
     .driver-header {

@@ -272,9 +272,9 @@
         Showing {filteredRecords.length} of {maintenanceRecords.length} records
       </div>
 
-      <div class="maintenance-list">
+      <div class="record-list">
         {#each paginatedRecords as record}
-          <div class="maintenance-item">
+          <div class="record-item">
             <div class="item-header">
               <div class="item-title">
                 <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
@@ -404,27 +404,6 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-  }
-
-  .maintenance-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.5rem;
-  }
-
-  .maintenance-item {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-  }
-
-  .maintenance-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-color: var(--theme-color);
   }
 
   .item-header {

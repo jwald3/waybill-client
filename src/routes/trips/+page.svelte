@@ -265,9 +265,9 @@
         Showing {filteredRecords.length} of {trips.length} trips
       </div>
 
-      <div class="trips-list">
+      <div class="records-list">
         {#each paginatedRecords as trip}
-          <div class="trip-item">
+          <div class="record-item">
             <div class="trip-header">
               <div class="trip-title">
                 <h3>Trip #{trip.trip_number}</h3>
@@ -423,27 +423,6 @@
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
-  }
-
-  .trips-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.5rem;
-  }
-
-  .trip-item {
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
-  }
-
-  .trip-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    border-color: var(--theme-color);
   }
 
   .trip-header {
@@ -762,10 +741,6 @@
 
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
-    }
-
-    .trip-item {
-      padding: 1rem;
     }
 
     .trip-header {

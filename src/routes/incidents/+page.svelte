@@ -231,9 +231,9 @@
         Showing {paginatedRecords.length} of {filteredRecords.length} incidents
       </div>
 
-      <div class="incidents-list">
+      <div class="records-list">
         {#each paginatedRecords as incident}
-          <div class="incident-item">
+          <div class="record-item">
             <div class="incident-header">
               <div class="incident-title">
                 <h3 class="themed-text">Incident #{incident.id}</h3>
@@ -312,20 +312,6 @@
     padding: var(--spacing-xl);
     max-width: 1400px;
     margin: 0 auto;
-  }
-
-  .incidents-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-  }
-
-  .incident-item {
-    padding: var(--spacing-lg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-lg);
-    background: var(--bg-secondary);
   }
 
   .incident-header {
@@ -415,10 +401,6 @@
 
   @media (max-width: 768px) {
     .page {
-      padding: var(--spacing-md);
-    }
-
-    .incident-item {
       padding: var(--spacing-md);
     }
 
