@@ -302,12 +302,22 @@
   }
 
   .sort-buttons {
+    display: flex;
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   .sort-button {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
     flex: 1;
-    min-width: calc(50% - var(--spacing-sm));
+    min-width: calc(50% - 0.25rem);
     text-align: center;
   }
 

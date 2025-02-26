@@ -523,33 +523,6 @@
     min-width: 200px;
   }
 
-  .sort-buttons {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .sort-button {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .sort-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .sort-button.active {
-    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
   @media (max-width: 768px) {
     .drivers {
       padding: 1rem;
@@ -589,16 +562,6 @@
 
     .filter-group {
       flex-direction: column;
-    }
-
-    .sort-buttons {
-      flex-wrap: wrap;
-    }
-
-    .sort-button {
-      flex: 1;
-      min-width: calc(50% - 0.25rem);
-      text-align: center;
     }
   }
 </style> 
