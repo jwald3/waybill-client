@@ -408,15 +408,6 @@
     color: white;
   }
 
-  .controls {
-    padding: 1.5rem 1.5rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1.5rem;
-  }
-
   .search-box {
     flex: 1;
     min-width: 300px;
@@ -441,11 +432,6 @@
     .action-button {
       width: 100%;
       text-align: center;
-    }
-
-    .controls {
-      padding: 1rem 1rem 0;
-      flex-direction: column;
     }
 
     .search-box {
