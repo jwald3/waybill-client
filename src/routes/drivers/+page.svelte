@@ -550,65 +550,6 @@
     color: var(--theme-color);
   }
 
-  .pagination {
-    padding: 1.5rem;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .pagination-info {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
-  .pagination-controls {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .page-button {
-    padding: 0.5rem 0.75rem;
-    min-width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .page-button:hover:not(:disabled) {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .page-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .page-button.active {
-    background: var(--theme-color);
-    border-color: var(--theme-color);
-    color: white;
-  }
-
-  .page-ellipsis {
-    color: var(--text-secondary);
-    padding: 0 0.5rem;
-  }
-
   @media (max-width: 768px) {
     .drivers {
       padding: 1rem;
@@ -658,21 +599,6 @@
       flex: 1;
       min-width: calc(50% - 0.25rem);
       text-align: center;
-    }
-
-    .pagination {
-      padding: 1rem;
-    }
-
-    .pagination-controls {
-      gap: 0.25rem;
-    }
-
-    .page-button {
-      padding: 0.4rem 0.6rem;
-      min-width: 2.2rem;
-      height: 2.2rem;
-      font-size: 0.85rem;
     }
   }
 </style> 

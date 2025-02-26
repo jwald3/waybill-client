@@ -530,44 +530,6 @@
     color: var(--theme-color);
   }
 
-  .pagination {
-    padding: 1.5rem;
-    display: flex;
-    justify-content: center;
-  }
-
-  .pagination-controls {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .page-button {
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .page-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .page-button.active {
-    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .page-ellipsis {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-
   @media (max-width: 768px) {
     .trucks {
       padding: 1rem;
