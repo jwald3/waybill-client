@@ -62,7 +62,7 @@
   <div class="page">
     <h1 class="page-title">Add New Driver</h1>
 
-    <Card>
+    <Card title="Driver Details" icon={icons.drivers}>
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-content">
           <section class="form-group">
@@ -225,20 +225,18 @@
 
 <style>
   .form-content {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
   }
 
   .form-group {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
   }
 
   .section-title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
     color: var(--text-primary);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
     font-weight: 600;
-    padding-bottom: var(--spacing-sm);
-    border-bottom: 1px solid var(--border-color);
   }
 
   .input-grid {
@@ -250,7 +248,7 @@
   .input-field {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
   }
 
   .input-field.full-width {
@@ -259,7 +257,7 @@
 
   .input-field label {
     font-size: var(--font-size-sm);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     font-weight: 500;
   }
 
@@ -268,10 +266,16 @@
     padding: var(--spacing-md);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     color: var(--text-primary);
     font-size: var(--font-size-md);
     transition: var(--transition-all);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .input-field input:hover,
+  .input-field select:hover {
+    border-color: color-mix(in srgb, var(--theme-color) 50%, var(--border-color));
   }
 
   .input-field input:focus,
@@ -285,8 +289,8 @@
     display: flex;
     justify-content: flex-end;
     gap: var(--spacing-md);
-    margin-top: var(--spacing-xl);
-    padding-top: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-xl);
     border-top: 1px solid var(--border-color);
   }
 
@@ -297,20 +301,24 @@
     font-weight: 500;
     cursor: pointer;
     transition: var(--transition-all);
+    min-width: 120px;
+    text-align: center;
   }
 
   .btn-submit {
     background: var(--theme-color);
     color: white;
     border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
 
   .btn-submit:hover {
     opacity: 0.9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .btn-cancel {
-    background: var(--bg-secondary);
+    background: transparent;
     color: var(--text-secondary);
     border: 1px solid var(--border-color);
   }
@@ -321,6 +329,10 @@
   }
 
   @media (max-width: 768px) {
+    .form-content {
+      padding: var(--spacing-lg);
+    }
+
     .input-grid {
       grid-template-columns: 1fr;
     }
