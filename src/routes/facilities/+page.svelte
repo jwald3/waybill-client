@@ -236,6 +236,10 @@
             </button>
           </div>
         </div>
+
+        <a href="/facilities/new" class="action-button primary">
+          Add New Facility
+        </a>
       </div>
 
       <div class="results-summary">
