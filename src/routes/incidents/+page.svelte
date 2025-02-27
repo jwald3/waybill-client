@@ -237,6 +237,10 @@
             </button>
           </div>
         </div>
+
+        <a href="/incidents/new" class="action-button primary">
+          Report Incident
+        </a>
       </div>
 
       <div class="results-summary">
