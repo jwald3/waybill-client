@@ -178,6 +178,60 @@
   function toggleNotes(tripId: string) {
     expandedNotes[tripId] = !expandedNotes[tripId];
   }
+
+  // Add these new interfaces/types
+  interface AddNoteModal {
+    isOpen: boolean;
+    tripId: string | null;
+    content: string;
+  }
+
+  // Add these new state variables
+  let addNoteModal: AddNoteModal = {
+    isOpen: false,
+    tripId: null,
+    content: ''
+  };
+
+  // Add these new functions
+  function openAddNote(tripId: string) {
+    addNoteModal = {
+      isOpen: true,
+      tripId,
+      content: ''
+    };
+  }
+
+  function closeAddNote() {
+    addNoteModal = {
+      isOpen: false,
+      tripId: null,
+      content: ''
+    };
+  }
+
+  function handleAddNote() {
+    if (!addNoteModal.content.trim() || !addNoteModal.tripId) return;
+
+    const tripIndex = trips.findIndex(t => t.id === addNoteModal.tripId);
+    if (tripIndex === -1) return;
+
+    const newNote: TripNote = {
+      note_timestamp: new Date().toISOString(),
+      content: addNoteModal.content.trim()
+    };
+
+    // Update the trips array with the new note
+    trips[tripIndex] = {
+      ...trips[tripIndex],
+      notes: [newNote, ...trips[tripIndex].notes]
+    };
+
+    // Auto-expand notes for the trip that just got a new note
+    expandedNotes[addNoteModal.tripId] = true;
+
+    closeAddNote();
+  }
 </script>
 
 <svelte:head>
@@ -368,7 +422,9 @@
             <div class="record-actions">
               <button class="action-button">View Details</button>
               <button class="action-button">Update Status</button>
-              <button class="action-button">Add Note</button>
+              <button class="action-button" on:click={() => openAddNote(trip.id)}>
+                Add Note
+              </button>
             </div>
           </div>
         {/each}
@@ -430,6 +486,35 @@
       </div>
     </Card>
   </div>
+
+  <!-- Add this modal markup just before the closing Layout tag -->
+  {#if addNoteModal.isOpen}
+    <div class="modal-backdrop" on:click={closeAddNote}>
+      <div class="modal-content" on:click|stopPropagation>
+        <div class="modal-header">
+          <h3>Add Note</h3>
+          <button class="modal-close" on:click={closeAddNote}>×</button>
+        </div>
+        <div class="modal-body">
+          <textarea
+            bind:value={addNoteModal.content}
+            placeholder="Enter note content..."
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="modal-footer">
+          <button class="action-button" on:click={closeAddNote}>Cancel</button>
+          <button 
+            class="action-button primary"
+            on:click={handleAddNote}
+            disabled={!addNoteModal.content.trim()}
+          >
+            Add Note
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
 </Layout>
 
 <style>
@@ -584,5 +669,101 @@
   .note:not(.latest-note) p {
     white-space: normal;
     overflow: visible;
+  }
+
+  /* Add these new styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .modal-body {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-body textarea {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .modal-body textarea:focus {
+    outline: none;
+    border-color: var(--theme-color);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
+  .action-button.primary {
+    background: var(--theme-color);
+    color: white;
+  }
+
+  .action-button.primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style> 
