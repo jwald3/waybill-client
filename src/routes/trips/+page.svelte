@@ -420,7 +420,7 @@
             {/if}
 
             <div class="record-actions">
-              <button class="action-button">View Details</button>
+              <a href="/trips/{trip.id}" class="action-button">View Details</a>
               <button class="action-button">Update Status</button>
               <button class="action-button" on:click={() => openAddNote(trip.id)}>
                 Add Note
