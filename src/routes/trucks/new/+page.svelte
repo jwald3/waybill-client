@@ -196,7 +196,7 @@
                   required
                 >
                   {#each trailerTypes as type}
-                    <option value={type}>{type.replace('_', ' ')}</option>
+                    <option value={type}>{type.split('_').map(word => word.charAt(0) + word.slice(1).toLowerCase()).join(' ')}</option>
                   {/each}
                 </select>
               </div>
@@ -209,7 +209,7 @@
                   required
                 >
                   {#each fuelTypes as type}
-                    <option value={type}>{type}</option>
+                    <option value={type}>{type.charAt(0) + type.slice(1).toLowerCase()}</option>
                   {/each}
                 </select>
               </div>
