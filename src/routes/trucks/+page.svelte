@@ -226,6 +226,10 @@
             </button>
           </div>
         </div>
+
+        <a href="/trucks/new" class="action-button primary">
+          Add New Truck
+        </a>
       </div>
 
       <div class="results-summary">
