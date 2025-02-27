@@ -288,7 +288,7 @@
             </div>
 
             <div class="record-actions">
-              <button class="action-button">View Details</button>
+              <a href="/facilities/{facility.id}" class="action-button">View Details</a>
               <button class="action-button">Edit Facility</button>
               <button class="action-button">Schedule Maintenance</button>
             </div>
