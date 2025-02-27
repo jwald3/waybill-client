@@ -270,7 +270,7 @@
             </div>
 
             <div class="record-actions">
-              <button class="action-button">View Details</button>
+              <a href="/trucks/{truck.id}" class="action-button">View Details</a>
               <button class="action-button">Schedule Maintenance</button>
               <button class="action-button">Update Status</button>
             </div>
