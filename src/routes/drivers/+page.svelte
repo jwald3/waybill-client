@@ -280,7 +280,7 @@
             </div>
 
             <div class="record-actions">
-              <button class="action-button">View Details</button>
+              <a href="/drivers/{driver.id}" class="action-button">View Details</a>
               <button class="action-button">Edit</button>
               <button class="action-button">Update Status</button>
             </div>
