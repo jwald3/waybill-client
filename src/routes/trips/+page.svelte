@@ -264,6 +264,10 @@
             </button>
           </div>
         </div>
+
+        <a href="/trips/new" class="action-button primary">
+          Create Trip
+        </a>
       </div>
 
       <div class="results-summary">
