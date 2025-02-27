@@ -171,6 +171,13 @@
       .map(word => word.charAt(0) + word.slice(1).toLowerCase())
       .join(' ');
   }
+
+  // Add this to track expanded state for each trip
+  let expandedNotes: { [key: string]: boolean } = {};
+
+  function toggleNotes(tripId: string) {
+    expandedNotes[tripId] = !expandedNotes[tripId];
+  }
 </script>
 
 <svelte:head>
@@ -323,13 +330,38 @@
 
             {#if trip.notes.length > 0}
               <div class="trip-notes">
-                <h4>Notes:</h4>
-                {#each trip.notes as note}
-                  <div class="note">
-                    <span class="note-time">{formatDate(note.note_timestamp)}</span>
-                    <p>{note.content}</p>
+                <div class="notes-header">
+                  <span class="notes-count">{trip.notes.length} Note{trip.notes.length > 1 ? 's' : ''}</span>
+                  {#if trip.notes.length > 1}
+                    <button 
+                      class="notes-toggle" 
+                      on:click={() => toggleNotes(trip.id)}
+                    >
+                      {expandedNotes[trip.id] ? 'Show Less' : 'View All'}
+                    </button>
+                  {/if}
+                </div>
+                
+                {#if expandedNotes[trip.id]}
+                  {#each trip.notes as note}
+                    <div class="note">
+                      <div class="note-content">
+                        <span class="note-time">{formatDate(note.note_timestamp)}</span>
+                        <p>{note.content}</p>
+                      </div>
+                    </div>
+                  {/each}
+                {:else}
+                  <div class="note latest-note">
+                    <div class="note-content">
+                      <span class="note-time">{formatDate(trip.notes[0].note_timestamp)}</span>
+                      <p>{trip.notes[0].content}</p>
+                    </div>
+                    {#if trip.notes.length > 1}
+                      <div class="note-indicator">+{trip.notes.length - 1}</div>
+                    {/if}
                   </div>
-                {/each}
+                {/if}
               </div>
             {/if}
 
@@ -453,45 +485,104 @@
   .trip-notes {
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
   }
 
-  .trip-notes h4 {
-    color: var(--text-primary);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.75rem;
+  .notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .notes-count {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .notes-toggle {
+    background: none;
+    border: none;
+    color: var(--theme-color);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .notes-toggle:hover {
+    text-decoration: underline;
   }
 
   .note {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem;
     border-radius: 6px;
     background: var(--bg-secondary);
-    margin-bottom: 0.5rem;
   }
 
-  .note:last-child {
-    margin-bottom: 0;
+  .note-content {
+    flex: 1;
+    min-width: 0;
   }
 
   .note-time {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
+    display: block;
+    margin-bottom: 0.25rem;
   }
 
   .note p {
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     line-height: 1.4;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .note-indicator {
+    background: var(--theme-color);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    min-width: 1.5rem;
+    text-align: center;
   }
 
   @media (max-width: 768px) {
+    .trip-notes {
+      padding: 0.5rem;
+    }
+    
     .note {
       padding: 0.5rem;
     }
+  }
+
+  /* Add these new styles */
+  .note + .note {
+    margin-top: 0.5rem;
+  }
+
+  .latest-note p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Other notes can wrap */
+  .note:not(.latest-note) p {
+    white-space: normal;
+    overflow: visible;
   }
 </style> 
