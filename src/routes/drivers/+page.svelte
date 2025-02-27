@@ -237,6 +237,10 @@
             </button>
           </div>
         </div>
+
+        <a href="/drivers/new" class="action-button primary">
+          Add New Driver
+        </a>
       </div>
 
       <div class="results-summary">
@@ -394,5 +398,23 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
+  }
+
+  .action-button.primary {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-all);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .action-button.primary:hover {
+    opacity: 0.9;
   }
 </style> 
