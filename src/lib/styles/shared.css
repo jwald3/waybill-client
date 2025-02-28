@@ -340,6 +340,8 @@
   font-weight: 500;
   transition: all 0.2s ease;
   cursor: pointer;
+  width: 100%;
+  text-align: center;
 }
 
 .action-button:hover {
@@ -375,11 +377,6 @@
 
   .record-actions {
     flex-direction: column;
-  }
-
-  .action-button {
-    width: 100%;
-    text-align: center;
   }
 
   .record-details {
