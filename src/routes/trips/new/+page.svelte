@@ -263,7 +263,7 @@
               </div>
 
               <div class="input-field">
-                <label class="checkbox-label">
+                <label class="new-form-checkbox-label">
                   <input
                     type="checkbox"
                     bind:checked={formData.cargo.hazmat}
@@ -287,20 +287,3 @@
     </Card>
   </div>
 </Layout>
-
-<style>
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    cursor: pointer;
-  }
-
-  .checkbox-label input[type="checkbox"] {
-    width: auto;
-  }
-
-  .checkbox-label span {
-    color: var(--text-primary);
-  }
-</style> 

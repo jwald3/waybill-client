@@ -219,7 +219,7 @@
                     checked={formData.services_available.includes(service)}
                     on:change={() => handleServiceToggle(service)}
                   />
-                  <span class="checkbox-label">{service}</span>
+                  <span class="new-form-checkbox-label">{service}</span>
                 </label>
               {/each}
             </div>
@@ -259,11 +259,6 @@
 
   .service-checkbox:hover {
     background: var(--bg-secondary);
-  }
-
-  .checkbox-label {
-    color: var(--text-primary);
-    font-size: var(--font-size-sm);
   }
 
   @media (max-width: 768px) {
