@@ -1,6 +1,7 @@
 <script lang="ts">
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
+  import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   
   let isNavExpanded = true;
@@ -144,6 +145,28 @@
       sortDirection = 'asc';
     }
   }
+
+  // Add this reactive statement to update sort buttons when sort state changes
+  $: sortButtons = [
+    {
+      field: 'last_name',
+      label: 'Name',
+      active: sortField === 'last_name',
+      direction: sortField === 'last_name' ? sortDirection : undefined
+    },
+    {
+      field: 'license_expiration',
+      label: 'License Exp.',
+      active: sortField === 'license_expiration',
+      direction: sortField === 'license_expiration' ? sortDirection : undefined
+    },
+    {
+      field: 'employment_status',
+      label: 'Status',
+      active: sortField === 'employment_status',
+      direction: sortField === 'employment_status' ? sortDirection : undefined
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -185,63 +208,19 @@
     </div>
 
     <Card title="Driver Records" icon={icons.drivers}>
-      <div class="controls">
-        <div class="search-box">
-          <input
-            type="text"
-            placeholder="Search drivers..."
-            bind:value={searchQuery}
-            class="search-input"
-          />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="filter-group">
-          <select 
-            bind:value={selectedStatus}
-            class="filter-select"
-          >
-            {#each statusTypes as type}
-              <option value={type}>{formatStatusLabel(type)}</option>
-            {/each}
-          </select>
-
-          <div class="sort-buttons">
-            <button
-              class="sort-button"
-              class:active={sortField === 'last_name'}
-              class:asc={sortField === 'last_name' && sortDirection === 'asc'}
-              on:click={() => handleSort('last_name')}
-            >
-              Name {sortField === 'last_name' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'license_expiration'}
-              class:asc={sortField === 'license_expiration' && sortDirection === 'asc'}
-              on:click={() => handleSort('license_expiration')}
-            >
-              License Exp. {sortField === 'license_expiration' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'employment_status'}
-              class:asc={sortField === 'employment_status' && sortDirection === 'asc'}
-              on:click={() => handleSort('employment_status')}
-            >
-              Status {sortField === 'employment_status' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          </div>
-        </div>
-
-        <a href="/drivers/new" class="primary-action-button">
-          Add New Driver
-        </a>
-      </div>
+      <ListControls
+        searchPlaceholder="Search drivers..."
+        bind:searchQuery
+        bind:selectedFilter={selectedStatus}
+        filterOptions={statusTypes}
+        {formatStatusLabel}
+        {sortButtons}
+        addNewHref="/drivers/new"
+        addNewLabel="Add New Driver"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedStatus = value}
+        onSort={handleSort}
+      />
 
       <div class="results-summary">
         Showing {filteredRecords.length} of {drivers.length} drivers
