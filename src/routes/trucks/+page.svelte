@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  import ListControls from '$lib/components/ListControls.svelte';
   
   let isNavExpanded = true;
 
@@ -144,6 +145,28 @@
       sortDirection = 'desc';
     }
   }
+
+  // Add this reactive statement to update sort buttons when sort state changes
+  $: sortButtons = [
+    {
+      field: 'truck_number',
+      label: 'Number',
+      active: sortField === 'truck_number',
+      direction: sortField === 'truck_number' ? sortDirection : undefined
+    },
+    {
+      field: 'mileage',
+      label: 'Mileage',
+      active: sortField === 'mileage',
+      direction: sortField === 'mileage' ? sortDirection : undefined
+    },
+    {
+      field: 'last_maintenance',
+      label: 'Maintenance',
+      active: sortField === 'last_maintenance',
+      direction: sortField === 'last_maintenance' ? sortDirection : undefined
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -177,60 +200,19 @@
     </div>
 
     <Card title="Truck Records" icon={icons.truck}>
-      <div class="controls">
-        <div class="search-box">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search trucks..."
-            bind:value={searchQuery}
-          />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="filter-group">
-          <select
-            class="filter-select"
-            bind:value={selectedStatus}
-          >
-            {#each statusTypes as type}
-              <option value={type}>{formatStatusLabel(type)}</option>
-            {/each}
-          </select>
-
-          <div class="sort-buttons">
-            <button
-              class="sort-button"
-              class:active={sortField === 'truck_number'}
-              on:click={() => handleSort('truck_number')}
-            >
-              Number {sortField === 'truck_number' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'mileage'}
-              on:click={() => handleSort('mileage')}
-            >
-              Mileage {sortField === 'mileage' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'last_maintenance'}
-              on:click={() => handleSort('last_maintenance')}
-            >
-              Maintenance {sortField === 'last_maintenance' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          </div>
-        </div>
-
-        <a href="/trucks/new" class="primary-action-button">
-          Add New Truck
-        </a>
-      </div>
+      <ListControls
+        searchPlaceholder="Search trucks..."
+        bind:searchQuery
+        bind:selectedFilter={selectedStatus}
+        filterOptions={statusTypes}
+        {formatStatusLabel}
+        {sortButtons}
+        addNewHref="/trucks/new"
+        addNewLabel="Add New Truck"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedStatus = value}
+        onSort={handleSort}
+      />
 
       <div class="results-summary">
         Showing {paginatedRecords.length} of {filteredRecords.length} trucks
