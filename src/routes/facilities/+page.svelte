@@ -1,6 +1,7 @@
 <script lang="ts">
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
+  import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   
   let isNavExpanded = true;
@@ -153,6 +154,28 @@
   function formatTypeBadge(type: string): string {
     return `TYPE ${type}`;
   }
+
+  // Add this reactive statement to update sort buttons when sort state changes
+  $: sortButtons = [
+    {
+      field: 'name',
+      label: 'Name',
+      active: sortField === 'name',
+      direction: sortField === 'name' ? sortDirection : undefined
+    },
+    {
+      field: 'parking_capacity',
+      label: 'Capacity',
+      active: sortField === 'parking_capacity',
+      direction: sortField === 'parking_capacity' ? sortDirection : undefined
+    },
+    {
+      field: 'type',
+      label: 'Type',
+      active: sortField === 'type',
+      direction: sortField === 'type' ? sortDirection : undefined
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -187,60 +210,19 @@
     </div>
 
     <Card title="Facility Records" icon={icons.truck}>
-      <div class="controls">
-        <div class="search-box">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search facilities..."
-            bind:value={searchQuery}
-          />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="filter-group">
-          <select
-            class="filter-select"
-            bind:value={selectedType}
-          >
-            {#each facilityTypes as type}
-              <option value={type}>{formatTypeLabel(type)}</option>
-            {/each}
-          </select>
-
-          <div class="sort-buttons">
-            <button
-              class="sort-button"
-              class:active={sortField === 'name'}
-              on:click={() => handleSort('name')}
-            >
-              Name {sortField === 'name' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'parking_capacity'}
-              on:click={() => handleSort('parking_capacity')}
-            >
-              Capacity {sortField === 'parking_capacity' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'type'}
-              on:click={() => handleSort('type')}
-            >
-              Type {sortField === 'type' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          </div>
-        </div>
-
-        <a href="/facilities/new" class="primary-action-button">
-          Add New Facility
-        </a>
-      </div>
+      <ListControls
+        searchPlaceholder="Search facilities..."
+        bind:searchQuery
+        bind:selectedFilter={selectedType}
+        filterOptions={facilityTypes}
+        formatFilterLabel={formatTypeLabel}
+        {sortButtons}
+        addNewHref="/facilities/new"
+        addNewLabel="Add New Facility"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedType = value}
+        onSort={handleSort}
+      />
 
       <div class="results-summary">
         Showing {paginatedRecords.length} of {filteredRecords.length} facilities
