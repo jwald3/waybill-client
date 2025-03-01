@@ -1,6 +1,7 @@
 <script lang="ts">
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
+  import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   
@@ -168,6 +169,22 @@
       .map(word => word.charAt(0) + word.slice(1).toLowerCase())
       .join(' ');
   }
+
+  // Add this reactive statement to update sort buttons when sort state changes
+  $: sortButtons = [
+    {
+      field: 'date',
+      label: 'Date',
+      active: sortField === 'date',
+      direction: sortField === 'date' ? sortDirection : undefined
+    },
+    {
+      field: 'damage_estimate',
+      label: 'Damage',
+      active: sortField === 'damage_estimate',
+      direction: sortField === 'damage_estimate' ? sortDirection : undefined
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -195,53 +212,19 @@
     </div>
 
     <Card title="Incident Log" icon={icons.incidents}>
-      <div class="controls">
-        <div class="search-box">
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Search incidents..."
-            bind:value={searchQuery}
-          />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="filter-group">
-          <select 
-            class="filter-select"
-            bind:value={selectedType}
-          >
-            {#each incidentTypes as type}
-              <option value={type}>{formatIncidentTypeLabel(type)}</option>
-            {/each}
-          </select>
-
-          <div class="sort-buttons">
-            <button
-              class="sort-button"
-              class:active={sortField === 'date'}
-              on:click={() => handleSort('date')}
-            >
-              Date {sortField === 'date' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'damage_estimate'}
-              on:click={() => handleSort('damage_estimate')}
-            >
-              Damage {sortField === 'damage_estimate' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          </div>
-        </div>
-
-        <a href="/incidents/new" class="primary-action-button">
-          Report Incident
-        </a>
-      </div>
+      <ListControls
+        searchPlaceholder="Search incidents..."
+        bind:searchQuery
+        bind:selectedFilter={selectedType}
+        filterOptions={incidentTypes}
+        formatFilterLabel={formatIncidentTypeLabel}
+        {sortButtons}
+        addNewHref="/incidents/new"
+        addNewLabel="Report Incident"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedType = value}
+        onSort={handleSort}
+      />
 
       <div class="results-summary">
         Showing {paginatedRecords.length} of {filteredRecords.length} incidents
