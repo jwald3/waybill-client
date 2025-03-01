@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <a href="/drivers/new" class="action-button primary">
+        <a href="/drivers/new" class="primary-action-button">
           Add New Driver
         </a>
       </div>

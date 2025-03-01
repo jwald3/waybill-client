@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <a href="/incidents/new" class="action-button primary">
+        <a href="/incidents/new" class="primary-action-button">
           Report Incident
         </a>
       </div>

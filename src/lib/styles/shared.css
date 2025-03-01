@@ -713,4 +713,33 @@
   .btn-cancel {
     width: 100%;
   }
+}
+
+/* Primary Action Button - for "Add New" buttons */
+.primary-action-button {
+  padding: var(--spacing-md) var(--spacing-xl);
+  background: var(--theme-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition-all);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.primary-action-button:hover {
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .primary-action-button {
+    width: auto;
+    display: inline-flex;
+  }
 } 

@@ -272,7 +272,7 @@
           </div>
         </div>
 
-        <a href="/maintenance/new" class="action-button primary">
+        <a href="/maintenance/new" class="primary-action-button">
           Add Maintenance Log
         </a>
       </div>

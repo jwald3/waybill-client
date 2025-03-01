@@ -227,7 +227,7 @@
           </div>
         </div>
 
-        <a href="/trucks/new" class="action-button primary">
+        <a href="/trucks/new" class="primary-action-button">
           Add New Truck
         </a>
       </div>
@@ -381,5 +381,33 @@
   .status-badge.available {
     background: #dcfce7;
     color: #15803d;
+  }
+
+  :global(.action-button.primary) {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-all);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    :global(.action-button.primary) {
+      width: auto;
+      display: inline-flex;
+    }
+  }
+
+  :global(.action-button.primary:hover) {
+    opacity: 0.9;
   }
 </style> 

@@ -237,7 +237,7 @@
           </div>
         </div>
 
-        <a href="/facilities/new" class="action-button primary">
+        <a href="/facilities/new" class="primary-action-button">
           Add New Facility
         </a>
       </div>
