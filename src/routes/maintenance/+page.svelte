@@ -1,6 +1,7 @@
 <script lang="ts">
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
+  import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   
@@ -178,6 +179,28 @@
       sortDirection = 'desc';
     }
   }
+
+  // Add this reactive statement to update sort buttons when sort state changes
+  $: sortButtons = [
+    {
+      field: 'date',
+      label: 'Date',
+      active: sortField === 'date',
+      direction: sortField === 'date' ? sortDirection : undefined
+    },
+    {
+      field: 'cost',
+      label: 'Cost',
+      active: sortField === 'cost',
+      direction: sortField === 'cost' ? sortDirection : undefined
+    },
+    {
+      field: 'truck_number',
+      label: 'Truck #',
+      active: sortField === 'truck_number',
+      direction: sortField === 'truck_number' ? sortDirection : undefined
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -219,63 +242,19 @@
     </div>
 
     <Card title="Maintenance Records" icon={icons.maintenance}>
-      <div class="controls">
-        <div class="search-box">
-          <input
-            type="text"
-            placeholder="Search records..."
-            bind:value={searchQuery}
-            class="search-input"
-          />
-          <span class="search-icon">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="filter-group">
-          <select 
-            bind:value={selectedServiceType}
-            class="filter-select"
-          >
-            {#each serviceTypes as type}
-              <option value={type}>{formatServiceTypeLabel(type)}</option>
-            {/each}
-          </select>
-
-          <div class="sort-buttons">
-            <button
-              class="sort-button"
-              class:active={sortField === 'date'}
-              class:asc={sortField === 'date' && sortDirection === 'asc'}
-              on:click={() => handleSort('date')}
-            >
-              Date {sortField === 'date' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'cost'}
-              class:asc={sortField === 'cost' && sortDirection === 'asc'}
-              on:click={() => handleSort('cost')}
-            >
-              Cost {sortField === 'cost' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-            <button
-              class="sort-button"
-              class:active={sortField === 'truck_number'}
-              class:asc={sortField === 'truck_number' && sortDirection === 'asc'}
-              on:click={() => handleSort('truck_number')}
-            >
-              Truck # {sortField === 'truck_number' ? (sortDirection === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          </div>
-        </div>
-
-        <a href="/maintenance/new" class="primary-action-button">
-          Add Maintenance Log
-        </a>
-      </div>
+      <ListControls
+        searchPlaceholder="Search records..."
+        bind:searchQuery
+        bind:selectedFilter={selectedServiceType}
+        filterOptions={serviceTypes}
+        formatFilterLabel={formatServiceTypeLabel}
+        {sortButtons}
+        addNewHref="/maintenance/new"
+        addNewLabel="Add Maintenance Log"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedServiceType = value}
+        onSort={handleSort}
+      />
 
       <div class="results-summary">
         Showing {filteredRecords.length} of {maintenanceRecords.length} records
