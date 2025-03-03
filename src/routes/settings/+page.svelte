@@ -145,25 +145,30 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
   }
 
   .settings-section {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   .setting-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25rem;
+    padding: 0.875rem 1rem;
     background: var(--bg-secondary);
     border-radius: 12px;
     transition: all 0.2s ease;
     border: 1px solid transparent;
     position: relative;
+    max-width: 100%;
   }
 
   .setting-item:not(:last-child)::after {
@@ -185,7 +190,8 @@
 
   .setting-info {
     flex: 1;
-    padding-right: 1.5rem;
+    padding-right: 1rem;
+    max-width: 70%;
   }
 
   .setting-info h3 {
@@ -202,7 +208,11 @@
   }
 
   .action-button {
-    padding: 0.625rem 1.25rem;
+    padding: 0.5rem 0.75rem;
+    min-width: 70px;
+    width: auto;
+    height: 36px;
+    font-size: 0.875rem;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     border-radius: 8px;
@@ -221,14 +231,16 @@
   }
 
   .theme-select {
-    padding: 0.625rem 1.25rem;
+    padding: 0.5rem;
+    min-width: 110px;
+    width: auto;
+    height: 42px;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     border-radius: 8px;
     color: var(--text-primary);
     font-weight: 500;
     cursor: pointer;
-    min-width: 160px;
     transition: all 0.2s ease;
   }
 
@@ -239,16 +251,17 @@
 
   .mode-toggle {
     position: relative;
-    width: 110px;
-    height: 38px;
+    width: 80px;
+    height: 36px;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 19px;
+    border-radius: 18px;
     cursor: pointer;
     padding: 4px;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
   }
 
   .mode-toggle:hover {
@@ -267,7 +280,7 @@
   }
 
   .mode-toggle.dark .toggle-slider {
-    transform: translateX(64px);
+    transform: translateX(60px);
   }
 
   .toggle-text {
@@ -306,24 +319,63 @@
     }
 
     .setting-item {
-      padding: 1rem;
+      padding: 0.875rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
     }
 
     .setting-info {
-      padding-right: 1rem;
+      padding-right: 0;
+      flex: 1;
     }
 
     .setting-info h3 {
-      font-size: 1rem;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
     }
 
     .setting-info p {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
     }
 
-    .action-button, .theme-select {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.9rem;
+    .action-button,
+    .theme-select {
+      width: auto;
+      min-width: 90px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.85rem;
+      height: 42px;
+      white-space: nowrap;
+    }
+
+    .mode-toggle {
+      width: 90px;
+      height: 36px;
+      padding: 4px;
+    }
+
+    .toggle-slider {
+      width: 28px;
+      height: 28px;
+    }
+
+    .mode-toggle.dark .toggle-slider {
+      transform: translateX(calc(100% - 32px));
+    }
+
+    .toggle-text {
+      font-size: 0.85rem;
+      margin: 0 auto;
+    }
+
+    .setting-item:hover {
+      transform: none;
+      background: var(--bg-secondary);
+      border-color: transparent;
     }
   }
 </style> 
