@@ -213,7 +213,7 @@
         bind:searchQuery
         bind:selectedFilter={selectedStatus}
         filterOptions={statusTypes}
-        {formatStatusLabel}
+        formatFilterLabel={formatStatusLabel}
         {sortButtons}
         addNewHref="/drivers/new"
         addNewLabel="Add New Driver"
