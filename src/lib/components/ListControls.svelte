@@ -80,12 +80,13 @@
     background: var(--bg-primary);
     border-radius: var(--radius-lg);
     flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
   }
 
   .search-box {
     position: relative;
     flex: 1;
-    min-width: 300px;
+    min-width: 260px;
   }
 
   .search-icon {
@@ -102,34 +103,38 @@
 
   .search-input {
     width: 100%;
-    height: 40px;
-    padding: 0 var(--spacing-md) 0 2.5rem;
+    height: 42px;
+    padding: 0 var(--spacing-md) 0 2.75rem;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
     color: var(--text-primary);
     font-size: var(--font-size-sm);
+    transition: var(--transition-all);
   }
 
   .search-input:hover {
     border-color: color-mix(in srgb, var(--theme-color) 30%, var(--border-color));
+    transform: translateY(-1px);
   }
 
   .search-input:focus {
     outline: none;
     border-color: var(--theme-color);
-    box-shadow: 0 0 0 1px var(--theme-color);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-color) 20%, transparent);
   }
 
   .filter-select {
-    height: 40px;
-    padding: 0 var(--spacing-xl) 0 var(--spacing-md);
+    height: 42px;
+    padding: 0 2.5rem 0 var(--spacing-md);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
     color: var(--text-primary);
     font-size: var(--font-size-sm);
-    min-width: 140px;
+    min-width: 160px;
+    max-width: 200px;
+    transition: var(--transition-all);
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -139,12 +144,13 @@
 
   .filter-select:hover {
     border-color: color-mix(in srgb, var(--theme-color) 30%, var(--border-color));
+    transform: translateY(-1px);
   }
 
   .filter-select:focus {
     outline: none;
     border-color: var(--theme-color);
-    box-shadow: 0 0 0 1px var(--theme-color);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-color) 20%, transparent);
   }
 
   .sort-buttons {
@@ -153,8 +159,8 @@
   }
 
   .sort-button {
-    height: 40px;
-    padding: 0 var(--spacing-md);
+    height: 42px;
+    padding: 0 var(--spacing-lg);
     border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
@@ -166,19 +172,20 @@
     align-items: center;
     justify-content: center;
     gap: var(--spacing-xs);
-    min-width: 100px;
+    min-width: 110px;
+    transition: var(--transition-all);
   }
 
   .sort-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-    background: color-mix(in srgb, var(--theme-color) 2%, var(--bg-secondary));
+    border-color: color-mix(in srgb, var(--theme-color) 30%, var(--border-color));
+    transform: translateY(-1px);
   }
 
   .sort-button.active {
-    background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
+    background: color-mix(in srgb, var(--theme-color) 10%, var(--bg-secondary));
     border-color: var(--theme-color);
     color: var(--theme-color);
+    font-weight: 600;
   }
 
   .sort-icon {
@@ -189,12 +196,12 @@
   }
 
   .primary-action-button {
-    height: 40px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-xl);
     background: var(--theme-color);
     color: white;
     border: none;
@@ -204,38 +211,69 @@
     cursor: pointer;
     text-decoration: none;
     white-space: nowrap;
+    transition: var(--transition-all);
+    box-shadow: var(--shadow-sm);
   }
 
   .primary-action-button:hover {
     opacity: 0.95;
     transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 
   @media (max-width: 768px) {
     .controls {
       flex-direction: column;
       align-items: stretch;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-md);
     }
 
     .search-box {
       width: 100%;
+      min-width: 100%;
     }
 
     .filter-select {
       width: 100%;
+      max-width: 100%;
     }
 
     .sort-buttons {
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       width: 100%;
+      gap: var(--spacing-xs);
     }
 
     .sort-button {
       width: 100%;
+      min-width: 0;
+      padding: 0 var(--spacing-sm);
     }
 
     .primary-action-button {
       width: 100%;
+      margin-top: var(--spacing-xs);
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .controls {
+      gap: var(--spacing-sm);
+    }
+
+    .search-box {
+      min-width: 200px;
+    }
+
+    .filter-select {
+      min-width: 140px;
+    }
+
+    .sort-button {
+      min-width: 100px;
+      padding: 0 var(--spacing-md);
     }
   }
 </style> 
