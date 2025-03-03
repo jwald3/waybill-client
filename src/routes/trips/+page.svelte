@@ -739,33 +739,4 @@
     justify-content: flex-end;
     gap: var(--spacing-md);
   }
-
-  .action-button.primary {
-    background: var(--theme-color);
-    color: white;
-  }
-
-  .action-button.primary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-weight: 500;
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .action-button:hover {
-    background: color-mix(in srgb, var(--bg-secondary) 90%, var(--text-primary));
-  }
 </style> 
