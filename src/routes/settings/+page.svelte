@@ -171,16 +171,20 @@
   }
 
   .setting-info h3 {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-md);
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: var(--spacing-xs);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
   }
 
   .setting-info p {
     color: var(--text-secondary);
     font-size: var(--font-size-sm);
-    line-height: 1.4;
+    line-height: 1.5;
+    opacity: 0.9;
+    max-width: 28ch;
   }
 
   .action-button {
@@ -194,6 +198,7 @@
     border-radius: var(--radius-md);
     color: var(--theme-color);
     font-weight: 500;
+    letter-spacing: 0.01em;
     transition: var(--transition-all);
     cursor: pointer;
     white-space: nowrap;
@@ -208,17 +213,23 @@
   }
 
   .theme-select {
-    padding: var(--spacing-sm);
-    min-width: 110px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-width: 140px;
     width: auto;
-    height: 42px;
+    height: 36px;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
     border-radius: var(--radius-md);
     color: var(--text-primary);
     font-weight: 500;
+    font-size: var(--font-size-sm);
     cursor: pointer;
     transition: var(--transition-all);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-sm) center;
+    padding-right: var(--spacing-xl);
   }
 
   .theme-select:hover {
@@ -269,6 +280,8 @@
     font-weight: 500;
     margin-left: 36px;
     transition: var(--transition-all);
+    opacity: 0.9;
+    letter-spacing: 0.01em;
   }
 
   .mode-toggle.dark .toggle-text {
@@ -302,12 +315,14 @@
 
     .setting-info h3 {
       font-size: var(--font-size-md);
-      margin-bottom: var(--spacing-xs);
+      margin-bottom: calc(var(--spacing-xs) / 2);
+      line-height: 1.2;
     }
 
     .setting-info p {
       font-size: var(--font-size-sm);
-      color: var(--text-secondary);
+      line-height: 1.4;
+      max-width: 24ch;
     }
 
     .action-button,
