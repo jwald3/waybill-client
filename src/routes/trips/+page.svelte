@@ -108,7 +108,18 @@
   let sortDirection: 'asc' | 'desc' = 'desc';
 
   // Status options
-  const statusTypes = ['ALL', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'];
+  const rawStatusTypes = ['ALL', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'];
+  const statusTypes = rawStatusTypes.map(status => ({
+    value: status,
+    label: formatStatusLabel(status)
+  }));
+
+  function formatStatusLabel(status: string): string {
+    if (status === 'ALL') return 'All Statuses';
+    return status.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
+  }
 
   // Filtered and sorted records
   $: filteredRecords = trips
@@ -164,13 +175,6 @@
       sortField = field;
       sortDirection = 'desc';
     }
-  }
-
-  function formatStatusLabel(status: string): string {
-    if (status === 'ALL') return 'All Statuses';
-    return status.split('_')
-      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-      .join(' ');
   }
 
   // Add this to track expanded state for each trip
@@ -300,8 +304,8 @@
         searchPlaceholder="Search trips..."
         bind:searchQuery
         bind:selectedFilter={selectedStatus}
-        filterOptions={statusTypes}
-        {formatStatusLabel}
+        filterOptions={rawStatusTypes}
+        formatFilterLabel={formatStatusLabel}
         {sortButtons}
         addNewHref="/trips/new"
         addNewLabel="Create Trip"
