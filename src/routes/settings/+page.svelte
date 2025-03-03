@@ -126,8 +126,8 @@
   .settings-section {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
     max-width: 600px;
     margin: 0 auto;
   }
@@ -136,7 +136,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--spacing-lg) var(--spacing-xl);
     background: var(--bg-secondary);
     border-radius: var(--radius-lg);
     transition: var(--transition-all);
@@ -149,12 +149,12 @@
   .setting-item:not(:last-child)::after {
     content: '';
     position: absolute;
-    bottom: calc(-1 * var(--spacing-md));
+    bottom: calc(-1 * var(--spacing-xl));
     left: 0;
     right: 0;
     height: 1px;
     background: var(--border-color);
-    opacity: 0.5;
+    opacity: 0.3;
   }
 
   .setting-item:hover {
@@ -166,15 +166,15 @@
 
   .setting-info {
     flex: 1;
-    padding-right: var(--spacing-lg);
-    max-width: 70%;
+    padding-right: var(--spacing-xl);
+    max-width: 75%;
   }
 
   .setting-info h3 {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
     letter-spacing: -0.01em;
     line-height: 1.3;
   }
@@ -184,7 +184,7 @@
     font-size: var(--font-size-sm);
     line-height: 1.5;
     opacity: 0.9;
-    max-width: 28ch;
+    max-width: 32ch;
   }
 
   .action-button {
@@ -295,34 +295,31 @@
     }
 
     .settings-section {
-      padding: var(--spacing-md);
-      gap: var(--spacing-md);
+      padding: var(--spacing-lg);
+      gap: var(--spacing-lg);
     }
 
     .setting-item {
-      padding: var(--spacing-md);
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--spacing-md);
+      padding: var(--spacing-lg);
+      gap: var(--spacing-lg);
+    }
+
+    .setting-item:not(:last-child)::after {
+      bottom: calc(-1 * var(--spacing-lg));
     }
 
     .setting-info {
-      padding-right: 0;
-      flex: 1;
+      padding-right: var(--spacing-lg);
+      max-width: 70%;
     }
 
     .setting-info h3 {
       font-size: var(--font-size-md);
-      margin-bottom: calc(var(--spacing-xs) / 2);
-      line-height: 1.2;
+      margin-bottom: var(--spacing-xs);
     }
 
     .setting-info p {
-      font-size: var(--font-size-sm);
-      line-height: 1.4;
-      max-width: 24ch;
+      max-width: 28ch;
     }
 
     .action-button,
