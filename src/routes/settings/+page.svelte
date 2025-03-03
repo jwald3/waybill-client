@@ -230,12 +230,29 @@
     background-repeat: no-repeat;
     background-position: right var(--spacing-sm) center;
     padding-right: var(--spacing-xl);
+    outline: none;
   }
 
   .theme-select:hover {
     border-color: var(--theme-color);
     background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
     box-shadow: var(--shadow-sm);
+  }
+
+  .theme-select:focus {
+    border-color: var(--theme-color);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--theme-color) 25%, transparent);
+    outline: none;
+  }
+
+  .theme-select:focus:not(:focus-visible) {
+    box-shadow: none;
+  }
+
+  .theme-select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
   }
 
   .mode-toggle {
