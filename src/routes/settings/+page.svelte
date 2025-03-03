@@ -28,8 +28,8 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="settings">
-    <h1 class="settings-title">Settings</h1>
+  <div class="page">
+    <h1 class="page-title">Settings</h1>
 
     <div class="settings-grid">
       <Card title="Account Settings" icon={icons.settings}>
@@ -115,36 +115,10 @@
 </Layout>
 
 <style>
-  .settings {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .settings-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    position: relative;
-    letter-spacing: -1px;
-  }
-
-  .settings-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100px;
-    height: 6px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-  }
-
   .settings-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
+    gap: var(--spacing-xl);
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -152,8 +126,8 @@
   .settings-section {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    padding: 1.25rem;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
     max-width: 600px;
     margin: 0 auto;
   }
@@ -162,19 +136,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.875rem 1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
     background: var(--bg-secondary);
-    border-radius: 12px;
-    transition: all 0.2s ease;
-    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    transition: var(--transition-all);
+    border: 1px solid var(--border-color);
     position: relative;
     max-width: 100%;
+    box-shadow: var(--shadow-sm);
   }
 
   .setting-item:not(:last-child)::after {
     content: '';
     position: absolute;
-    bottom: -0.625rem;
+    bottom: calc(-1 * var(--spacing-md));
     left: 0;
     right: 0;
     height: 1px;
@@ -183,42 +158,43 @@
   }
 
   .setting-item:hover {
-    background: color-mix(in srgb, var(--theme-color) 2%, var(--surface-color));
-    border-color: color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+    background: color-mix(in srgb, var(--theme-color) 2%, var(--bg-secondary));
+    border-color: var(--theme-color);
     transform: translateX(4px);
+    box-shadow: var(--shadow-md);
   }
 
   .setting-info {
     flex: 1;
-    padding-right: 1rem;
+    padding-right: var(--spacing-lg);
     max-width: 70%;
   }
 
   .setting-info h3 {
-    font-size: 1.1rem;
+    font-size: var(--font-size-lg);
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 0.375rem;
+    margin-bottom: var(--spacing-xs);
   }
 
   .setting-info p {
     color: var(--text-secondary);
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
     line-height: 1.4;
   }
 
   .action-button {
-    padding: 0.5rem 0.75rem;
+    padding: var(--spacing-sm) var(--spacing-md);
     min-width: 70px;
     width: auto;
     height: 36px;
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--theme-color);
     font-weight: 500;
-    transition: all 0.2s ease;
+    transition: var(--transition-all);
     cursor: pointer;
     white-space: nowrap;
   }
@@ -228,25 +204,27 @@
     border-color: var(--theme-color);
     color: white;
     transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
   }
 
   .theme-select {
-    padding: 0.5rem;
+    padding: var(--spacing-sm);
     min-width: 110px;
     width: auto;
     height: 42px;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text-primary);
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: var(--transition-all);
   }
 
   .theme-select:hover {
     border-color: var(--theme-color);
     background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
+    box-shadow: var(--shadow-sm);
   }
 
   .mode-toggle {
@@ -255,10 +233,10 @@
     height: 36px;
     background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
     border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    border-radius: 18px;
+    border-radius: var(--radius-xl);
     cursor: pointer;
-    padding: 4px;
-    transition: all 0.3s ease;
+    padding: var(--spacing-xs);
+    transition: var(--transition-all);
     display: flex;
     align-items: center;
     flex-shrink: 0;
@@ -267,6 +245,7 @@
   .mode-toggle:hover {
     border-color: var(--theme-color);
     background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
+    box-shadow: var(--shadow-sm);
   }
 
   .toggle-slider {
@@ -275,56 +254,45 @@
     height: 28px;
     background: var(--theme-color);
     border-radius: 50%;
-    transition: transform 0.3s ease;
+    transition: var(--transition-all);
     left: 4px;
+    box-shadow: var(--shadow-sm);
   }
 
   .mode-toggle.dark .toggle-slider {
-    transform: translateX(60px);
+    transform: translateX(44px);
   }
 
   .toggle-text {
     color: var(--text-primary);
-    font-size: 0.85rem;
+    font-size: var(--font-size-sm);
     font-weight: 500;
     margin-left: 36px;
-    transition: opacity 0.3s ease;
+    transition: var(--transition-all);
   }
 
   .mode-toggle.dark .toggle-text {
     margin-left: 12px;
   }
 
-  [data-color-mode="dark"] .setting-item {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-                0 12px 16px rgba(0, 0, 0, 0.1);
-  }
-
   @media (max-width: 768px) {
-    .settings {
-      padding: 1rem;
-    }
-
-    .settings-title {
-      font-size: 2rem;
-    }
-
     .settings-grid {
       grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
     }
 
     .settings-section {
-      padding: 1rem;
-      gap: 1rem;
+      padding: var(--spacing-md);
+      gap: var(--spacing-md);
     }
 
     .setting-item {
-      padding: 0.875rem;
+      padding: var(--spacing-md);
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: var(--spacing-md);
     }
 
     .setting-info {
@@ -333,12 +301,12 @@
     }
 
     .setting-info h3 {
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
+      font-size: var(--font-size-md);
+      margin-bottom: var(--spacing-xs);
     }
 
     .setting-info p {
-      font-size: 0.8rem;
+      font-size: var(--font-size-sm);
       color: var(--text-secondary);
     }
 
@@ -346,8 +314,8 @@
     .theme-select {
       width: auto;
       min-width: 90px;
-      padding: 0.5rem 0.75rem;
-      font-size: 0.85rem;
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-size: var(--font-size-sm);
       height: 42px;
       white-space: nowrap;
     }
@@ -355,7 +323,7 @@
     .mode-toggle {
       width: 90px;
       height: 36px;
-      padding: 4px;
+      padding: var(--spacing-xs);
     }
 
     .toggle-slider {
@@ -364,18 +332,18 @@
     }
 
     .mode-toggle.dark .toggle-slider {
-      transform: translateX(calc(100% - 32px));
+      transform: translateX(54px);
     }
 
     .toggle-text {
-      font-size: 0.85rem;
+      font-size: var(--font-size-sm);
       margin: 0 auto;
     }
 
     .setting-item:hover {
       transform: none;
       background: var(--bg-secondary);
-      border-color: transparent;
+      border-color: var(--theme-color);
     }
   }
 </style> 
