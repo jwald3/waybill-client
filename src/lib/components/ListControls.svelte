@@ -19,61 +19,57 @@
 </script>
 
 <div class="controls">
-  <div class="controls-left">
-    <div class="controls-section search-section">
-      <label class="section-header">Search</label>
-      <div class="search-box">
-        <span class="search-icon">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
-        </span>
-        <input
-          type="text"
-          class="search-input"
-          placeholder={searchPlaceholder}
-          bind:value={searchQuery}
-          on:input={(e) => onSearch(e.currentTarget.value)}
-        />
-      </div>
-    </div>
-
-    <div class="controls-section filter-section">
-      <label class="section-header">Filter & Sort</label>
-      <div class="filter-group">
-        <select
-          class="filter-select"
-          bind:value={selectedFilter}
-          on:change={(e) => onFilterChange(e.currentTarget.value)}
-        >
-          {#each filterOptions as option}
-            <option value={option}>{formatFilterLabel(option)}</option>
-          {/each}
-        </select>
-
-        <div class="sort-buttons">
-          {#each sortButtons as button}
-            <button
-              class="sort-button"
-              class:active={button.active}
-              class:asc={button.direction === 'asc'}
-              on:click={() => onSort(button.field)}
-            >
-              {button.label}
-              {#if button.active}
-                <span class="sort-icon">
-                  {button.direction === 'asc' ? '↑' : '↓'}
-                </span>
-              {/if}
-            </button>
-          {/each}
-        </div>
-      </div>
+  <div class="controls-section search-section">
+    <label class="section-header">Search</label>
+    <div class="search-box">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+      </span>
+      <input
+        type="text"
+        class="search-input"
+        placeholder={searchPlaceholder}
+        bind:value={searchQuery}
+        on:input={(e) => onSearch(e.currentTarget.value)}
+      />
     </div>
   </div>
 
-  <div class="controls-section actions-section">
-    <label class="section-header">Actions</label>
+  <div class="filter-controls">
+    <div class="filter-row">
+      <select
+        class="filter-select"
+        bind:value={selectedFilter}
+        on:change={(e) => onFilterChange(e.currentTarget.value)}
+      >
+        {#each filterOptions as option}
+          <option value={option}>{formatFilterLabel(option)}</option>
+        {/each}
+      </select>
+    </div>
+
+    <div class="sort-buttons">
+      {#each sortButtons as button}
+        <button
+          class="sort-button"
+          class:active={button.active}
+          class:asc={button.direction === 'asc'}
+          on:click={() => onSort(button.field)}
+        >
+          {button.label}
+          {#if button.active}
+            <span class="sort-icon">
+              {button.direction === 'asc' ? '↑' : '↓'}
+            </span>
+          {/if}
+        </button>
+      {/each}
+    </div>
+  </div>
+
+  <div class="actions-section">
     <a href={addNewHref} class="primary-action-button">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -86,46 +82,15 @@
 
 <style>
   .controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--spacing-xl);
-    flex-wrap: wrap;
-    padding: var(--spacing-lg) var(--spacing-xl);
-    border-bottom: 1px solid var(--border-color);
+    display: grid;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
     background: var(--bg-primary);
-  }
-
-  .controls-left {
-    display: flex;
-    gap: var(--spacing-xl);
-    flex: 1;
-    min-width: 0;
-    flex-wrap: wrap;
-  }
-
-  .controls-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xs);
-  }
-
-  .section-header {
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding-left: var(--spacing-xs);
+    border-radius: var(--radius-lg);
   }
 
   .search-section {
-    flex: 1;
-    min-width: 300px;
-  }
-
-  .filter-section {
-    min-width: 320px;
+    width: 100%;
   }
 
   .search-box {
@@ -167,11 +132,14 @@
     box-shadow: 0 0 0 1px var(--theme-color);
   }
 
-  .filter-group {
-    display: flex;
+  .filter-controls {
+    display: grid;
     gap: var(--spacing-md);
-    align-items: center;
-    flex-wrap: wrap;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: var(--spacing-sm);
   }
 
   .filter-select {
@@ -202,7 +170,8 @@
   }
 
   .sort-buttons {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: var(--spacing-xs);
   }
 
@@ -219,7 +188,9 @@
     transition: var(--transition-all);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--spacing-xs);
+    white-space: nowrap;
   }
 
   .sort-button:hover {
@@ -241,14 +212,11 @@
     margin-top: -1px;
   }
 
-  .actions-section {
-    align-items: flex-start;
-  }
-
   .primary-action-button {
     height: 40px;
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--spacing-sm);
     padding: 0 var(--spacing-lg);
     background: var(--theme-color);
@@ -261,6 +229,7 @@
     transition: var(--transition-all);
     text-decoration: none;
     white-space: nowrap;
+    width: 100%;
   }
 
   .primary-action-button:hover {
@@ -268,48 +237,25 @@
     transform: translateY(-1px);
   }
 
-  @media (max-width: 768px) {
+  @media (min-width: 768px) {
     .controls {
-      padding: var(--spacing-md);
-      gap: var(--spacing-md);
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: var(--spacing-xl);
+      padding: var(--spacing-lg) var(--spacing-xl);
     }
 
-    .controls-left {
-      width: 100%;
-      gap: var(--spacing-md);
-    }
-
-    .controls-section {
-      width: 100%;
-    }
-
-    .search-section,
-    .filter-section {
-      min-width: 100%;
-    }
-
-    .filter-group {
-      width: 100%;
-      gap: var(--spacing-sm);
-    }
-
-    .filter-select {
-      flex: 1;
+    .filter-controls {
+      grid-template-columns: auto 1fr;
+      align-items: center;
     }
 
     .sort-buttons {
-      width: 100%;
-      flex-wrap: wrap;
-    }
-
-    .sort-button {
-      flex: 1;
-      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(100px, auto));
     }
 
     .primary-action-button {
-      width: 100%;
-      justify-content: center;
+      width: auto;
     }
   }
 </style> 
