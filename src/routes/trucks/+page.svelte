@@ -205,7 +205,7 @@
         bind:searchQuery
         bind:selectedFilter={selectedStatus}
         filterOptions={statusTypes}
-        {formatStatusLabel}
+        formatFilterLabel={formatStatusLabel}
         {sortButtons}
         addNewHref="/trucks/new"
         addNewLabel="Add New Truck"
