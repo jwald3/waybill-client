@@ -27,8 +27,40 @@ interface TruckResponse {
   data: Truck;
 }
 
-export async function getTruck(id: string): Promise<Truck> {
-  const response = await fetch(`${API_BASE_URL}/trucks/${id}`);
+export interface CreateTruckPayload {
+  truck_number: string;
+  vin: string;
+  make: string;
+  model: string;
+  year: number;
+  license_plate: LicensePlate;
+  mileage: number;
+  status: 'IN_TRANSIT' | 'MAINTENANCE' | 'AVAILABLE';
+  trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLATBED';
+  capacity_tons: number;
+  fuel_type: string;
+  last_maintenance: string;
+}
+
+export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fetch = fetch): Promise<Truck> {
+  const response = await fetchFn(`${API_BASE_URL}/trucks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(truck)
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+
+  const result: TruckResponse = await response.json();
+  return result.data;
+}
+
+export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promise<Truck> {
+  const response = await fetchFn(`${API_BASE_URL}/trucks/${id}`);
   if (!response.ok) {
     throw new Error(`API request failed: ${response.statusText}`);
   }
@@ -36,6 +68,6 @@ export async function getTruck(id: string): Promise<Truck> {
   return result.data;
 }
 
-export async function getTrucks(): Promise<ApiResponse<Truck>> {
-  return fetchApi<Truck>('/trucks');
+export async function getTrucks(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Truck>> {
+  return fetchApi<Truck>('/trucks', fetchFn);
 } 

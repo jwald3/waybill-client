@@ -3,8 +3,9 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
+  import { createTruck, type CreateTruckPayload } from '$lib/api/trucks';
   
-  let formData = {
+  let formData: CreateTruckPayload = {
     truck_number: '',
     vin: '',
     make: '',
@@ -54,21 +55,11 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/trucks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create truck');
-      }
-
+      await createTruck(formData);
       goto('/trucks');
     } catch (error) {
       console.error('Error creating truck:', error);
+      // You might want to add error handling UI here
     }
   }
 
@@ -85,7 +76,7 @@
   <div class="page">
     <h1 class="page-title">Add New Truck</h1>
 
-    <Card title="Truck Details" icon={icons.trucks}>
+    <Card title="Truck Details" icon={icons.truck}>
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-content">
           <section class="form-group">
