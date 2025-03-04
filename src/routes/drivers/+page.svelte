@@ -3,56 +3,22 @@
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
+  import type { Driver } from '$lib/api/drivers';
+  import { getDrivers } from '$lib/api/drivers';
   
   let isNavExpanded = true;
 
-  interface Address {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  }
+  // Replace static drivers array with async data
+  let driversPromise = getDrivers();
+  let drivers: Driver[] = [];
 
-  interface Driver {
-    id: string;
-    first_name: string;
-    last_name: string;
-    dob: string;
-    license_number: string;
-    license_state: string;
-    license_expiration: string;
-    phone: string;
-    email: string;
-    address: Address;
-    employment_status: 'ACTIVE' | 'SUSPENDED' | 'ON_LEAVE' | 'TERMINATED';
-    created_at: string;
-    updated_at: string;
-  }
+  // Load drivers data
+  driversPromise.then(response => {
+    drivers = response.items;
+  });
 
-  // Generate sample drivers
-  const drivers: Driver[] = Array.from({ length: 20 }, (_, i): Driver => ({
-    id: `driver_${i + 1}`,
-    first_name: ['John', 'Sarah', 'Michael', 'Emily', 'David', 'Maria', 'James', 'Lisa'][i % 8],
-    last_name: ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia', 'Miller', 'Davis'][i % 8],
-    dob: `${1970 + (i % 30)}-${String(1 + (i % 12)).padStart(2, '0')}-${String(1 + (i % 28)).padStart(2, '0')}`,
-    license_number: `DL${String(10000 + i).padStart(5, '0')}`,
-    license_state: ['NY', 'CA', 'TX', 'FL', 'IL', 'PA'][i % 6],
-    license_expiration: `${2024 + (i % 5)}-${String(1 + (i % 12)).padStart(2, '0')}-${String(1 + (i % 28)).padStart(2, '0')}`,
-    phone: `(${String(200 + (i % 799)).padStart(3, '0')}) ${String(555).padStart(3, '0')}-${String(1000 + i).padStart(4, '0')}`,
-    email: `driver${i + 1}@example.com`,
-    address: {
-      street: `${1000 + i} Main St`,
-      city: ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Phoenix', 'Philadelphia'][i % 6],
-      state: ['NY', 'CA', 'IL', 'TX', 'AZ', 'PA'][i % 6],
-      zip: String(10000 + (i * 37)).padStart(5, '0')
-    },
-    employment_status: ['ACTIVE', 'SUSPENDED', 'ON_LEAVE', 'TERMINATED'][i % 4],
-    created_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-    updated_at: new Date(Date.now() - (i * 12 * 60 * 60 * 1000)).toISOString()
-  }));
-
-  // Stats calculation
-  const stats = {
+  // Stats calculation - make reactive based on drivers data
+  $: stats = {
     active: drivers.filter(d => d.employment_status === 'ACTIVE').length,
     suspended: drivers.filter(d => d.employment_status === 'SUSPENDED').length,
     onLeave: drivers.filter(d => d.employment_status === 'ON_LEAVE').length,
@@ -176,145 +142,169 @@
 <Layout {isNavExpanded}>
   <div class="page">
     <h1 class="page-title">Driver Management</h1>
-
-    <div class="stats-grid">
-      <Card title="Active Drivers" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.active}</p>
-          <p class="stat-label">Currently Active</p>
-        </div>
-      </Card>
-
-      <Card title="Suspended" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.suspended}</p>
-          <p class="stat-label">Temporarily Suspended</p>
-        </div>
-      </Card>
-
-      <Card title="On Leave" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.onLeave}</p>
-          <p class="stat-label">Currently on Leave</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Driver Records" icon={icons.drivers}>
-      <ListControls
-        searchPlaceholder="Search drivers..."
-        bind:searchQuery
-        bind:selectedFilter={selectedStatus}
-        filterOptions={statusTypes}
-        formatFilterLabel={formatStatusLabel}
-        {sortButtons}
-        addNewHref="/drivers/new"
-        addNewLabel="Add New Driver"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedStatus = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {filteredRecords.length} of {drivers.length} drivers
-      </div>
-
-      <div class="records-list">
-        {#each paginatedRecords as driver}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <div class="avatar">
-                  {driver.first_name[0]}{driver.last_name[0]}
-                </div>
-                <div class="driver-info">
-                  <h3>{driver.first_name} {driver.last_name}</h3>
-                  <p class="driver-contact">{driver.email} • {driver.phone}</p>
-                </div>
-              </div>
-              <span class="status-badge {driver.employment_status.toLowerCase()}">
-                {formatStatusBadge(driver.employment_status)}
-              </span>
-            </div>
-
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">License</span>
-                <span class="value">{driver.license_number}</span>
-                <span class="sub-value">{driver.license_state} • Expires: {formatDate(driver.license_expiration)}</span>
-              </div>
-
-              <div class="detail">
-                <span class="label">Address</span>
-                <span class="value">{driver.address.street}</span>
-                <span class="sub-value">{driver.address.city}, {driver.address.state} {driver.address.zip}</span>
-              </div>
-            </div>
-
-            <div class="record-actions">
-              <a href="/drivers/{driver.id}" class="action-button">View Details</a>
-              <button class="action-button">Edit</button>
-              <button class="action-button">Update Status</button>
-            </div>
+    
+    {#await driversPromise}
+      <div class="stats-grid">
+        <Card title="Loading..." icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
           </div>
-        {/each}
+        </Card>
+        <Card title="Loading..." icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+        <Card title="Loading..." icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+      </div>
+    {:then driversData}
+      <div class="stats-grid">
+        <Card title="Active Drivers" icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.active}</p>
+            <p class="stat-label">Currently Active</p>
+          </div>
+        </Card>
+
+        <Card title="Suspended" icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.suspended}</p>
+            <p class="stat-label">Temporarily Suspended</p>
+          </div>
+        </Card>
+
+        <Card title="On Leave" icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.onLeave}</p>
+            <p class="stat-label">Currently on Leave</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="pagination">
-        <div class="pagination-info">
-          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} drivers
+      <Card title="Driver Records" icon={icons.drivers}>
+        <ListControls
+          searchPlaceholder="Search drivers..."
+          bind:searchQuery
+          bind:selectedFilter={selectedStatus}
+          filterOptions={statusTypes}
+          formatFilterLabel={formatStatusLabel}
+          {sortButtons}
+          addNewHref="/drivers/new"
+          addNewLabel="Add New Driver"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedStatus = value}
+          onSort={handleSort}
+        />
+
+        <div class="results-summary">
+          Showing {filteredRecords.length} of {drivers.length} drivers
         </div>
-        <div class="pagination-controls">
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-            title="First page"
-          >
-            ««
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-            title="Previous page"
-          >
-            «
-          </button>
-          
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
-              <button 
-                class="page-button"
-                class:active={page === currentPage}
-                on:click={() => goToPage(page)}
-              >
-                {page}
-              </button>
-            {:else if page === currentPage - 3 || page === currentPage + 3}
-              <span class="page-ellipsis">...</span>
-            {/if}
+
+        <div class="records-list">
+          {#each paginatedRecords as driver}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <div class="avatar">
+                    {driver.first_name[0]}{driver.last_name[0]}
+                  </div>
+                  <div class="driver-info">
+                    <h3>{driver.first_name} {driver.last_name}</h3>
+                    <p class="driver-contact">{driver.email} • {driver.phone}</p>
+                  </div>
+                </div>
+                <span class="status-badge {driver.employment_status.toLowerCase()}">
+                  {formatStatusBadge(driver.employment_status)}
+                </span>
+              </div>
+
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">License</span>
+                  <span class="value">{driver.license_number}</span>
+                  <span class="sub-value">{driver.license_state} • Expires: {formatDate(driver.license_expiration)}</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Address</span>
+                  <span class="value">{driver.address.street}</span>
+                  <span class="sub-value">{driver.address.city}, {driver.address.state} {driver.address.zip}</span>
+                </div>
+              </div>
+
+              <div class="record-actions">
+                <a href="/drivers/{driver.id}" class="action-button">View Details</a>
+                <button class="action-button">Edit</button>
+                <button class="action-button">Update Status</button>
+              </div>
+            </div>
           {/each}
-
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-            title="Next page"
-          >
-            »
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-            title="Last page"
-          >
-            »»
-          </button>
         </div>
-      </div>
-    </Card>
+
+        <div class="pagination">
+          <div class="pagination-info">
+            Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} drivers
+          </div>
+          <div class="pagination-controls">
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
+              title="First page"
+            >
+              ««
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+              title="Previous page"
+            >
+              «
+            </button>
+            
+            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+              {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+                <button 
+                  class="page-button"
+                  class:active={page === currentPage}
+                  on:click={() => goToPage(page)}
+                >
+                  {page}
+                </button>
+              {:else if page === currentPage - 3 || page === currentPage + 3}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+              title="Next page"
+            >
+              »
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+              title="Last page"
+            >
+              »»
+            </button>
+          </div>
+        </div>
+      </Card>
+    {:catch error}
+      <Card title="Error" icon={icons.error}>
+        <p>Failed to load drivers data: {error.message}</p>
+      </Card>
+    {/await}
   </div>
 </Layout>
 
