@@ -290,13 +290,6 @@
           <p class="stat-label">Miles</p>
         </div>
       </Card>
-
-      <Card title="Fuel Usage" icon={icons.trips}>
-        <div class="stat-content">
-          <p class="stat-number">{formatNumber(stats.totalFuel)}</p>
-          <p class="stat-label">Gallons</p>
-        </div>
-      </Card>
     </div>
 
     <Card title="Trip Records" icon={icons.trips}>
