@@ -232,13 +232,6 @@
           <p class="stat-label">Critical issues</p>
         </div>
       </Card>
-
-      <Card title="Total Costs" icon={icons.maintenance}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalCost}</p>
-          <p class="stat-label">This period</p>
-        </div>
-      </Card>
     </div>
 
     <Card title="Maintenance Records" icon={icons.maintenance}>
