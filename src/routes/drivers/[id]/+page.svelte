@@ -2,57 +2,13 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { page } from '$app/stores';
+  import type { Driver } from '$lib/api/drivers';
+
+  export let data;
+  const driver: Driver = data.driver;
   
   let isNavExpanded = true;
-
-  // Get driver ID from URL parameter
-  const driverId = $page.params.id;
-
-  interface Address {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  }
-
-  interface Driver {
-    id: string;
-    first_name: string;
-    last_name: string;
-    dob: string;
-    license_number: string;
-    license_state: string;
-    license_expiration: string;
-    phone: string;
-    email: string;
-    address: Address;
-    employment_status: 'ACTIVE' | 'SUSPENDED' | 'ON_LEAVE' | 'TERMINATED';
-    created_at: string;
-    updated_at: string;
-  }
-
-  // TODO: Replace with actual API call
-  const driver: Driver = {
-    id: driverId,
-    first_name: 'John',
-    last_name: 'Smith',
-    dob: '1985-06-15',
-    license_number: 'DL123456',
-    license_state: 'NY',
-    license_expiration: '2025-06-15',
-    phone: '(555) 123-4567',
-    email: 'john.smith@example.com',
-    address: {
-      street: '123 Main Street',
-      city: 'New York',
-      state: 'NY',
-      zip: '10001'
-    },
-    employment_status: 'ACTIVE',
-    created_at: '2023-01-01T00:00:00Z',
-    updated_at: '2024-03-15T00:00:00Z'
-  };
+  let error: string | null = null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -81,129 +37,137 @@
 </script>
 
 <svelte:head>
-  <title>{driver.first_name} {driver.last_name} Details | Waybill</title>
+  <title>{driver?.first_name ?? 'Driver'} {driver?.last_name ?? 'Details'} | Waybill</title>
 </svelte:head>
 
 <Layout {isNavExpanded}>
   <div class="page">
-    <div class="page-header">
-      <div class="header-content">
-        <a href="/drivers" class="back-link">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
-          Back to Driver Management
-        </a>
-        <div class="title-section">
-          <div class="driver-header">
-            <div class="avatar">
-              {driver.first_name[0]}{driver.last_name[0]}
+    {#if !driver}
+      <div class="loading">Loading driver details...</div>
+    {:else}
+      <div class="page-header">
+        <div class="header-content">
+          <a href="/drivers" class="back-link">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to Driver Management
+          </a>
+          <div class="title-section">
+            <div class="driver-header">
+              <div class="avatar">
+                {#if driver?.first_name && driver?.last_name}
+                  {driver.first_name[0]}{driver.last_name[0]}
+                {/if}
+              </div>
+              <div class="driver-info">
+                <h1 class="page-title">
+                  {driver?.first_name ?? ''} {driver?.last_name ?? ''}
+                </h1>
+                <span class="driver-id">#{driver?.license_number ?? ''}</span>
+              </div>
             </div>
-            <div class="driver-info">
-              <h1 class="page-title">{driver.first_name} {driver.last_name}</h1>
-              <span class="driver-id">#{driver.license_number}</span>
-            </div>
+            <span class="status-badge {driver?.employment_status?.toLowerCase() ?? ''}">
+              {driver?.employment_status ? formatStatusLabel(driver.employment_status) : ''}
+            </span>
           </div>
-          <span class="status-badge {driver.employment_status.toLowerCase()}">
-            {formatStatusLabel(driver.employment_status)}
-          </span>
         </div>
       </div>
-    </div>
 
-    <div class="details-grid">
-      <Card title="Personal Information" icon={icons.drivers}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Full Name</span>
-              <span class="value highlight">{driver.first_name} {driver.last_name}</span>
+      <div class="details-grid">
+        <Card title="Personal Information" icon={icons.drivers}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Full Name</span>
+                <span class="value highlight">{driver.first_name} {driver.last_name}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Date of Birth</span>
+                <span class="value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
+              </div>
             </div>
-            <div class="detail-item">
-              <span class="label">Date of Birth</span>
-              <span class="value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Email</span>
+                <span class="value mono">{driver.email}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Phone</span>
+                <span class="value mono">{driver.phone}</span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Email</span>
-              <span class="value mono">{driver.email}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Phone</span>
-              <span class="value mono">{driver.phone}</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="License Information" icon={icons.id}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">License Number</span>
-              <span class="value highlight mono">{driver.license_number}</span>
+        <Card title="License Information" icon={icons.id}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">License Number</span>
+                <span class="value highlight mono">{driver.license_number}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">State</span>
+                <span class="value">{driver.license_state}</span>
+              </div>
             </div>
-            <div class="detail-item">
-              <span class="label">State</span>
-              <span class="value">{driver.license_state}</span>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Expiration Date</span>
+                <span class="value">{formatDate(driver.license_expiration)}</span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Expiration Date</span>
-              <span class="value">{formatDate(driver.license_expiration)}</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="Contact Information" icon={icons.location}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item full-width">
-              <span class="label">Street Address</span>
-              <span class="value">{driver.address.street}</span>
+        <Card title="Contact Information" icon={icons.location}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item full-width">
+                <span class="label">Street Address</span>
+                <span class="value">{driver.address.street}</span>
+              </div>
+            </div>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">City</span>
+                <span class="value">{driver.address.city}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">State</span>
+                <span class="value">{driver.address.state}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">ZIP Code</span>
+                <span class="value mono">{driver.address.zip}</span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">City</span>
-              <span class="value">{driver.address.city}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">State</span>
-              <span class="value">{driver.address.state}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">ZIP Code</span>
-              <span class="value mono">{driver.address.zip}</span>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
+        </Card>
+      </div>
 
-    <div class="action-buttons">
-      <button class="action-button primary">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/>
-        </svg>
-        Update Status
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-        </svg>
-        Edit Details
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>
-        View Documents
-      </button>
-    </div>
+      <div class="action-buttons">
+        <button class="action-button primary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/>
+          </svg>
+          Update Status
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          Edit Details
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+          View Documents
+        </button>
+      </div>
+    {/if}
   </div>
 </Layout>
 
@@ -394,5 +358,19 @@
     background: var(--theme-color-dark);
     border-color: var(--theme-color-dark);
     color: white;
+  }
+
+  .error-message {
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
   }
 </style> 

@@ -1,5 +1,4 @@
-import { fetchApi } from './client';
-import type { ApiResponse } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
 
 export interface Address {
   street: string;
@@ -26,4 +25,17 @@ export interface Driver {
 
 export async function getDrivers(): Promise<ApiResponse<Driver>> {
   return fetchApi<Driver>('/drivers');
+}
+
+interface DriverResponse {
+  data: Driver;
+}
+
+export async function getDriver(id: string): Promise<Driver> {
+  const response = await fetch(`${API_BASE_URL}/drivers/${id}`);
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+  const result: DriverResponse = await response.json();
+  return result.data;
 } 

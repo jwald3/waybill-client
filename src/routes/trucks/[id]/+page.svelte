@@ -2,57 +2,12 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { page } from '$app/stores';
+  import type { Truck } from '$lib/api/trucks';
   
   let isNavExpanded = true;
-
-  // Get truck ID from URL parameter
-  const truckId = $page.params.id;
-
-  interface LicensePlate {
-    number: string;
-    state: string;
-  }
-
-  interface Truck {
-    id: string;
-    truck_number: string;
-    vin: string;
-    make: string;
-    model: string;
-    year: number;
-    license_plate: LicensePlate;
-    mileage: number;
-    status: 'IN_TRANSIT' | 'MAINTENANCE' | 'AVAILABLE';
-    trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLATBED';
-    capacity_tons: number;
-    fuel_type: string;
-    last_maintenance: string;
-    created_at: string;
-    updated_at: string;
-  }
-
-  // TODO: Replace with actual API call
-  const truck: Truck = {
-    id: truckId,
-    truck_number: 'A200001',
-    vin: 'VIN123456789',
-    make: 'Freightliner',
-    model: 'Cascadia',
-    year: 2022,
-    license_plate: {
-      number: 'TR12345',
-      state: 'NY'
-    },
-    mileage: 50000,
-    status: 'AVAILABLE',
-    trailer_type: 'DRY_VAN',
-    capacity_tons: 25,
-    fuel_type: 'DIESEL',
-    last_maintenance: '2024-02-15',
-    created_at: '2023-01-01T00:00:00Z',
-    updated_at: '2024-03-15T00:00:00Z'
-  };
+  
+  export let data;
+  const truck: Truck = data.truck;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -68,124 +23,128 @@
 </script>
 
 <svelte:head>
-  <title>{truck.make} {truck.model} Details | Waybill</title>
+  <title>{truck?.make ?? 'Truck'} {truck?.model ?? 'Details'} | Waybill</title>
 </svelte:head>
 
 <Layout {isNavExpanded}>
   <div class="page">
-    <div class="page-header">
-      <div class="header-content">
-        <a href="/trucks" class="back-link">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
-          Back to Fleet Management
-        </a>
-        <div class="title-section">
-          <h1 class="page-title">{truck.make} {truck.model}</h1>
-          <div class="truck-meta">
-            <span class="truck-number">#{truck.truck_number}</span>
-            <span class="status-badge {truck.status.toLowerCase()}">
-              {truck.status.replace('_', ' ')}
-            </span>
+    {#if !truck}
+      <div class="loading">Loading truck details...</div>
+    {:else}
+      <div class="page-header">
+        <div class="header-content">
+          <a href="/trucks" class="back-link">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to Fleet Management
+          </a>
+          <div class="title-section">
+            <h1 class="page-title">{truck.make} {truck.model}</h1>
+            <div class="truck-meta">
+              <span class="truck-number">#{truck.truck_number}</span>
+              <span class="status-badge {truck.status.toLowerCase()}">
+                {truck.status.replace('_', ' ')}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="details-grid">
-      <Card title="Vehicle Information" icon={icons.truck}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Make & Model</span>
-              <span class="value highlight">{truck.make} {truck.model}</span>
+      <div class="details-grid">
+        <Card title="Vehicle Information" icon={icons.truck}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Make & Model</span>
+                <span class="value highlight">{truck.make} {truck.model}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Year</span>
+                <span class="value">{truck.year}</span>
+              </div>
             </div>
-            <div class="detail-item">
-              <span class="label">Year</span>
-              <span class="value">{truck.year}</span>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">VIN</span>
+                <span class="value mono">{truck.vin}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">License Plate</span>
+                <span class="value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">VIN</span>
-              <span class="value mono">{truck.vin}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">License Plate</span>
-              <span class="value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="Specifications" icon={icons.settings}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Trailer Type</span>
-              <span class="value highlight">{truck.trailer_type.replace('_', ' ')}</span>
+        <Card title="Specifications" icon={icons.settings}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Trailer Type</span>
+                <span class="value highlight">{truck.trailer_type.replace('_', ' ')}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Capacity</span>
+                <span class="value">{truck.capacity_tons} tons</span>
+              </div>
             </div>
-            <div class="detail-item">
-              <span class="label">Capacity</span>
-              <span class="value">{truck.capacity_tons} tons</span>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Fuel Type</span>
+                <span class="value">{truck.fuel_type}</span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Fuel Type</span>
-              <span class="value">{truck.fuel_type}</span>
-            </div>
-          </div>
-        </div>
-      </Card>
+        </Card>
 
-      <Card title="Usage & Maintenance" icon={icons.chart}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Current Mileage</span>
-              <span class="value highlight">{formatNumber(truck.mileage)} miles</span>
+        <Card title="Usage & Maintenance" icon={icons.chart}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Current Mileage</span>
+                <span class="value highlight">{formatNumber(truck.mileage)} miles</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Last Maintenance</span>
+                <span class="value">{formatDate(truck.last_maintenance)}</span>
+              </div>
             </div>
-            <div class="detail-item">
-              <span class="label">Last Maintenance</span>
-              <span class="value">{formatDate(truck.last_maintenance)}</span>
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Added to Fleet</span>
+                <span class="value">{formatDate(truck.created_at)}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Last Updated</span>
+                <span class="value">{formatDate(truck.updated_at)}</span>
+              </div>
             </div>
           </div>
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Added to Fleet</span>
-              <span class="value">{formatDate(truck.created_at)}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Last Updated</span>
-              <span class="value">{formatDate(truck.updated_at)}</span>
-            </div>
-          </div>
-        </div>
-      </Card>
-    </div>
+        </Card>
+      </div>
 
-    <div class="action-buttons">
-      <button class="action-button primary">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-        </svg>
-        Schedule Maintenance
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.17-5.24l-1.1-1.1c.71-1.33.53-3.01-.59-4.13-1.38-1.38-1.38-3.61-1.38-4.99 0-1.38 1.38-1.38 3.61 0 4.99 1.12 1.12 2.8 1.31 4.13.59l1.1 1.1c.19.19.45.29.71.29.26 0 .52-.1.71-.29.39-.39.39-1.02 0-1.41z"/>
-        </svg>
-        Update Status
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-        </svg>
-        Edit Details
-      </button>
-    </div>
+      <div class="action-buttons">
+        <button class="action-button primary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+          Schedule Maintenance
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.17-5.24l-1.1-1.1c.71-1.33.53-3.01-.59-4.13-1.38-1.38-1.38-3.61-1.38-4.99 0-1.38 1.38-1.38 3.61 0 4.99 1.12 1.12 2.8 1.31 4.13.59l1.1 1.1c.19.19.45.29.71.29.26 0 .52-.1.71-.29.39-.39.39-1.02 0-1.41z"/>
+          </svg>
+          Update Status
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          Edit Details
+        </button>
+      </div>
+    {/if}
   </div>
 </Layout>
 

@@ -1,5 +1,4 @@
-import { fetchApi } from './client';
-import type { ApiResponse } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
 
 export interface LicensePlate {
   number: string;
@@ -22,6 +21,19 @@ export interface Truck {
   last_maintenance: string;
   created_at: string;
   updated_at: string;
+}
+
+interface TruckResponse {
+  data: Truck;
+}
+
+export async function getTruck(id: string): Promise<Truck> {
+  const response = await fetch(`${API_BASE_URL}/trucks/${id}`);
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+  const result: TruckResponse = await response.json();
+  return result.data;
 }
 
 export async function getTrucks(): Promise<ApiResponse<Truck>> {
