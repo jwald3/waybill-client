@@ -391,6 +391,7 @@
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-md);
+    padding: 0 var(--spacing-md);
   }
 
   .controls {
@@ -433,10 +434,13 @@
 
   .stat-number {
     font-size: 2.5rem;
+    margin-bottom: var(--spacing-xs);
+    color: var(--theme-color);
   }
 
   .stat-label {
-    font-size: 0.875rem;
+    font-size: 1rem;
+    color: var(--text-secondary);
   }
 
   .record-item {
@@ -466,6 +470,21 @@
     min-width: 2.2rem;
     height: 2.2rem;
     font-size: 0.85rem;
+  }
+
+  .card {
+    background: white;
+    border-radius: var(--radius-lg);
+    margin: 0;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Add breakpoint for very small screens */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 }
 
