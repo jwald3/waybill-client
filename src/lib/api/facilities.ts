@@ -1,5 +1,4 @@
-import { fetchApi } from './client';
-import type { ApiResponse } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
 
 export interface Address {
   street: string;
@@ -24,6 +23,19 @@ export interface Facility {
   services_available: string[];
   created_at: string;
   updated_at: string;
+}
+
+interface FacilityResponse {
+  data: Facility;
+}
+
+export async function getFacility(id: string): Promise<Facility> {
+  const response = await fetch(`${API_BASE_URL}/facilities/${id}`);
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+  const result: FacilityResponse = await response.json();
+  return result.data;
 }
 
 export async function getFacilities(): Promise<ApiResponse<Facility>> {
