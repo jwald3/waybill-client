@@ -292,54 +292,59 @@
   .analytics-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .main-content {
-    display: grid;
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    display: flex;
     gap: 1.5rem;
-    align-items: start;
+    align-items: flex-start;
   }
 
   .main-column {
-    display: grid;
-    grid-template-rows: 1.5fr 1fr;  /* Increased ratio for performance trends */
-    gap: 1.5rem;
-    height: 100%;
-    min-height: 800px;  /* Ensure minimum height for better visualization */
-  }
-
-  .side-column {
-    display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
-    gap: 1.5rem;
-    height: 100%;
-  }
-
-  .chart-container {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* Important for flex child scrolling */
-    padding: 1.5rem;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .side-column {
+    width: 380px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .chart-container {
+    height: 500px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
   }
 
   .cost-analysis {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 2rem;
+    height: 400px;
+    display: flex;
+    gap: 1.5rem;
     padding: 1.5rem;
-    height: 100%;
-    align-items: center;
-    background: var(--surface-color);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
+  }
+
+  .cost-chart {
+    flex: 1.2;
+    min-width: 0;
+  }
+
+  .cost-legend {
+    width: 250px;
+    flex-shrink: 0;
   }
 
   .routes-table,
   .drivers-list,
   .alerts-list {
+    height: 300px;
     overflow-y: auto;
   }
 
@@ -589,15 +594,6 @@
     min-height: 0;
   }
 
-  .cost-chart {
-    width: 100%;
-    height: 100%;
-    min-height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .cost-legend {
     display: flex;
     flex-direction: column;
@@ -654,13 +650,32 @@
     color: var(--text-secondary);
   }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1200px) {
     .main-content {
-      grid-template-columns: 1fr;
+      flex-direction: column;
     }
 
-    .main-column {
-      grid-template-rows: minmax(500px, auto) auto;
+    .side-column {
+      width: 100%;
+    }
+
+    .cost-analysis {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .cost-chart {
+      height: 300px;
+    }
+
+    .cost-legend {
+      width: 100%;
+    }
+
+    .routes-table,
+    .drivers-list,
+    .alerts-list {
+      height: 250px;
     }
   }
 
@@ -674,38 +689,36 @@
       margin-bottom: 2rem;
     }
 
-    .main-content {
-      grid-template-columns: 1fr;
-    }
-
-    .main-column {
-      grid-template-rows: minmax(500px, auto) auto;
-    }
-
     .chart-container {
-      min-height: 400px;
-    }
-
-    .cost-analysis {
-      background: var(--surface-color);
-      padding: 1rem;
-    }
-
-    .cost-legend {
-      box-shadow: none;
-      padding: 1rem;
-      background: var(--surface-color);
+      height: 400px;
     }
 
     .cost-chart {
-      min-height: 200px;
+      height: 250px;
     }
 
-    .cost-legend {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    .routes-table,
+    .drivers-list,
+    .alerts-list {
+      height: 200px;
+    }
+
+    .chart-header {
+      flex-direction: column;
       gap: 0.75rem;
-      padding: 0.75rem;
+    }
+
+    .chart-legend {
+      width: 100%;
+    }
+
+    .time-range {
+      width: 100%;
+    }
+
+    .card-content {
+      max-height: 500px;
+      overflow-y: auto;
     }
   }
 
