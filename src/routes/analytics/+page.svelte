@@ -107,7 +107,19 @@
       time: '6h ago'
     }
   ];
+
+  // Add responsive state management
+  let windowWidth: number;
+  
+  $: isMobile = windowWidth < 768;
+  $: isTablet = windowWidth >= 768 && windowWidth < 1200;
+  
+  // Adjust chart heights based on screen size
+  $: chartHeight = isMobile ? 300 : isTablet ? 400 : 500;
+  $: pieChartHeight = isMobile ? 250 : 300;
 </script>
+
+<svelte:window bind:innerWidth={windowWidth} />
 
 <svelte:head>
   <title>Analytics & Insights | Waybill</title>
@@ -120,74 +132,58 @@
     <!-- Metrics Grid -->
     <div class="stats-grid">
       {#each metrics as metric}
-        <Card title={metric.title} icon={metric.icon}>
-          <div class="stat-content">
-            <p class="stat-number">{metric.value}</p>
-            <p class="stat-label">
-              {metric.trend.value}
-              <span class="trend {metric.trend.positive ? 'positive' : 'negative'}">
-                {metric.trend.positive ? '↑' : '↓'}
-              </span>
-            </p>
-          </div>
-        </Card>
+        <MetricCard {...metric} />
       {/each}
     </div>
 
     <div class="analytics-content">
-      <!-- Main Content Grid -->
-      <div class="main-content">
-        <!-- Left Column -->
-        <div class="main-column">
-          <Card title="Performance Trends" icon={icons.chart}>
-            <div class="chart-container">
-              <div class="chart-header">
-                <div class="chart-legend">
-                  <span class="legend-item">
-                    <span class="dot delivery"></span>
-                    Delivery Times
-                  </span>
-                  <span class="legend-item">
-                    <span class="dot fuel"></span>
-                    Fuel Consumption
-                  </span>
-                  <span class="legend-item">
-                    <span class="dot cost"></span>
-                    Operating Costs
-                  </span>
-                </div>
-                <select class="time-range">
-                  <option>Last 7 Days</option>
-                  <option>Last 30 Days</option>
-                  <option>Last Quarter</option>
-                </select>
-              </div>
-              <LineChart data={performanceData} />
+      <!-- Performance Chart Card -->
+      <Card title="Performance Trends" icon={icons.chart}>
+        <div class="chart-container">
+          <div class="chart-header">
+            <div class="chart-legend">
+              {#each performanceData.datasets as dataset}
+                <span class="legend-item">
+                  <span class="dot" style="background-color: {dataset.color}"></span>
+                  {dataset.label}
+                </span>
+              {/each}
             </div>
-          </Card>
-
-          <Card title="Cost Breakdown" icon={icons.analytics}>
-            <div class="cost-analysis">
-              <div class="cost-chart">
-                <PieChart data={costData} />
-              </div>
-              <div class="cost-legend">
-                {#each costData as item}
-                  <div class="cost-legend-item">
-                    <div class="cost-legend-color" style="background-color: {item.color}"></div>
-                    <div class="cost-legend-details">
-                      <span class="cost-legend-label">{item.label}</span>
-                      <span class="cost-legend-value">{item.value}%</span>
-                    </div>
-                  </div>
-                {/each}
-              </div>
-            </div>
-          </Card>
+            <select class="time-range">
+              <option>Last 7 Days</option>
+              <option>Last 30 Days</option>
+              <option>Last Quarter</option>
+            </select>
+          </div>
+          <div class="chart-body">
+            <LineChart data={performanceData} />
+          </div>
         </div>
+      </Card>
 
-        <!-- Right Column -->
-        <div class="side-column">
+      <!-- Cost Analysis Grid -->
+      <div class="analysis-grid">
+        <Card title="Cost Breakdown" icon={icons.analytics}>
+          <div class="cost-analysis">
+            <div class="cost-chart">
+              <PieChart data={costData} />
+            </div>
+            <div class="cost-legend">
+              {#each costData as item}
+                <div class="cost-legend-item">
+                  <div class="cost-legend-color" style="background-color: {item.color}"></div>
+                  <div class="cost-legend-details">
+                    <span class="cost-legend-label">{item.label}</span>
+                    <span class="cost-legend-value">{item.value}%</span>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        </Card>
+
+        <!-- Side Cards Grid -->
+        <div class="side-cards">
           <Card title="Top Performing Routes" icon={icons.truck}>
             <div class="routes-table">
               <div class="table-header">
@@ -221,36 +217,6 @@
                   <div class="rating">
                     <span class="rating-value">{driver.rating}</span>
                     <span class="rating-label">rating</span>
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </Card>
-
-          <Card title="Recent Alerts" icon={icons.alert}>
-            <div class="alerts-list">
-              {#each recentAlerts as alert}
-                <div class="alert-item">
-                  <div class="alert-content">
-                    <div class="alert-icon {alert.type}">
-                      {#if alert.type === 'warning'}
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                          <path d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/>
-                        </svg>
-                      {:else if alert.type === 'success'}
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-                        </svg>
-                      {:else}
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-                        </svg>
-                      {/if}
-                    </div>
-                    <div class="alert-details">
-                      <span class="alert-message">{alert.message}</span>
-                      <span class="alert-time">{alert.time}</span>
-                    </div>
                   </div>
                 </div>
               {/each}
@@ -295,68 +261,45 @@
     gap: 1.5rem;
   }
 
-  .main-content {
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-  }
-
-  .main-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-width: 0;
-  }
-
-  .side-column {
-    width: 380px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
+  .analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 600px), 1fr));
     gap: 1.5rem;
   }
 
-  .chart-container {
-    height: 500px;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
+  .side-cards {
+    display: grid;
+    gap: 1.5rem;
   }
 
   .cost-analysis {
-    height: 400px;
     display: flex;
+    flex-direction: column;
     gap: 1.5rem;
-    padding: 1.5rem;
+    height: 100%;
   }
 
   .cost-chart {
-    flex: 1.2;
-    min-width: 0;
-  }
-
-  .cost-legend {
-    width: 250px;
-    flex-shrink: 0;
-  }
-
-  .routes-table,
-  .drivers-list,
-  .alerts-list {
+    width: 100%;
     height: 300px;
-    overflow-y: auto;
+  }
+
+  .chart-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
   }
 
   .chart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
     background: var(--surface-color);
     border-radius: 8px;
-    margin-bottom: 1rem;
-    flex-shrink: 0;
     border: 1px solid var(--border-color);
   }
 
@@ -651,31 +594,17 @@
   }
 
   @media (max-width: 1200px) {
-    .main-content {
+    .analysis-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-header {
       flex-direction: column;
+      align-items: stretch;
     }
 
-    .side-column {
+    .time-range {
       width: 100%;
-    }
-
-    .cost-analysis {
-      flex-direction: column;
-      height: auto;
-    }
-
-    .cost-chart {
-      height: 300px;
-    }
-
-    .cost-legend {
-      width: 100%;
-    }
-
-    .routes-table,
-    .drivers-list,
-    .alerts-list {
-      height: 250px;
     }
   }
 
@@ -689,27 +618,13 @@
       margin-bottom: 2rem;
     }
 
-    .chart-container {
-      height: 400px;
-    }
-
-    .cost-chart {
-      height: 250px;
-    }
-
-    .routes-table,
-    .drivers-list,
-    .alerts-list {
-      height: 200px;
+    .analysis-grid {
+      grid-template-columns: 1fr;
     }
 
     .chart-header {
       flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .chart-legend {
-      width: 100%;
+      align-items: stretch;
     }
 
     .time-range {
@@ -720,6 +635,14 @@
       max-height: 500px;
       overflow-y: auto;
     }
+
+    .chart-body {
+      min-height: 300px;
+    }
+
+    .cost-chart {
+      height: 250px;
+    }
   }
 
   /* Update chart styles */
@@ -728,6 +651,8 @@
     border-radius: 12px;
     padding: 1rem;
     border: 1px solid var(--border-color);
+    height: 100%;
+    width: 100%;
   }
 
   [data-color-mode="dark"] :global(.chart-wrapper) {

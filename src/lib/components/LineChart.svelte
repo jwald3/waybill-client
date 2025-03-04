@@ -13,8 +13,22 @@
   };
 
   let canvas: HTMLCanvasElement;
+  let chart: Chart | null = null;
 
-  $: createChart(canvas, data, $colorMode);
+  onMount(() => {
+    return () => {
+      if (chart) {
+        chart.destroy();
+      }
+    };
+  });
+
+  $: if (canvas && data) {
+    if (chart) {
+      chart.destroy();
+    }
+    createChart(canvas, data, $colorMode);
+  }
 
   function createChart(canvas: HTMLCanvasElement, data: any, mode: string) {
     if (!canvas) return;
@@ -85,7 +99,7 @@
         }
       };
 
-      new Chart(ctx, config);
+      chart = new Chart(ctx, config);
     }
   }
 </script>
@@ -98,6 +112,6 @@
   .chart-wrapper {
     width: 100%;
     height: 100%;
-    min-height: 300px;
+    position: relative;
   }
 </style> 

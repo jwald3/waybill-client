@@ -12,7 +12,22 @@
   let canvas: HTMLCanvasElement;
   let totalValue = data.reduce((sum, item) => sum + item.value, 0);
 
-  $: createChart(canvas, data, $colorMode);
+  let chart: Chart | null = null;
+  
+  onMount(() => {
+    return () => {
+      if (chart) {
+        chart.destroy();
+      }
+    };
+  });
+
+  $: if (canvas && data) {
+    if (chart) {
+      chart.destroy();
+    }
+    createChart(canvas, data, $colorMode);
+  }
 
   function createChart(canvas: HTMLCanvasElement, data: any, mode: string) {
     if (!canvas) return;
@@ -52,7 +67,7 @@
         }
       };
 
-      new Chart(ctx, config);
+      chart = new Chart(ctx, config);
     }
   }
 </script>
