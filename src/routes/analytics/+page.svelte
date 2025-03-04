@@ -27,12 +27,6 @@
       value: "7.2 mpg",
       trend: { value: "0.4 mpg improvement", positive: true },
       icon: icons.analytics
-    },
-    {
-      title: "Driver Satisfaction",
-      value: "4.8/5.0",
-      trend: { value: "0.2 from last quarter", positive: true },
-      icon: icons.people
     }
   ];
 
