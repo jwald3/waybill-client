@@ -4,84 +4,22 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
+  import type { IncidentReport } from '$lib/api/incidents';
+  import { getIncidents } from '$lib/api/incidents';
   
   let isNavExpanded = true;
 
-  interface Trip {
-    _id: string;
-    trip_number: string;
-    status: string;
-  }
+  // Replace static data with async data
+  let incidentsPromise = getIncidents();
+  let incidents: IncidentReport[] = [];
 
-  interface Truck {
-    id: string;
-    truck_number: string;
-    make: string;
-    model: string;
-  }
+  // Load incidents data
+  incidentsPromise.then(response => {
+    incidents = response.items;
+  });
 
-  interface Driver {
-    _id: string;
-    first_name: string;
-    last_name: string;
-  }
-
-  interface IncidentReport {
-    id: string;
-    trip: Trip;
-    truck: Truck;
-    driver: Driver;
-    type: 'TRAFFIC_ACCIDENT' | 'MECHANICAL_FAILURE' | 'WEATHER_DELAY' | 'CARGO_ISSUE' | 'OTHER';
-    description: string;
-    date: string;
-    location: string;
-    damage_estimate: number;
-    created_at: string;
-    updated_at: string;
-  }
-
-  // Generate sample incidents
-  const incidents: IncidentReport[] = Array.from({ length: 15 }, (_, i): IncidentReport => ({
-    id: `incident_${i + 1}`,
-    trip: {
-      _id: `trip_${i + 1}`,
-      trip_number: `${String(209100240 + i)}`,
-      status: ['IN_PROGRESS', 'COMPLETED', 'CANCELED'][i % 3]
-    },
-    truck: {
-      id: `truck_${i + 1}`,
-      truck_number: `A${String(236286 + i)}`,
-      make: ['Freightliner', 'Peterbilt', 'Kenworth'][i % 3],
-      model: ['Cascadia', '579', 'T680'][i % 3]
-    },
-    driver: {
-      _id: `driver_${i + 1}`,
-      first_name: ['John', 'Jane', 'Mike', 'Sarah'][i % 4],
-      last_name: ['Smith', 'Johnson', 'Williams', 'Brown'][i % 4]
-    },
-    type: ['TRAFFIC_ACCIDENT', 'MECHANICAL_FAILURE', 'WEATHER_DELAY', 'CARGO_ISSUE', 'OTHER'][i % 5],
-    description: [
-      'Driver ran into large debris left in the road',
-      'Engine malfunction during transit',
-      'Severe weather conditions caused delay',
-      'Cargo shifted during transport',
-      'Minor fender bender in parking lot'
-    ][i % 5],
-    date: new Date(Date.now() - (i * 7 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0],
-    location: [
-      'Albany, NY',
-      'Syracuse, NY',
-      'Buffalo, NY',
-      'Rochester, NY',
-      'Yonkers, NY'
-    ][i % 5],
-    damage_estimate: Math.round((5000 + Math.random() * 15000) * 100) / 100,
-    created_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-    updated_at: new Date(Date.now() - (i * 12 * 60 * 60 * 1000)).toISOString()
-  }));
-
-  // Stats calculation
-  const stats = {
+  // Make stats calculation reactive based on incidents data
+  $: stats = {
     total: incidents.length,
     totalDamage: formatLargeNumber(
       incidents.reduce((sum, inc) => sum + inc.damage_estimate, 0)
@@ -194,115 +132,134 @@
 <Layout {isNavExpanded}>
   <div class="page">
     <h1 class="page-title">Incident Reports</h1>
-
-    <div class="stats-grid">
-      <Card title="Total Incidents" icon={icons.chart}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.total}</p>
-          <p class="stat-label">Reported incidents</p>
-        </div>
-      </Card>
-
-      <Card title="Total Damage Cost" icon={icons.chart}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalDamage}</p>
-          <p class="stat-label">Estimated damage</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Incident Log" icon={icons.incidents}>
-      <ListControls
-        searchPlaceholder="Search incidents..."
-        bind:searchQuery
-        bind:selectedFilter={selectedType}
-        filterOptions={incidentTypes}
-        formatFilterLabel={formatIncidentTypeLabel}
-        {sortButtons}
-        addNewHref="/incidents/new"
-        addNewLabel="Report Incident"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedType = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {paginatedRecords.length} of {filteredRecords.length} incidents
-      </div>
-
-      <div class="records-list">
-        {#each paginatedRecords as incident}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <h3 class="themed-text">Incident #{incident.id}</h3>
-                <span class="incident-date">{formatDate(incident.date)}</span>
-              </div>
-              <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
-            </div>
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">Driver</span>
-                <span class="value">{incident.driver.first_name} {incident.driver.last_name}</span>
-              </div>
-              <div class="detail">
-                <span class="label">Location</span>
-                <span class="value">{incident.location}</span>
-              </div>
-              <div class="detail">
-                <span class="label">Damage Estimate</span>
-                <span class="value themed-text">{formatCurrency(incident.damage_estimate)}</span>
-              </div>
-            </div>
-            <p class="incident-description">{incident.description}</p>
+    
+    {#await incidentsPromise}
+      <div class="stats-grid">
+        <Card title="Loading..." icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
           </div>
-        {/each}
+        </Card>
+        <Card title="Loading..." icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+      </div>
+    {:then incidentsData}
+      <div class="stats-grid">
+        <Card title="Total Incidents" icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.total}</p>
+            <p class="stat-label">Reported incidents</p>
+          </div>
+        </Card>
+
+        <Card title="Total Damage Cost" icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalDamage}</p>
+            <p class="stat-label">Estimated damage</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="pagination">
-        <div class="pagination-controls">
-          <button 
-            class="page-button" 
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-          >
-            First
-          </button>
-          <button 
-            class="page-button" 
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-          >
-            Previous
-          </button>
-          
-          {#each Array(totalPages) as _, i}
+      <Card title="Incident Log" icon={icons.incidents}>
+        <ListControls
+          searchPlaceholder="Search incidents..."
+          bind:searchQuery
+          bind:selectedFilter={selectedType}
+          filterOptions={incidentTypes}
+          formatFilterLabel={formatIncidentTypeLabel}
+          {sortButtons}
+          addNewHref="/incidents/new"
+          addNewLabel="Report Incident"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedType = value}
+          onSort={handleSort}
+        />
+
+        <div class="results-summary">
+          Showing {paginatedRecords.length} of {filteredRecords.length} incidents
+        </div>
+
+        <div class="records-list">
+          {#each paginatedRecords as incident}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <h3 class="themed-text">Incident #{incident.id}</h3>
+                  <span class="incident-date">{formatDate(incident.date)}</span>
+                </div>
+                <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
+              </div>
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">Driver</span>
+                  <span class="value">{incident.driver.first_name} {incident.driver.last_name}</span>
+                </div>
+                <div class="detail">
+                  <span class="label">Location</span>
+                  <span class="value">{incident.location}</span>
+                </div>
+                <div class="detail">
+                  <span class="label">Damage Estimate</span>
+                  <span class="value themed-text">{formatCurrency(incident.damage_estimate)}</span>
+                </div>
+              </div>
+              <p class="incident-description">{incident.description}</p>
+            </div>
+          {/each}
+        </div>
+
+        <div class="pagination">
+          <div class="pagination-controls">
             <button 
               class="page-button" 
-              class:active={currentPage === i + 1}
-              on:click={() => goToPage(i + 1)}
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
             >
-              {i + 1}
+              First
             </button>
-          {/each}
-          
-          <button 
-            class="page-button" 
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-          >
-            Next
-          </button>
-          <button 
-            class="page-button" 
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-          >
-            Last
-          </button>
+            <button 
+              class="page-button" 
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+            >
+              Previous
+            </button>
+            
+            {#each Array(totalPages) as _, i}
+              <button 
+                class="page-button" 
+                class:active={currentPage === i + 1}
+                on:click={() => goToPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            {/each}
+            
+            <button 
+              class="page-button" 
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+            <button 
+              class="page-button" 
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+            >
+              Last
+            </button>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    {:catch error}
+      <Card title="Error" icon={icons.error}>
+        <p>Failed to load incidents data: {error.message}</p>
+      </Card>
+    {/await}
   </div>
 </Layout>
 
