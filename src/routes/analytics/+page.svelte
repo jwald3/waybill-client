@@ -259,6 +259,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    min-height: 600px;
   }
 
   .analysis-grid {
@@ -288,7 +289,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    height: 100%;
+    height: 600px;
   }
 
   .chart-header {
@@ -531,10 +532,27 @@
     font-size: 0.875rem;
   }
 
-  /* For the LineChart component wrapper */
-  :global(.chart-container > :global(.chart-wrapper)) {
+  .chart-body {
     flex: 1;
-    min-height: 0;
+    display: flex;
+    height: calc(100% - 80px);
+  }
+
+  /* Update chart styles */
+  :global(.chart-wrapper) {
+    background: var(--surface-color);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :global(.chart-wrapper canvas) {
+    height: 100% !important;
+    width: 100% !important;
   }
 
   .cost-legend {
@@ -598,13 +616,12 @@
       grid-template-columns: 1fr;
     }
 
-    .chart-header {
-      flex-direction: column;
-      align-items: stretch;
+    .chart-container {
+      height: 500px;
     }
 
-    .time-range {
-      width: 100%;
+    .chart-body {
+      height: calc(100% - 80px);
     }
   }
 
@@ -622,41 +639,17 @@
       grid-template-columns: 1fr;
     }
 
-    .chart-header {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .time-range {
-      width: 100%;
-    }
-
-    .card-content {
-      max-height: 500px;
-      overflow-y: auto;
+    .chart-container {
+      height: 400px;
     }
 
     .chart-body {
-      min-height: 300px;
+      height: calc(100% - 80px);
     }
 
     .cost-chart {
-      height: 250px;
+      height: 300px;
     }
-  }
-
-  /* Update chart styles */
-  :global(.chart-wrapper) {
-    background: var(--surface-color);
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    height: 100%;
-    width: 100%;
-  }
-
-  [data-color-mode="dark"] :global(.chart-wrapper) {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   /* Update scrollbar styles for dark mode */
