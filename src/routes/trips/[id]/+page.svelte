@@ -2,75 +2,17 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { page } from '$app/stores';
+  import type { Trip } from '$lib/api/trips';
   
   let isNavExpanded = true;
-
-  // Get trip ID from URL parameter
-  const tripId = $page.params.id;
+  
+  export let data;
+  const trip: Trip = data.trip;
 
   interface TripNote {
     note_timestamp: string;
     content: string;
   }
-
-  interface Trip {
-    id: string;
-    trip_number: string;
-    departure_time: {
-      scheduled: string;
-      actual?: string;
-    };
-    arrival_time: {
-      scheduled: string;
-      actual?: string;
-    };
-    status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
-    cargo: {
-      description: string;
-      weight: number;
-      hazmat: boolean;
-    };
-    fuel_usage_gallons: number;
-    distance_miles: number;
-    notes: TripNote[];
-    created_at: string;
-    updated_at: string;
-  }
-
-  // TODO: Replace with actual API call
-  const trip: Trip = {
-    id: tripId,
-    trip_number: "209100240",
-    departure_time: {
-      scheduled: "2024-03-20T08:00:00Z",
-      actual: "2024-03-20T08:15:00Z"
-    },
-    arrival_time: {
-      scheduled: "2024-03-24T16:00:00Z",
-      actual: undefined
-    },
-    status: "IN_PROGRESS",
-    cargo: {
-      description: "Electronics and Components",
-      weight: 25000,
-      hazmat: false
-    },
-    fuel_usage_gallons: 450,
-    distance_miles: 2800,
-    notes: [
-      {
-        note_timestamp: "2024-03-20T08:15:00Z",
-        content: "Trip started. All systems normal."
-      },
-      {
-        note_timestamp: "2024-03-20T12:30:00Z",
-        content: "First checkpoint reached. On schedule."
-      }
-    ],
-    created_at: "2024-03-15T10:00:00Z",
-    updated_at: "2024-03-20T12:30:00Z"
-  };
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -94,140 +36,148 @@
 </script>
 
 <svelte:head>
-  <title>Trip #{trip.trip_number} Details | Waybill</title>
+  <title>
+    {trip?.trip_number 
+      ? `Trip #${trip.trip_number} Details`
+      : 'Trip Details'} | Waybill
+  </title>
 </svelte:head>
 
 <Layout {isNavExpanded}>
   <div class="page">
-    <div class="page-header">
-      <div class="header-content">
-        <a href="/trips" class="back-link">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
-          Back to Trip Management
-        </a>
-        <div class="title-section">
-          <div class="trip-header">
-            <div class="title-info">
-              <h1 class="page-title">Trip #{trip.trip_number}</h1>
-              <span class="trip-cargo">{trip.cargo.description}</span>
+    {#if !trip}
+      <div class="loading">Loading trip details...</div>
+    {:else}
+      <div class="page-header">
+        <div class="header-content">
+          <a href="/trips" class="back-link">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            Back to Trip Management
+          </a>
+          <div class="title-section">
+            <div class="trip-header">
+              <div class="title-info">
+                <h1 class="page-title">Trip #{trip.trip_number}</h1>
+                <span class="trip-cargo">{trip.cargo.description}</span>
+              </div>
+              <span class="status-badge {trip.status.toLowerCase()}">
+                {formatStatusLabel(trip.status)}
+              </span>
             </div>
-            <span class="status-badge {trip.status.toLowerCase()}">
-              {formatStatusLabel(trip.status)}
-            </span>
-          </div>
-          <div class="trip-metrics">
-            <div class="metric">
-              <span class="metric-label">Distance</span>
-              <span class="metric-value">{formatNumber(trip.distance_miles)} mi</span>
-            </div>
-            <div class="metric">
-              <span class="metric-label">Fuel Usage</span>
-              <span class="metric-value">{formatNumber(trip.fuel_usage_gallons)} gal</span>
+            <div class="trip-metrics">
+              <div class="metric">
+                <span class="metric-label">Distance</span>
+                <span class="metric-value">{formatNumber(trip.distance_miles)} mi</span>
+              </div>
+              <div class="metric">
+                <span class="metric-label">Fuel Usage</span>
+                <span class="metric-value">{formatNumber(trip.fuel_usage_gallons)} gal</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="details-grid">
-      <Card title="Schedule Information" icon={icons.calendar}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Departure (Scheduled)</span>
-              <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
-              {#if trip.departure_time.actual}
-                <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
-              {/if}
-            </div>
-            <div class="detail-item">
-              <span class="label">Arrival (Scheduled)</span>
-              <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
-              {#if trip.arrival_time.actual}
-                <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
-              {/if}
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      <Card title="Cargo Details" icon={icons.box}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Description</span>
-              <span class="value">{trip.cargo.description}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Weight</span>
-              <span class="value">{formatNumber(trip.cargo.weight)} lbs</span>
-            </div>
-          </div>
-          {#if trip.cargo.hazmat}
-            <div class="hazmat-warning">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                <path d="M12 2L1 21h22M12 6l7.53 13H4.47M11 10v4h2v-4m-2 6v2h2v-2"/>
-              </svg>
-              Hazardous Materials
-            </div>
-          {/if}
-        </div>
-      </Card>
-
-      <Card title="Trip Notes" icon={icons.notes}>
-        <div class="detail-group">
-          <div class="notes-list">
-            {#each trip.notes as note}
-              <div class="note">
-                <div class="note-content">
-                  <span class="note-time">{formatDate(note.note_timestamp)}</span>
-                  <p>{note.content}</p>
-                </div>
+      <div class="details-grid">
+        <Card title="Schedule Information" icon={icons.calendar}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Departure (Scheduled)</span>
+                <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
+                {#if trip.departure_time.actual}
+                  <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
+                {/if}
               </div>
-            {/each}
-          </div>
-        </div>
-      </Card>
-
-      <Card title="Record Details" icon={icons.chart}>
-        <div class="detail-group">
-          <div class="detail-row">
-            <div class="detail-item">
-              <span class="label">Created</span>
-              <span class="value">{formatDate(trip.created_at)}</span>
-            </div>
-            <div class="detail-item">
-              <span class="label">Last Updated</span>
-              <span class="value">{formatDate(trip.updated_at)}</span>
+              <div class="detail-item">
+                <span class="label">Arrival (Scheduled)</span>
+                <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
+                {#if trip.arrival_time.actual}
+                  <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
+                {/if}
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
-    </div>
+        </Card>
 
-    <div class="action-buttons">
-      <button class="action-button primary">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-        </svg>
-        Update Status
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>
-        Add Note
-      </button>
-      <button class="action-button">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
-          <path d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/>
-        </svg>
-        View Analytics
-      </button>
-    </div>
+        <Card title="Cargo Details" icon={icons.box}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Description</span>
+                <span class="value">{trip.cargo.description}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Weight</span>
+                <span class="value">{formatNumber(trip.cargo.weight)} lbs</span>
+              </div>
+            </div>
+            {#if trip.cargo.hazmat}
+              <div class="hazmat-warning">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12 2L1 21h22M12 6l7.53 13H4.47M11 10v4h2v-4m-2 6v2h2v-2"/>
+                </svg>
+                Hazardous Materials
+              </div>
+            {/if}
+          </div>
+        </Card>
+
+        <Card title="Trip Notes" icon={icons.notes}>
+          <div class="detail-group">
+            <div class="notes-list">
+              {#each trip.notes as note}
+                <div class="note">
+                  <div class="note-content">
+                    <span class="note-time">{formatDate(note.note_timestamp)}</span>
+                    <p>{note.content}</p>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Record Details" icon={icons.chart}>
+          <div class="detail-group">
+            <div class="detail-row">
+              <div class="detail-item">
+                <span class="label">Created</span>
+                <span class="value">{formatDate(trip.created_at)}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">Last Updated</span>
+                <span class="value">{formatDate(trip.updated_at)}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div class="action-buttons">
+        <button class="action-button primary">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+          Update Status
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+          Add Note
+        </button>
+        <button class="action-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+            <path d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/>
+          </svg>
+          View Analytics
+        </button>
+      </div>
+    {/if}
   </div>
 </Layout>
 
