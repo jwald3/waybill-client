@@ -3,80 +3,22 @@
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
+  import type { Trip } from '$lib/api/trips';
+  import { getTrips } from '$lib/api/trips';
   
   let isNavExpanded = true;
 
-  interface TripNote {
-    note_timestamp: string;
-    content: string;
-  }
+  // Replace static trips array with async data
+  let tripsPromise = getTrips();
+  let trips: Trip[] = [];
 
-  interface Trip {
-    id: string;
-    trip_number: string;
-    departure_time: {
-      scheduled: string;
-      actual?: string;
-    };
-    arrival_time: {
-      scheduled: string;
-      actual?: string;
-    };
-    status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
-    cargo: {
-      description: string;
-      weight: number;
-      hazmat: boolean;
-    };
-    fuel_usage_gallons: number;
-    distance_miles: number;
-    notes: TripNote[];
-    created_at: string;
-    updated_at: string;
-  }
+  // Load trips data
+  tripsPromise.then(response => {
+    trips = response.items;
+  });
 
-  // Generate sample trips based on API structure
-  const trips: Trip[] = Array.from({ length: 15 }, (_, i): Trip => ({
-    id: `trip_${i + 1}`,
-    trip_number: `${209100240 + i}`,
-    departure_time: {
-      scheduled: new Date(Date.now() + (i * 24 * 60 * 60 * 1000)).toISOString(),
-      actual: i < 5 ? new Date(Date.now() + (i * 22 * 60 * 60 * 1000)).toISOString() : undefined
-    },
-    arrival_time: {
-      scheduled: new Date(Date.now() + ((i + 4) * 24 * 60 * 60 * 1000)).toISOString(),
-      actual: i < 3 ? new Date(Date.now() + ((i + 4) * 23 * 60 * 60 * 1000)).toISOString() : undefined
-    },
-    status: ['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'][i % 4],
-    cargo: {
-      description: [
-        'Electronics and Components',
-        'Construction Materials',
-        'Food Products',
-        'Medical Supplies',
-        'Automotive Parts'
-      ][i % 5],
-      weight: 20000 + Math.random() * 15000,
-      hazmat: i % 7 === 0
-    },
-    fuel_usage_gallons: 300 + Math.random() * 200,
-    distance_miles: 1500 + Math.random() * 2000,
-    notes: Array.from({ length: 1 + (i % 3) }, (_, j) => ({
-      note_timestamp: new Date(Date.now() - (j * 60 * 60 * 1000)).toISOString(),
-      content: [
-        'On schedule and proceeding as planned',
-        'Minor delay due to weather conditions',
-        'Route adjusted to avoid construction',
-        'Fuel stop completed',
-        'Load secured and checked'
-      ][j % 5]
-    })),
-    created_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-    updated_at: new Date(Date.now() - (i * 12 * 60 * 60 * 1000)).toISOString()
-  }));
-
-  // Calculate statistics
-  const stats = {
+  // Make stats calculation reactive based on trips data
+  $: stats = {
     active: trips.filter(t => t.status === 'IN_PROGRESS').length,
     scheduled: trips.filter(t => t.status === 'SCHEDULED').length,
     completed: trips.filter(t => t.status === 'COMPLETED').length,
@@ -268,199 +210,223 @@
 <Layout {isNavExpanded}>
   <div class="page">
     <h1 class="page-title">Trip Management</h1>
+    
+    {#await tripsPromise}
+      <div class="stats-grid">
+        <Card title="Loading..." icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+        <Card title="Loading..." icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+        <Card title="Loading..." icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+      </div>
+    {:then tripsData}
+      <div class="stats-grid">
+        <Card title="Active Trips" icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.active}</p>
+            <p class="stat-label">In Progress</p>
+          </div>
+        </Card>
 
-    <div class="stats-grid">
-      <Card title="Active Trips" icon={icons.trips}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.active}</p>
-          <p class="stat-label">In Progress</p>
-        </div>
-      </Card>
+        <Card title="Scheduled" icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.scheduled}</p>
+            <p class="stat-label">Upcoming</p>
+          </div>
+        </Card>
 
-      <Card title="Scheduled" icon={icons.trips}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.scheduled}</p>
-          <p class="stat-label">Upcoming</p>
-        </div>
-      </Card>
-
-      <Card title="Total Distance" icon={icons.trips}>
-        <div class="stat-content">
-          <p class="stat-number">{formatNumber(stats.totalMiles)}</p>
-          <p class="stat-label">Miles</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Trip Records" icon={icons.trips}>
-      <ListControls
-        searchPlaceholder="Search trips..."
-        bind:searchQuery
-        bind:selectedFilter={selectedStatus}
-        filterOptions={rawStatusTypes}
-        formatFilterLabel={formatStatusLabel}
-        {sortButtons}
-        addNewHref="/trips/new"
-        addNewLabel="Create Trip"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedStatus = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {filteredRecords.length} of {trips.length} trips
+        <Card title="Total Distance" icon={icons.trips}>
+          <div class="stat-content">
+            <p class="stat-number">{formatNumber(stats.totalMiles)}</p>
+            <p class="stat-label">Miles</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="records-list">
-        {#each paginatedRecords as trip}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <h3>Trip #{trip.trip_number}</h3>
-                <span class="status-badge {trip.status.toLowerCase()}">
-                  {trip.status.replace('_', ' ')}
-                </span>
-              </div>
-              {#if trip.cargo.hazmat}
-                <span class="hazmat-badge">HAZMAT</span>
-              {/if}
-            </div>
+      <Card title="Trip Records" icon={icons.trips}>
+        <ListControls
+          searchPlaceholder="Search trips..."
+          bind:searchQuery
+          bind:selectedFilter={selectedStatus}
+          filterOptions={rawStatusTypes}
+          formatFilterLabel={formatStatusLabel}
+          {sortButtons}
+          addNewHref="/trips/new"
+          addNewLabel="Create Trip"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedStatus = value}
+          onSort={handleSort}
+        />
 
-            <div class="record-details">
-              <div class="detail-group">
-                <div class="detail">
-                  <span class="label">Departure:</span>
-                  <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
-                  {#if trip.departure_time.actual}
-                    <span class="actual-time">Actual: {formatDate(trip.departure_time.actual)}</span>
-                  {/if}
-                </div>
-                <div class="detail">
-                  <span class="label">Arrival:</span>
-                  <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
-                  {#if trip.arrival_time.actual}
-                    <span class="actual-time">Actual: {formatDate(trip.arrival_time.actual)}</span>
-                  {/if}
-                </div>
-              </div>
+        <div class="results-summary">
+          Showing {filteredRecords.length} of {trips.length} trips
+        </div>
 
-              <div class="detail-group">
-                <div class="detail">
-                  <span class="label">Cargo:</span>
-                  <span class="value">{trip.cargo.description}</span>
-                  <span class="sub-value">{formatNumber(trip.cargo.weight)} lbs</span>
+        <div class="records-list">
+          {#each paginatedRecords as trip}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <h3>Trip #{trip.trip_number}</h3>
+                  <span class="status-badge {trip.status.toLowerCase()}">
+                    {trip.status.replace('_', ' ')}
+                  </span>
                 </div>
-                <div class="detail">
-                  <span class="label">Distance:</span>
-                  <span class="value">{formatNumber(trip.distance_miles)} miles</span>
-                  <span class="sub-value">{formatNumber(trip.fuel_usage_gallons)} gal. fuel</span>
-                </div>
-              </div>
-            </div>
-
-            {#if trip.notes.length > 0}
-              <div class="trip-notes">
-                <div class="notes-header">
-                  <span class="notes-count">{trip.notes.length} Note{trip.notes.length > 1 ? 's' : ''}</span>
-                  {#if trip.notes.length > 1}
-                    <button 
-                      class="notes-toggle" 
-                      on:click={() => toggleNotes(trip.id)}
-                    >
-                      {expandedNotes[trip.id] ? 'Show Less' : 'View All'}
-                    </button>
-                  {/if}
-                </div>
-                
-                {#if expandedNotes[trip.id]}
-                  {#each trip.notes as note}
-                    <div class="note">
-                      <div class="note-content">
-                        <span class="note-time">{formatDate(note.note_timestamp)}</span>
-                        <p>{note.content}</p>
-                      </div>
-                    </div>
-                  {/each}
-                {:else}
-                  <div class="note latest-note">
-                    <div class="note-content">
-                      <span class="note-time">{formatDate(trip.notes[0].note_timestamp)}</span>
-                      <p>{trip.notes[0].content}</p>
-                    </div>
-                    {#if trip.notes.length > 1}
-                      <div class="note-indicator">+{trip.notes.length - 1}</div>
-                    {/if}
-                  </div>
+                {#if trip.cargo.hazmat}
+                  <span class="hazmat-badge">HAZMAT</span>
                 {/if}
               </div>
-            {/if}
 
-            <div class="record-actions">
-              <a href="/trips/{trip.id}" class="action-button">View Details</a>
-              <button class="action-button">Update Status</button>
-              <button class="action-button" on:click={() => openAddNote(trip.id)}>
-                Add Note
-              </button>
+              <div class="record-details">
+                <div class="detail-group">
+                  <div class="detail">
+                    <span class="label">Departure:</span>
+                    <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
+                    {#if trip.departure_time.actual}
+                      <span class="actual-time">Actual: {formatDate(trip.departure_time.actual)}</span>
+                    {/if}
+                  </div>
+                  <div class="detail">
+                    <span class="label">Arrival:</span>
+                    <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
+                    {#if trip.arrival_time.actual}
+                      <span class="actual-time">Actual: {formatDate(trip.arrival_time.actual)}</span>
+                    {/if}
+                  </div>
+                </div>
+
+                <div class="detail-group">
+                  <div class="detail">
+                    <span class="label">Cargo:</span>
+                    <span class="value">{trip.cargo.description}</span>
+                    <span class="sub-value">{formatNumber(trip.cargo.weight)} lbs</span>
+                  </div>
+                  <div class="detail">
+                    <span class="label">Distance:</span>
+                    <span class="value">{formatNumber(trip.distance_miles)} miles</span>
+                    <span class="sub-value">{formatNumber(trip.fuel_usage_gallons)} gal. fuel</span>
+                  </div>
+                </div>
+              </div>
+
+              {#if trip.notes.length > 0}
+                <div class="trip-notes">
+                  <div class="notes-header">
+                    <span class="notes-count">{trip.notes.length} Note{trip.notes.length > 1 ? 's' : ''}</span>
+                    {#if trip.notes.length > 1}
+                      <button 
+                        class="notes-toggle" 
+                        on:click={() => toggleNotes(trip.id)}
+                      >
+                        {expandedNotes[trip.id] ? 'Show Less' : 'View All'}
+                      </button>
+                    {/if}
+                  </div>
+                  
+                  {#if expandedNotes[trip.id]}
+                    {#each trip.notes as note}
+                      <div class="note">
+                        <div class="note-content">
+                          <span class="note-time">{formatDate(note.note_timestamp)}</span>
+                          <p>{note.content}</p>
+                        </div>
+                      </div>
+                    {/each}
+                  {:else}
+                    <div class="note latest-note">
+                      <div class="note-content">
+                        <span class="note-time">{formatDate(trip.notes[0].note_timestamp)}</span>
+                        <p>{trip.notes[0].content}</p>
+                      </div>
+                      {#if trip.notes.length > 1}
+                        <div class="note-indicator">+{trip.notes.length - 1}</div>
+                      {/if}
+                    </div>
+                  {/if}
+                </div>
+              {/if}
+
+              <div class="record-actions">
+                <a href="/trips/{trip.id}" class="action-button">View Details</a>
+                <button class="action-button">Update Status</button>
+                <button class="action-button" on:click={() => openAddNote(trip.id)}>
+                  Add Note
+                </button>
+              </div>
             </div>
-          </div>
-        {/each}
-      </div>
-
-      <div class="pagination">
-        <div class="pagination-info">
-          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} trips
-        </div>
-        <div class="pagination-controls">
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-            title="First page"
-          >
-            ««
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-            title="Previous page"
-          >
-            «
-          </button>
-          
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
-              <button 
-                class="page-button"
-                class:active={page === currentPage}
-                on:click={() => goToPage(page)}
-              >
-                {page}
-              </button>
-            {:else if page === currentPage - 3 || page === currentPage + 3}
-              <span class="page-ellipsis">...</span>
-            {/if}
           {/each}
-
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-            title="Next page"
-          >
-            »
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-            title="Last page"
-          >
-            »»
-          </button>
         </div>
-      </div>
-    </Card>
+
+        <div class="pagination">
+          <div class="pagination-info">
+            Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} trips
+          </div>
+          <div class="pagination-controls">
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
+              title="First page"
+            >
+              ««
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+              title="Previous page"
+            >
+              «
+            </button>
+            
+            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+              {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+                <button 
+                  class="page-button"
+                  class:active={page === currentPage}
+                  on:click={() => goToPage(page)}
+                >
+                  {page}
+                </button>
+              {:else if page === currentPage - 3 || page === currentPage + 3}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+              title="Next page"
+            >
+              »
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+              title="Last page"
+            >
+              »»
+            </button>
+          </div>
+        </div>
+      </Card>
+    {:catch error}
+      <Card title="Error" icon={icons.error}>
+        <p>Failed to load trips data: {error.message}</p>
+      </Card>
+    {/await}
   </div>
 
   <!-- Add this modal markup just before the closing Layout tag -->
