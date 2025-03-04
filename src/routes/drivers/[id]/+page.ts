@@ -2,9 +2,9 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { getDriver } from '$lib/api/drivers';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, fetch }) => {
   try {
-    const driver = await getDriver(params.id);
+    const driver = await getDriver(params.id, fetch);
     return { driver };
   } catch (_err) {
     throw error(404, {

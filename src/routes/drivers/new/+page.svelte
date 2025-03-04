@@ -3,8 +3,9 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
+  import { createDriver, type CreateDriverPayload } from '$lib/api/drivers';
   
-  let formData = {
+  let formData: CreateDriverPayload = {
     first_name: '',
     last_name: '',
     dob: '',
@@ -14,10 +15,10 @@
     phone: '',
     email: '',
     address: {
-      Street: '',
-      City: '',
-      State: '',
-      Zip: ''
+      street: '',
+      city: '',
+      state: '',
+      zip: ''
     }
   };
 
@@ -31,26 +32,35 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/drivers', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create driver');
-      }
-
+      await createDriver(formData);
       goto('/drivers');
     } catch (error) {
       console.error('Error creating driver:', error);
+      // You might want to add error handling UI here
     }
   }
 
   function handleCancel() {
     goto('/drivers');
+  }
+
+  function validateZip(value: string): boolean {
+    return /^\d{5}$/.test(value);
+  }
+
+  let zipError = '';
+
+  function handleZipInput(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    input.value = input.value.replace(/\D/g, '').slice(0, 5);
+    
+    if (input.value.length === 5) {
+      zipError = '';
+    } else {
+      zipError = 'Please enter a 5-digit ZIP code';
+    }
+    
+    formData.address.zip = input.value;
   }
 </script>
 
@@ -167,7 +177,7 @@
                 <input
                   id="street"
                   type="text"
-                  bind:value={formData.address.Street}
+                  bind:value={formData.address.street}
                   required
                 />
               </div>
@@ -177,7 +187,7 @@
                 <input
                   id="city"
                   type="text"
-                  bind:value={formData.address.City}
+                  bind:value={formData.address.city}
                   required
                 />
               </div>
@@ -186,7 +196,7 @@
                 <label for="state">State</label>
                 <select
                   id="state"
-                  bind:value={formData.address.State}
+                  bind:value={formData.address.state}
                   required
                 >
                   <option value="">Select State</option>
@@ -201,10 +211,14 @@
                 <input
                   id="zip"
                   type="text"
-                  bind:value={formData.address.Zip}
+                  value={formData.address.zip}
                   required
-                  pattern="[0-9]{5}"
+                  inputmode="numeric"
+                  on:input={handleZipInput}
                 />
+                {#if zipError}
+                  <span class="error">{zipError}</span>
+                {/if}
               </div>
             </div>
           </section>
@@ -221,4 +235,12 @@
       </form>
     </Card>
   </div>
-</Layout> 
+</Layout>
+
+<style>
+  .error {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 0.2em;
+  }
+</style> 
