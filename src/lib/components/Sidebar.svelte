@@ -43,10 +43,6 @@
     
     <!-- Desktop secondary navigation -->
     <div class="desktop-secondary-nav">
-      <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
-        <span class="nav-icon">{@html icons.routes}</span>
-        {#if $sidebarExpanded}<span>Routes</span>{/if}
-      </a>
       <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
         <span class="nav-icon">{@html icons.maintenance}</span>
         {#if $sidebarExpanded}<span>Maintenance</span>{/if}
@@ -86,10 +82,6 @@
 
       <div class="secondary-nav" class:show={isMoreMenuOpen}>
         <div class="more-menu">
-          <a href="/routes" class="nav-link" class:active={$page.url.pathname === "/routes"}>
-            <span class="nav-icon">{@html icons.routes}</span>
-            <span>Routes</span>
-          </a>
           <a href="/maintenance" class="nav-link" class:active={$page.url.pathname === "/maintenance"}>
             <span class="nav-icon">{@html icons.maintenance}</span>
             <span>Maintenance</span>
