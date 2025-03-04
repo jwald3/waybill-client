@@ -198,13 +198,6 @@
           <p class="stat-label">Currently on Leave</p>
         </div>
       </Card>
-
-      <Card title="Total Drivers" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.total}</p>
-          <p class="stat-label">Total Registered</p>
-        </div>
-      </Card>
     </div>
 
     <Card title="Driver Records" icon={icons.drivers}>
