@@ -3,72 +3,22 @@
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
+  import type { Facility } from '$lib/api/facilities';
+  import { getFacilities } from '$lib/api/facilities';
   
   let isNavExpanded = true;
 
-  interface Address {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  }
+  // Replace static data with async data
+  let facilitiesPromise = getFacilities();
+  let facilities: Facility[] = [];
 
-  interface ContactInfo {
-    phone: string;
-    email: string;
-  }
+  // Load facilities data
+  facilitiesPromise.then(response => {
+    facilities = response.items;
+  });
 
-  interface Facility {
-    id: string;
-    facility_number: string;
-    name: string;
-    type: string;
-    address: Address;
-    contact_info: ContactInfo;
-    parking_capacity: number;
-    services_available: string[];
-    created_at: string;
-    updated_at: string;
-  }
-
-  // Generate sample facilities
-  const facilities: Facility[] = Array.from({ length: 15 }, (_, i): Facility => ({
-    id: `facility_${i + 1}`,
-    facility_number: `A${String(328 + i).padStart(3, '0')}-${1 + Math.floor(i/5)}${String.fromCharCode(65 + (i % 5))}`,
-    name: [
-      'Main Distribution Center',
-      'North Regional Hub',
-      'South Logistics Center',
-      'East Coast Terminal',
-      'West Coast Depot',
-      'Central Processing Facility',
-      'Cross-Dock Terminal',
-      'Regional Sorting Center'
-    ][i % 8],
-    type: ['A', 'B', 'C'][i % 3],
-    address: {
-      street: `${1000 + i * 123} ${['Main', 'Industrial', 'Commerce', 'Transport', 'Logistics'][i % 5]} Street`,
-      city: ['Albany', 'Buffalo', 'Rochester', 'Syracuse', 'Yonkers'][i % 5],
-      state: 'NY',
-      zip: String(10000 + (i * 37)).padStart(5, '0')
-    },
-    contact_info: {
-      phone: `1-${String(300 + i).padStart(3, '0')}-${String(200 + i).padStart(3, '0')}-${String(1000 + i).padStart(4, '0')}`,
-      email: `facility${i + 1}@example.com`
-    },
-    parking_capacity: 2000 + (i * 500),
-    services_available: shuffle(['REPAIRS', 'FUELING', 'WASHING', 'STORAGE', 'MAINTENANCE']).slice(0, 1 + (i % 4)),
-    created_at: new Date(Date.now() - (i * 24 * 60 * 60 * 1000)).toISOString(),
-    updated_at: new Date(Date.now() - (i * 12 * 60 * 60 * 1000)).toISOString()
-  }));
-
-  // Helper function to shuffle array
-  function shuffle<T>(array: T[]): T[] {
-    return array.sort(() => Math.random() - 0.5);
-  }
-
-  // Stats calculation
-  const stats = {
+  // Make stats calculation reactive based on facilities data
+  $: stats = {
     totalFacilities: facilities.length,
     totalCapacity: facilities.reduce((sum, f) => sum + f.parking_capacity, 0),
     averageUtilization: Math.round(
@@ -185,147 +135,171 @@
 <Layout {isNavExpanded}>
   <div class="page">
     <h1 class="page-title">Facility Management</h1>
+    
+    {#await facilitiesPromise}
+      <div class="stats-grid">
+        <Card title="Loading..." icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+        <Card title="Loading..." icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+        <Card title="Loading..." icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">...</p>
+          </div>
+        </Card>
+      </div>
+    {:then facilitiesData}
+      <div class="stats-grid">
+        <Card title="Total Facilities" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalFacilities}</p>
+            <p class="stat-label">Active Facilities</p>
+          </div>
+        </Card>
 
-    <div class="stats-grid">
-      <Card title="Total Facilities" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalFacilities}</p>
-          <p class="stat-label">Active Facilities</p>
-        </div>
-      </Card>
+        <Card title="Total Capacity" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
+            <p class="stat-label">Parking Spaces</p>
+          </div>
+        </Card>
 
-      <Card title="Total Capacity" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
-          <p class="stat-label">Parking Spaces</p>
-        </div>
-      </Card>
-
-      <Card title="Average Utilization" icon={icons.chart}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
-          <p class="stat-label">Facility Space Utilized</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Facility Records" icon={icons.truck}>
-      <ListControls
-        searchPlaceholder="Search facilities..."
-        bind:searchQuery
-        bind:selectedFilter={selectedType}
-        filterOptions={facilityTypes}
-        formatFilterLabel={formatTypeLabel}
-        {sortButtons}
-        addNewHref="/facilities/new"
-        addNewLabel="Add New Facility"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedType = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {paginatedRecords.length} of {filteredRecords.length} facilities
+        <Card title="Average Utilization" icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
+            <p class="stat-label">Facility Space Utilized</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="records-list">
-        {#each paginatedRecords as facility}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <h3>{facility.name}</h3>
-                <span class="facility-number">{facility.facility_number}</span>
-              </div>
-              <span class="type-badge type-{facility.type.toLowerCase()}">
-                {formatTypeBadge(facility.type)}
-              </span>
-            </div>
+      <Card title="Facility Records" icon={icons.truck}>
+        <ListControls
+          searchPlaceholder="Search facilities..."
+          bind:searchQuery
+          bind:selectedFilter={selectedType}
+          filterOptions={facilityTypes}
+          formatFilterLabel={formatTypeLabel}
+          {sortButtons}
+          addNewHref="/facilities/new"
+          addNewLabel="Add New Facility"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedType = value}
+          onSort={handleSort}
+        />
 
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">Address</span>
-                <span class="value">{facility.address.street}</span>
-                <span class="sub-value">{facility.address.city}, {facility.address.state} {facility.address.zip}</span>
+        <div class="results-summary">
+          Showing {paginatedRecords.length} of {filteredRecords.length} facilities
+        </div>
+
+        <div class="records-list">
+          {#each paginatedRecords as facility}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <h3>{facility.name}</h3>
+                  <span class="facility-number">{facility.facility_number}</span>
+                </div>
+                <span class="type-badge type-{facility.type.toLowerCase()}">
+                  {formatTypeBadge(facility.type)}
+                </span>
               </div>
 
-              <div class="detail">
-                <span class="label">Contact</span>
-                <span class="value">{facility.contact_info.phone}</span>
-                <span class="sub-value">{facility.contact_info.email}</span>
-              </div>
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">Address</span>
+                  <span class="value">{facility.address.street}</span>
+                  <span class="sub-value">{facility.address.city}, {facility.address.state} {facility.address.zip}</span>
+                </div>
 
-              <div class="detail">
-                <span class="label">Capacity</span>
-                <span class="value">{facility.parking_capacity.toLocaleString()} spaces</span>
-              </div>
+                <div class="detail">
+                  <span class="label">Contact</span>
+                  <span class="value">{facility.contact_info.phone}</span>
+                  <span class="sub-value">{facility.contact_info.email}</span>
+                </div>
 
-              <div class="detail">
-                <span class="label">Services</span>
-                <div class="services-list">
-                  {#each facility.services_available as service}
-                    <span class="service-badge">{service}</span>
-                  {/each}
+                <div class="detail">
+                  <span class="label">Capacity</span>
+                  <span class="value">{facility.parking_capacity.toLocaleString()} spaces</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Services</span>
+                  <div class="services-list">
+                    {#each facility.services_available as service}
+                      <span class="service-badge">{service}</span>
+                    {/each}
+                  </div>
                 </div>
               </div>
+
+              <div class="record-actions">
+                <a href="/facilities/{facility.id}" class="action-button">View Details</a>
+                <button class="action-button">Edit Facility</button>
+                <button class="action-button">Schedule Maintenance</button>
+              </div>
             </div>
-
-            <div class="record-actions">
-              <a href="/facilities/{facility.id}" class="action-button">View Details</a>
-              <button class="action-button">Edit Facility</button>
-              <button class="action-button">Schedule Maintenance</button>
-            </div>
-          </div>
-        {/each}
-      </div>
-
-      <div class="pagination">
-        <div class="pagination-controls">
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-          >
-            First
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-          >
-            Previous
-          </button>
-
-          {#each Array(totalPages) as _, i}
-            {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
-              <button
-                class="page-button"
-                class:active={currentPage === i + 1}
-                on:click={() => goToPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
-              <span class="page-ellipsis">...</span>
-            {/if}
           {/each}
-
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-          >
-            Next
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-          >
-            Last
-          </button>
         </div>
-      </div>
-    </Card>
+
+        <div class="pagination">
+          <div class="pagination-controls">
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
+            >
+              First
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+            >
+              Previous
+            </button>
+
+            {#each Array(totalPages) as _, i}
+              {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
+                <button
+                  class="page-button"
+                  class:active={currentPage === i + 1}
+                  on:click={() => goToPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+            >
+              Last
+            </button>
+          </div>
+        </div>
+      </Card>
+    {:catch error}
+      <Card title="Error" icon={icons.error}>
+        <p>Failed to load facilities data: {error.message}</p>
+      </Card>
+    {/await}
   </div>
 </Layout>
 
