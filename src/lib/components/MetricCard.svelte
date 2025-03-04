@@ -9,14 +9,18 @@
 </script>
 
 <div class="metric-card">
-  <div class="card-content">
-    {#if icon}
-      <div class="icon-wrapper">
-        {@html icon}
-      </div>
-    {/if}
-    <div class="metric-info">
+  <div class="card-header">
+    <div class="header-content">
+      {#if icon}
+        <div class="icon-wrapper">
+          {@html icon}
+        </div>
+      {/if}
       <h3>{title}</h3>
+    </div>
+  </div>
+  <div class="card-content">
+    <div class="metric-info">
       <div class="metric-details">
         <p class="value">{value}</p>
         <p class="trend" class:positive={trend.positive} class:negative={!trend.positive}>
@@ -31,57 +35,76 @@
   .metric-card {
     background: var(--bg-secondary);
     border-radius: 16px;
-    padding: 1.75rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
-                0 12px 16px rgba(0, 0, 0, 0.05),
-                0 0 0 1px var(--border-color);
-    transition: all 0.3s ease;
+                0 12px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
     height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-header {
+    height: 64px;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 1.25rem;
+  }
+
+  .header-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .card-content {
+    flex: 1;
+    padding: 2rem 1.25rem;
+    min-height: 160px;
     display: flex;
-    gap: 1.25rem;
-    height: 100%;
   }
 
   .metric-info {
-    flex: 1;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    justify-content: center;
+    width: 100%;
   }
 
   .metric-details {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    text-align: center;
   }
 
   .icon-wrapper {
-    flex-shrink: 0;
-    width: 48px;
-    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: color-mix(in srgb, var(--theme-color) 10%, transparent);
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    background: color-mix(in srgb, var(--theme-color) 15%, transparent);
+    border-radius: 8px;
     color: var(--theme-color);
+    flex-shrink: 0;
   }
 
   .icon-wrapper :global(svg) {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   h3 {
-    font-size: 1.1rem;
+    font-size: 1.125rem;
     font-weight: 600;
     color: var(--text-secondary);
-    white-space: nowrap;
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .value {
@@ -89,6 +112,7 @@
     font-weight: 800;
     color: var(--theme-color);
     line-height: 1;
+    margin: 0;
   }
 
   .trend {
@@ -97,6 +121,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 0;
   }
 
   .trend.positive {
@@ -108,12 +133,13 @@
   }
 
   @media (max-width: 768px) {
-    .metric-card {
-      padding: 1.5rem;
+    .card-header {
+      height: 56px;
     }
 
     .card-content {
-      gap: 1rem;
+      padding: 1.5rem 1.25rem;
+      min-height: 140px;
     }
 
     .value {
@@ -122,22 +148,18 @@
   }
 
   @media (max-width: 480px) {
-    .metric-card {
-      padding: 1.25rem;
-    }
-
     .card-content {
-      gap: 0.875rem;
+      padding: 1.25rem;
+      min-height: 120px;
     }
-
     .icon-wrapper {
-      width: 40px;
-      height: 40px;
+      width: 28px;
+      height: 28px;
     }
 
     .icon-wrapper :global(svg) {
-      width: 20px;
-      height: 20px;
+      width: 16px;
+      height: 16px;
     }
 
     h3 {
@@ -151,15 +173,10 @@
     .trend {
       font-size: 0.85rem;
     }
-
-    .metric-info {
-      gap: 0.5rem;
-    }
   }
 
   [data-color-mode="dark"] .metric-card {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-                0 12px 16px rgba(0, 0, 0, 0.1),
-                0 0 0 1px var(--border-color);
+                0 12px 16px rgba(0, 0, 0, 0.1);
   }
 </style> 
