@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
 
 export interface Address {
   street: string;
@@ -29,11 +29,49 @@ interface FacilityResponse {
   data: Facility;
 }
 
-export async function getFacilities(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Facility>> {
-  return fetchApi<Facility>('/facilities', fetchFn);
+interface SingleFacilityResponse {
+  data: Facility;
 }
 
 export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Promise<Facility> {
-  const response = await fetchApi<Facility>(`/facilities/${id}`, fetchFn);
-  return response.items[0];
+  const url = `${API_BASE_URL}/facilities/${id}`;
+  console.log('Fetching facility from URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error fetching facility:', err);
+    throw err;
+  }
+}
+
+export async function getFacilities(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Facility>> {
+  return fetchApi<Facility>('/facilities', fetchFn);
 } 
