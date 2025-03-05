@@ -23,10 +23,6 @@ export interface Truck {
   updated_at: string;
 }
 
-interface TruckResponse {
-  data: Truck;
-}
-
 export interface CreateTruckPayload {
   truck_number: string;
   vin: string;
@@ -42,30 +38,88 @@ export interface CreateTruckPayload {
   last_maintenance: string;
 }
 
-export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fetch = fetch): Promise<Truck> {
-  const response = await fetchFn(`${API_BASE_URL}/trucks`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(truck)
-  });
-
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
-  }
-
-  const result: TruckResponse = await response.json();
-  return result.data;
+interface SingleTruckResponse {
+  data: Truck;
 }
 
 export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promise<Truck> {
-  const response = await fetchFn(`${API_BASE_URL}/trucks/${id}`);
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
+  const url = `${API_BASE_URL}/trucks/${id}`;
+  console.log('Fetching truck from URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error fetching truck:', err);
+    throw err;
   }
-  const result: TruckResponse = await response.json();
-  return result.data;
+}
+
+export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fetch = fetch): Promise<Truck> {
+  const url = `${API_BASE_URL}/trucks`;
+  console.log('Creating truck at URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(truck)
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error creating truck:', err);
+    throw err;
+  }
 }
 
 export async function getTrucks(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Truck>> {

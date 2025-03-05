@@ -14,11 +14,49 @@ export interface MaintenanceLog {
   updated_at: string;
 }
 
-export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch): Promise<ApiResponse<MaintenanceLog>> {
-  return fetchApi<MaintenanceLog>('/maintenance-logs', fetchFn);
+interface SingleMaintenanceResponse {
+  data: MaintenanceLog;
 }
 
 export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetch): Promise<MaintenanceLog> {
-  const response = await fetchApi<MaintenanceLog>(`/maintenance-logs/${id}`, fetchFn);
-  return response.items[0];
+  const url = `${API_BASE_URL}/maintenance-logs/${id}`;
+  console.log('Fetching maintenance log from URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error fetching maintenance log:', err);
+    throw err;
+  }
+}
+
+export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch): Promise<ApiResponse<MaintenanceLog>> {
+  return fetchApi<MaintenanceLog>('/maintenance-logs', fetchFn);
 } 
