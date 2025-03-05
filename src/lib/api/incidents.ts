@@ -18,6 +18,11 @@ export interface IncidentReport {
   updated_at: string;
 }
 
-export async function getIncidents(): Promise<ApiResponse<IncidentReport>> {
-  return fetchApi<IncidentReport>('/incident-reports');
+export async function getIncidents(fetchFn: typeof fetch = fetch): Promise<ApiResponse<IncidentReport>> {
+  return fetchApi<IncidentReport>('/incident-reports', fetchFn);
+}
+
+export async function getIncident(id: string, fetchFn: typeof fetch = fetch): Promise<IncidentReport> {
+  const response = await fetchApi<IncidentReport>(`/incident-reports/${id}`, fetchFn);
+  return response.items[0];
 } 
