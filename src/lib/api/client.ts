@@ -1,4 +1,4 @@
-export const API_BASE_URL = '/api/v1';
+export const API_BASE_URL = typeof window !== 'undefined' ? '/api/v1' : 'http://localhost:8000/api/v1';
 
 export interface ApiResponse<T> {
   items: T[];

@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
 
 export interface TripNote {
   note_timestamp: string;
@@ -33,7 +33,46 @@ export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiRespon
   return fetchApi<Trip>('/trips', fetchFn);
 }
 
+interface SingleTripResponse {
+  data: Trip;
+}
+
 export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promise<Trip> {
-  const response = await fetchApi<Trip>(`/trips/${id}`, fetchFn);
-  return response.items[0];
+  const url = `${API_BASE_URL}/trips/${id}`;
+  console.log('Fetching trip from URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      // Try to get error details from response
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error fetching trip:', err);
+    throw err;
+  }
 } 
