@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse } from './client';
 
 export interface TripNote {
   note_timestamp: string;
@@ -29,19 +29,11 @@ export interface Trip {
   updated_at: string;
 }
 
-interface TripResponse {
-  data: Trip;
+export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
+  return fetchApi<Trip>('/trips', fetchFn);
 }
 
-export async function getTrip(id: string): Promise<Trip> {
-  const response = await fetch(`${API_BASE_URL}/trips/${id}`);
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
-  }
-  const result: TripResponse = await response.json();
-  return result.data;
-}
-
-export async function getTrips(): Promise<ApiResponse<Trip>> {
-  return fetchApi<Trip>('/trips');
+export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promise<Trip> {
+  const response = await fetchApi<Trip>(`/trips/${id}`, fetchFn);
+  return response.items[0];
 } 
