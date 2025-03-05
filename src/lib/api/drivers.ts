@@ -27,13 +27,47 @@ export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResp
   return fetchApi<Driver>('/drivers', fetchFn);
 }
 
-interface DriverResponse {
+interface SingleDriverResponse {
   data: Driver;
 }
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
-  const response = await fetchApi<Driver>(`/drivers/${id}`, fetchFn);
-  return response.items[0]; // Assuming single item response
+  const url = `${API_BASE_URL}/drivers/${id}`;
+  console.log('Fetching driver from URL:', url);
+  
+  try {
+    const response = await fetchFn(url, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    console.log('API Response:', responseData);
+    
+    if (!responseData.data) {
+      console.error('Unexpected response format:', responseData);
+      throw new Error('Invalid response format from API');
+    }
+    
+    return responseData.data;
+  } catch (err) {
+    console.error('Error fetching driver:', err);
+    throw err;
+  }
 }
 
 export interface CreateDriverPayload {
