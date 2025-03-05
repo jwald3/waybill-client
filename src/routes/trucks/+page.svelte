@@ -4,18 +4,11 @@
   import { icons } from '$lib/icons';
   import ListControls from '$lib/components/ListControls.svelte';
   import type { Truck } from '$lib/api/trucks';
-  import { getTrucks } from '$lib/api/trucks';
   
   let isNavExpanded = true;
+  export let data;
 
-  // Replace static trucks array with async data
-  let trucksPromise = getTrucks();
-  let trucks: Truck[] = [];
-
-  // Load trucks data
-  trucksPromise.then(response => {
-    trucks = response.items;
-  });
+  let trucks: Truck[] = data.trucks;
 
   // Stats calculation - make reactive based on trucks data
   $: stats = {
@@ -143,153 +136,138 @@
   <div class="page">
     <h1 class="page-title">Fleet Management</h1>
     
-    {#await trucksPromise}
-      <div class="stats-grid">
-        <Card title="Loading..." icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">...</p>
-          </div>
-        </Card>
-        <!-- Repeat for other stat cards -->
-      </div>
-    {:then trucksData}
-      <div class="stats-grid">
-        <Card title="Total Fleet" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.totalTrucks}</p>
-            <p class="stat-label">Registered Trucks</p>
-          </div>
-        </Card>
-
-        <Card title="Active Fleet" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.activeFleet}</p>
-            <p class="stat-label">Available & In Transit</p>
-          </div>
-        </Card>
-
-        <Card title="Fleet Utilization" icon={icons.chart}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
-            <p class="stat-label">Currently In Transit</p>
-          </div>
-        </Card>
-      </div>
-
-      <Card title="Truck Records" icon={icons.truck}>
-        <ListControls
-          searchPlaceholder="Search trucks..."
-          bind:searchQuery
-          bind:selectedFilter={selectedStatus}
-          filterOptions={statusTypes}
-          formatFilterLabel={formatStatusLabel}
-          {sortButtons}
-          addNewHref="/trucks/new"
-          addNewLabel="Add New Truck"
-          onSearch={(value) => searchQuery = value}
-          onFilterChange={(value) => selectedStatus = value}
-          onSort={handleSort}
-        />
-
-        <div class="results-summary">
-          Showing {paginatedRecords.length} of {filteredRecords.length} trucks
+    <div class="stats-grid">
+      <Card title="Total Fleet" icon={icons.truck}>
+        <div class="stat-content">
+          <p class="stat-number">{stats.totalTrucks}</p>
+          <p class="stat-label">Registered Trucks</p>
         </div>
+      </Card>
 
-        <div class="records-list">
-          {#each paginatedRecords as truck}
-            <div class="record-item">
-              <div class="record-header">
-                <div class="record-title">
-                  <h3>{truck.make} {truck.model}</h3>
-                  <span class="truck-number">{truck.truck_number}</span>
-                </div>
-                <span class="status-badge {truck.status.toLowerCase()}">
-                  {truck.status.replace('_', ' ')}
-                </span>
+      <Card title="Active Fleet" icon={icons.truck}>
+        <div class="stat-content">
+          <p class="stat-number">{stats.activeFleet}</p>
+          <p class="stat-label">Available & In Transit</p>
+        </div>
+      </Card>
+
+      <Card title="Fleet Utilization" icon={icons.chart}>
+        <div class="stat-content">
+          <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
+          <p class="stat-label">Currently In Transit</p>
+        </div>
+      </Card>
+    </div>
+
+    <Card title="Truck Records" icon={icons.truck}>
+      <ListControls
+        searchPlaceholder="Search trucks..."
+        bind:searchQuery
+        bind:selectedFilter={selectedStatus}
+        filterOptions={statusTypes}
+        formatFilterLabel={formatStatusLabel}
+        {sortButtons}
+        addNewHref="/trucks/new"
+        addNewLabel="Add New Truck"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedStatus = value}
+        onSort={(field: typeof sortField) => handleSort(field)}
+      />
+
+      <div class="results-summary">
+        Showing {paginatedRecords.length} of {filteredRecords.length} trucks
+      </div>
+
+      <div class="records-list">
+        {#each paginatedRecords as truck}
+          <div class="record-item">
+            <div class="record-header">
+              <div class="record-title">
+                <h3>{truck.make} {truck.model}</h3>
+                <span class="truck-number">{truck.truck_number}</span>
+              </div>
+              <span class="status-badge {truck.status.toLowerCase()}">
+                {truck.status.replace('_', ' ')}
+              </span>
+            </div>
+
+            <div class="record-details">
+              <div class="detail">
+                <span class="label">Vehicle Info</span>
+                <span class="value">{truck.year} • VIN: {truck.vin}</span>
+                <span class="sub-value">License: {truck.license_plate.number} ({truck.license_plate.state})</span>
               </div>
 
-              <div class="record-details">
-                <div class="detail">
-                  <span class="label">Vehicle Info</span>
-                  <span class="value">{truck.year} • VIN: {truck.vin}</span>
-                  <span class="sub-value">License: {truck.license_plate.number} ({truck.license_plate.state})</span>
-                </div>
-
-                <div class="detail">
-                  <span class="label">Usage</span>
-                  <span class="value">{formatNumber(truck.mileage)} miles</span>
-                  <span class="sub-value">Last Maintenance: {formatDate(truck.last_maintenance)}</span>
-                </div>
-
-                <div class="detail">
-                  <span class="label">Specifications</span>
-                  <span class="value">{truck.trailer_type.replace('_', ' ')}</span>
-                  <span class="sub-value">Capacity: {truck.capacity_tons} tons • {truck.fuel_type}</span>
-                </div>
+              <div class="detail">
+                <span class="label">Usage</span>
+                <span class="value">{formatNumber(truck.mileage)} miles</span>
+                <span class="sub-value">Last Maintenance: {formatDate(truck.last_maintenance)}</span>
               </div>
 
-              <div class="record-actions">
-                <a href="/trucks/{truck.id}" class="action-button">View Details</a>
-                <button class="action-button">Schedule Maintenance</button>
-                <button class="action-button">Update Status</button>
+              <div class="detail">
+                <span class="label">Specifications</span>
+                <span class="value">{truck.trailer_type.replace('_', ' ')}</span>
+                <span class="sub-value">Capacity: {truck.capacity_tons} tons • {truck.fuel_type}</span>
               </div>
             </div>
-          {/each}
-        </div>
 
-        <div class="pagination">
-          <div class="pagination-controls">
-            <button
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(1)}
-            >
-              First
-            </button>
-            <button
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(currentPage - 1)}
-            >
-              Previous
-            </button>
-
-            {#each Array(totalPages) as _, i}
-              {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
-                <button
-                  class="page-button"
-                  class:active={currentPage === i + 1}
-                  on:click={() => goToPage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
-                <span class="page-ellipsis">...</span>
-              {/if}
-            {/each}
-
-            <button
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(currentPage + 1)}
-            >
-              Next
-            </button>
-            <button
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(totalPages)}
-            >
-              Last
-            </button>
+            <div class="record-actions">
+              <a href="/trucks/{truck.id}" class="action-button">View Details</a>
+              <button class="action-button">Schedule Maintenance</button>
+              <button class="action-button">Update Status</button>
+            </div>
           </div>
+        {/each}
+      </div>
+
+      <div class="pagination">
+        <div class="pagination-controls">
+          <button
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(1)}
+          >
+            First
+          </button>
+          <button
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          {#each Array(totalPages) as _, i}
+            {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
+              <button
+                class="page-button"
+                class:active={currentPage === i + 1}
+                on:click={() => goToPage(i + 1)}
+              >
+                {i + 1}
+              </button>
+            {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
+              <span class="page-ellipsis">...</span>
+            {/if}
+          {/each}
+
+          <button
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(currentPage + 1)}
+          >
+            Next
+          </button>
+          <button
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(totalPages)}
+          >
+            Last
+          </button>
         </div>
-      </Card>
-    {:catch error}
-      <Card title="Error" icon={icons.error}>
-        <p>Failed to load trucks data: {error.message}</p>
-      </Card>
-    {/await}
+      </div>
+    </Card>
   </div>
 </Layout>
 
