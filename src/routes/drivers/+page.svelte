@@ -96,12 +96,14 @@
     currentPage = 1;
   }
 
-  function handleSort(field: typeof sortField) {
-    if (sortField === field) {
-      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortField = field;
-      sortDirection = 'asc';
+  function handleSort(field: string) {
+    if (field === 'last_name' || field === 'license_expiration' || field === 'employment_status') {
+      if (sortField === field) {
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortField = field;
+        sortDirection = 'asc';
+      }
     }
   }
 

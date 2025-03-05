@@ -14,19 +14,11 @@ export interface MaintenanceLog {
   updated_at: string;
 }
 
-interface MaintenanceLogResponse {
-  data: MaintenanceLog;
+export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch): Promise<ApiResponse<MaintenanceLog>> {
+  return fetchApi<MaintenanceLog>('/maintenance-logs', fetchFn);
 }
 
-export async function getMaintenanceLog(id: string): Promise<MaintenanceLog> {
-  const response = await fetch(`${API_BASE_URL}/maintenance-logs/${id}`);
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
-  }
-  const result: MaintenanceLogResponse = await response.json();
-  return result.data;
-}
-
-export async function getMaintenanceLogs(): Promise<ApiResponse<MaintenanceLog>> {
-  return fetchApi<MaintenanceLog>('/maintenance-logs');
+export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetch): Promise<MaintenanceLog> {
+  const response = await fetchApi<MaintenanceLog>(`/maintenance-logs/${id}`, fetchFn);
+  return response.items[0];
 } 

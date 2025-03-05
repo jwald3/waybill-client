@@ -9,22 +9,17 @@
   
   let isNavExpanded = true;
 
-  // Replace static data with async data
-  let maintenancePromise = getMaintenanceLogs();
-  let maintenanceRecords: MaintenanceLog[] = [];
-
-  // Load maintenance data
-  maintenancePromise.then(response => {
-    maintenanceRecords = response.items;
-  });
+  // Get the data from the load function
+  export let data;
+  let maintenanceLogs = data.maintenanceLogs;
 
   // Make stats calculation reactive based on maintenance data
   $: stats = {
-    routine: maintenanceRecords.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
-    repair: maintenanceRecords.filter(r => r.service_type === 'REPAIR').length,
-    emergency: maintenanceRecords.filter(r => r.service_type === 'EMERGENCY').length,
+    routine: maintenanceLogs.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
+    repair: maintenanceLogs.filter(r => r.service_type === 'REPAIR').length,
+    emergency: maintenanceLogs.filter(r => r.service_type === 'EMERGENCY').length,
     totalCost: formatLargeNumber(
-      maintenanceRecords.reduce((sum, record) => sum + record.cost, 0)
+      maintenanceLogs.reduce((sum, record) => sum + record.cost, 0)
     )
   };
 
@@ -49,7 +44,7 @@
   }
 
   // Filtered and sorted records
-  $: filteredRecords = maintenanceRecords
+  $: filteredRecords = maintenanceLogs
     .filter(record => {
       const matchesSearch = searchQuery === '' || 
         record.truck.truck_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -137,169 +132,145 @@
   <div class="page">
     <h1 class="page-title">Maintenance Management</h1>
     
-    {#await maintenancePromise}
-      <div class="stats-grid">
-        <Card title="Loading..." icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">...</p>
-          </div>
-        </Card>
-        <Card title="Loading..." icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">...</p>
-          </div>
-        </Card>
-        <Card title="Loading..." icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">...</p>
-          </div>
-        </Card>
-      </div>
-    {:then maintenanceData}
-      <div class="stats-grid">
-        <Card title="Routine Maintenance" icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.routine}</p>
-            <p class="stat-label">Services</p>
-          </div>
-        </Card>
-
-        <Card title="Repairs" icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.repair}</p>
-            <p class="stat-label">Active repairs</p>
-          </div>
-        </Card>
-
-        <Card title="Emergency Services" icon={icons.maintenance}>
-          <div class="stat-content warning">
-            <p class="stat-number">{stats.emergency}</p>
-            <p class="stat-label">Critical issues</p>
-          </div>
-        </Card>
-      </div>
-
-      <Card title="Maintenance Records" icon={icons.maintenance}>
-        <ListControls
-          searchPlaceholder="Search records..."
-          bind:searchQuery
-          bind:selectedFilter={selectedServiceType}
-          filterOptions={serviceTypes}
-          formatFilterLabel={formatServiceTypeLabel}
-          {sortButtons}
-          addNewHref="/maintenance/new"
-          addNewLabel="Add Maintenance Log"
-          onSearch={(value) => searchQuery = value}
-          onFilterChange={(value) => selectedServiceType = value}
-          onSort={handleSort}
-        />
-
-        <div class="results-summary">
-          Showing {filteredRecords.length} of {maintenanceRecords.length} records
+    <div class="stats-grid">
+      <Card title="Routine Maintenance" icon={icons.maintenance}>
+        <div class="stat-content">
+          <p class="stat-number">{stats.routine}</p>
+          <p class="stat-label">Services</p>
         </div>
+      </Card>
 
-        <div class="record-list">
-          {#each paginatedRecords as record}
-            <div class="record-item">
-              <div class="record-header">
-                <div class="record-title">
-                  <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
-                  <span class="chip {record.service_type.toLowerCase()}">{record.service_type.replace('_', ' ')}</span>
-                </div>
-                <div class="cost">
-                  {formatCurrency(record.cost)}
-                </div>
+      <Card title="Repairs" icon={icons.maintenance}>
+        <div class="stat-content">
+          <p class="stat-number">{stats.repair}</p>
+          <p class="stat-label">Active repairs</p>
+        </div>
+      </Card>
+
+      <Card title="Emergency Services" icon={icons.maintenance}>
+        <div class="stat-content warning">
+          <p class="stat-number">{stats.emergency}</p>
+          <p class="stat-label">Critical issues</p>
+        </div>
+      </Card>
+    </div>
+
+    <Card title="Maintenance Records" icon={icons.maintenance}>
+      <ListControls
+        searchPlaceholder="Search records..."
+        bind:searchQuery
+        bind:selectedFilter={selectedServiceType}
+        filterOptions={serviceTypes}
+        formatFilterLabel={formatServiceTypeLabel}
+        {sortButtons}
+        addNewHref="/maintenance/new"
+        addNewLabel="Add Maintenance Log"
+        onSearch={(value) => searchQuery = value}
+        onFilterChange={(value) => selectedServiceType = value}
+        onSort={handleSort}
+      />
+
+      <div class="results-summary">
+        Showing {filteredRecords.length} of {maintenanceLogs.length} records
+      </div>
+
+      <div class="record-list">
+        {#each paginatedRecords as record}
+          <div class="record-item">
+            <div class="record-header">
+              <div class="record-title">
+                <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
+                <span class="chip {record.service_type.toLowerCase()}">{record.service_type.replace('_', ' ')}</span>
               </div>
-
-              <div class="record-details">
-                <div class="detail">
-                  <span class="label">Date:</span>
-                  <span class="value">{formatDate(record.date)}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Mechanic:</span>
-                  <span class="value">{record.mechanic}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Mileage:</span>
-                  <span class="value">{record.truck.mileage.toLocaleString()} miles</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Location:</span>
-                  <span class="value">{record.location}</span>
-                </div>
-              </div>
-
-              <p class="description">{record.notes}</p>
-
-              <div class="record-actions">
-                <a href="/maintenance/{record.id}" class="action-button">View Full Details</a>
-                <button class="action-button">Update Record</button>
+              <div class="cost">
+                {formatCurrency(record.cost)}
               </div>
             </div>
+
+            <div class="record-details">
+              <div class="detail">
+                <span class="label">Date:</span>
+                <span class="value">{formatDate(record.date)}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Mechanic:</span>
+                <span class="value">{record.mechanic}</span>
+              </div>
+              <div class="detail">
+                <span class="label">Mileage:</span>
+                <span class="value">{record.truck.mileage.toLocaleString()} miles</span>
+              </div>
+              <div class="detail">
+                <span class="label">Location:</span>
+                <span class="value">{record.location}</span>
+              </div>
+            </div>
+
+            <p class="description">{record.notes}</p>
+
+            <div class="record-actions">
+              <a href="/maintenance/{record.id}" class="action-button">View Full Details</a>
+              <button class="action-button">Update Record</button>
+            </div>
+          </div>
+        {/each}
+      </div>
+
+      <div class="pagination">
+        <div class="pagination-info">
+          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} records
+        </div>
+        <div class="pagination-controls">
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(1)}
+            title="First page"
+          >
+            ««
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === 1}
+            on:click={() => goToPage(currentPage - 1)}
+            title="Previous page"
+          >
+            «
+          </button>
+          
+          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+              <button 
+                class="page-button"
+                class:active={page === currentPage}
+                on:click={() => goToPage(page)}
+              >
+                {page}
+              </button>
+            {:else if page === currentPage - 3 || page === currentPage + 3}
+              <span class="page-ellipsis">...</span>
+            {/if}
           {/each}
-        </div>
 
-        <div class="pagination">
-          <div class="pagination-info">
-            Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} records
-          </div>
-          <div class="pagination-controls">
-            <button 
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(1)}
-              title="First page"
-            >
-              ««
-            </button>
-            <button 
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(currentPage - 1)}
-              title="Previous page"
-            >
-              «
-            </button>
-            
-            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-              {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
-                <button 
-                  class="page-button"
-                  class:active={page === currentPage}
-                  on:click={() => goToPage(page)}
-                >
-                  {page}
-                </button>
-              {:else if page === currentPage - 3 || page === currentPage + 3}
-                <span class="page-ellipsis">...</span>
-              {/if}
-            {/each}
-
-            <button 
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(currentPage + 1)}
-              title="Next page"
-            >
-              »
-            </button>
-            <button 
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(totalPages)}
-              title="Last page"
-            >
-              »»
-            </button>
-          </div>
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(currentPage + 1)}
+            title="Next page"
+          >
+            »
+          </button>
+          <button 
+            class="page-button"
+            disabled={currentPage === totalPages}
+            on:click={() => goToPage(totalPages)}
+            title="Last page"
+          >
+            »»
+          </button>
         </div>
-      </Card>
-    {:catch error}
-      <Card title="Error" icon={icons.error}>
-        <p>Failed to load maintenance data: {error.message}</p>
-      </Card>
-    {/await}
+      </div>
+    </Card>
   </div>
 </Layout>
 

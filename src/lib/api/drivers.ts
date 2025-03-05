@@ -32,12 +32,8 @@ interface DriverResponse {
 }
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
-  const response = await fetchFn(`${API_BASE_URL}/drivers/${id}`);
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
-  }
-  const result: DriverResponse = await response.json();
-  return result.data;
+  const response = await fetchApi<Driver>(`/drivers/${id}`, fetchFn);
+  return response.items[0]; // Assuming single item response
 }
 
 export interface CreateDriverPayload {

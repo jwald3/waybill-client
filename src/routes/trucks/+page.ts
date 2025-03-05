@@ -6,4 +6,4 @@ export const load = (async ({ fetch }) => {
   return {
     trucks: trucksResponse.items
   };
-}) satisfies PageLoad; 
+}) satisfies PageLoad;

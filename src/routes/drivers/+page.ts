@@ -6,4 +6,4 @@ export const load = (async ({ fetch }) => {
   return {
     drivers: driversResponse.items
   };
-}) satisfies PageLoad; 
+}) satisfies PageLoad;

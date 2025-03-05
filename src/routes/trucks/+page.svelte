@@ -5,10 +5,10 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import type { Truck } from '$lib/api/trucks';
   
-  let isNavExpanded = true;
   export let data;
-
   let trucks: Truck[] = data.trucks;
+
+  let isNavExpanded = true;
 
   // Stats calculation - make reactive based on trucks data
   $: stats = {
@@ -96,12 +96,14 @@
     currentPage = 1;
   }
 
-  function handleSort(field: typeof sortField) {
-    if (sortField === field) {
-      sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      sortField = field;
-      sortDirection = 'desc';
+  function handleSort(field: string) {
+    if (field === 'truck_number' || field === 'mileage' || field === 'last_maintenance') {
+      if (sortField === field) {
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortField = field;
+        sortDirection = 'desc';
+      }
     }
   }
 
@@ -171,7 +173,7 @@
         addNewLabel="Add New Truck"
         onSearch={(value) => searchQuery = value}
         onFilterChange={(value) => selectedStatus = value}
-        onSort={(field: typeof sortField) => handleSort(field)}
+        onSort={handleSort}
       />
 
       <div class="results-summary">
