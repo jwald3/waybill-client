@@ -3,33 +3,33 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
+  import { getTrucks } from '$lib/api/trucks';
+  import type { Truck } from '$lib/api/trucks';
+  import { API_BASE_URL } from '$lib/api/client';
+  import { createMaintenanceLog } from '$lib/api/maintenance';
   
   let formData = {
     truck_id: '',
     date: '',
-    service_type: 'ROUTINE_MAINTENANCE',
+    service_type: 'ROUTINE_MAINTENANCE' as const,
     cost: 0,
     notes: '',
     mechanic: '',
     location: ''
   };
 
-  // Sample trucks for the dropdown
-  // In a real app, this would come from an API
-  const trucks = [
-    { id: '67b0d790c7baa8eb47fafe70', label: 'A236286 - Ford Big Truck' },
-    { id: '67b0d790c7baa8eb47fafe71', label: 'B445789 - Peterbilt 579' },
-    { id: '67b0d790c7baa8eb47fafe72', label: 'C789012 - Kenworth T680' }
-  ];
+  // Load trucks from API
+  let trucksPromise = getTrucks();
 
   const serviceTypes = [
     'ROUTINE_MAINTENANCE',
     'REPAIR',
-    'EMERGENCY',
-    'INSPECTION',
-    'TIRE_SERVICE',
-    'OIL_CHANGE'
-  ];
+    'EMERGENCY'
+  ] as const;
+
+  function formatTruckLabel(truck: Truck): string {
+    return `${truck.truck_number} - ${truck.year} ${truck.make} ${truck.model}`;
+  }
 
   function formatServiceType(type: string): string {
     return type.split('_')
@@ -39,21 +39,11 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/maintenance-logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create maintenance log');
-      }
-
-      goto('/maintenance');
+      await createMaintenanceLog(formData);
+      await goto('/maintenance');
     } catch (error) {
       console.error('Error creating maintenance log:', error);
+      alert('Failed to create maintenance log. Please try again.');
     }
   }
 
@@ -78,16 +68,26 @@
             <div class="input-grid">
               <div class="input-field">
                 <label for="truck">Truck</label>
-                <select
-                  id="truck"
-                  bind:value={formData.truck_id}
-                  required
-                >
-                  <option value="">Select Truck</option>
-                  {#each trucks as truck}
-                    <option value={truck.id}>{truck.label}</option>
-                  {/each}
-                </select>
+                {#await trucksPromise}
+                  <select disabled>
+                    <option>Loading trucks...</option>
+                  </select>
+                {:then trucksResponse}
+                  <select
+                    id="truck"
+                    bind:value={formData.truck_id}
+                    required
+                  >
+                    <option value="">Select Truck</option>
+                    {#each trucksResponse.items as truck}
+                      <option value={truck.id}>{formatTruckLabel(truck)}</option>
+                    {/each}
+                  </select>
+                {:catch error}
+                  <select disabled>
+                    <option>Error loading trucks</option>
+                  </select>
+                {/await}
               </div>
 
               <div class="input-field">
