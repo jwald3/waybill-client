@@ -23,12 +23,12 @@ export interface Driver {
   updated_at: string;
 }
 
-export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Driver>> {
-  return fetchApi<Driver>('/drivers', fetchFn);
+export interface DriverResponse {
+  data: Driver;
 }
 
-interface SingleDriverResponse {
-  data: Driver;
+export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Driver>> {
+  return fetchApi<Driver>('/drivers', fetchFn);
 }
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
