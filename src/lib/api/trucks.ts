@@ -38,10 +38,6 @@ export interface CreateTruckPayload {
   last_maintenance: string;
 }
 
-interface SingleTruckResponse {
-  data: Truck;
-}
-
 export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promise<Truck> {
   const url = `${API_BASE_URL}/trucks/${id}`;
   console.log('Fetching truck from URL:', url);
