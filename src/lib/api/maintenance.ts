@@ -14,10 +14,6 @@ export interface MaintenanceLog {
   updated_at: string;
 }
 
-interface SingleMaintenanceResponse {
-  data: MaintenanceLog;
-}
-
 export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetch): Promise<MaintenanceLog> {
   const url = `${API_BASE_URL}/maintenance-logs/${id}`;
   console.log('Fetching maintenance log from URL:', url);
