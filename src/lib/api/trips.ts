@@ -35,7 +35,6 @@ export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiRespon
 
 export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promise<Trip> {
   const url = `${API_BASE_URL}/trips/${id}`;
-  console.log('Fetching trip from URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -59,7 +58,6 @@ export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promis
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);

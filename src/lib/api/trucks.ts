@@ -40,7 +40,6 @@ export interface CreateTruckPayload {
 
 export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promise<Truck> {
   const url = `${API_BASE_URL}/trucks/${id}`;
-  console.log('Fetching truck from URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -63,7 +62,6 @@ export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promi
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);
@@ -79,7 +77,6 @@ export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promi
 
 export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fetch = fetch): Promise<Truck> {
   const url = `${API_BASE_URL}/trucks`;
-  console.log('Creating truck at URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -104,7 +101,6 @@ export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fet
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);

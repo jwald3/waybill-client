@@ -33,7 +33,6 @@ export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResp
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
   const url = `${API_BASE_URL}/drivers/${id}`;
-  console.log('Fetching driver from URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -56,7 +55,6 @@ export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Prom
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);

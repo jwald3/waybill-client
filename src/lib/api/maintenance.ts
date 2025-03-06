@@ -16,7 +16,6 @@ export interface MaintenanceLog {
 
 export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetch): Promise<MaintenanceLog> {
   const url = `${API_BASE_URL}/maintenance-logs/${id}`;
-  console.log('Fetching maintenance log from URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -39,7 +38,6 @@ export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetc
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);

@@ -27,7 +27,6 @@ export interface Facility {
 
 export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Promise<Facility> {
   const url = `${API_BASE_URL}/facilities/${id}`;
-  console.log('Fetching facility from URL:', url);
   
   try {
     const response = await fetchFn(url, {
@@ -50,7 +49,6 @@ export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Pr
     }
 
     const responseData = await response.json();
-    console.log('API Response:', responseData);
     
     if (!responseData.data) {
       console.error('Unexpected response format:', responseData);
