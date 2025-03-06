@@ -154,7 +154,7 @@
                   rows="4"
                   class="form-input"
                   placeholder="Describe the maintenance work performed..."
-                />
+                ></textarea>
               </div>
             </div>
           </section>
