@@ -33,10 +33,6 @@ export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiRespon
   return fetchApi<Trip>('/trips', fetchFn);
 }
 
-interface SingleTripResponse {
-  data: Trip;
-}
-
 export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promise<Trip> {
   const url = `${API_BASE_URL}/trips/${id}`;
   console.log('Fetching trip from URL:', url);
