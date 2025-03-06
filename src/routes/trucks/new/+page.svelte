@@ -16,7 +16,6 @@
       state: ''
     },
     mileage: 0,
-    status: 'AVAILABLE',
     trailer_type: 'DRY_VAN',
     capacity_tons: 0,
     fuel_type: 'DIESEL',
@@ -33,10 +32,14 @@
 
   const trailerTypes = [
     'DRY_VAN',
-    'REEFER',
-    'FLATBED',
-    'LOWBOY',
-    'TANKER'
+    'REFRIGERATED',
+    'FLAT_BED',
+    'TANKER',
+    'AUTO_CARRIER',
+    'LIVE_STOCK',
+    'INTERMODAL',
+    'LOGGING',
+    'PNEUMATIC_TANK'
   ];
 
   const fuelTypes = [
@@ -48,9 +51,8 @@
 
   const statusTypes = [
     'AVAILABLE',
-    'IN_USE',
-    'MAINTENANCE',
-    'OUT_OF_SERVICE'
+    'IN_TRANSIT',
+    'MAINTENANCE'
   ];
 
   async function handleSubmit() {
@@ -59,7 +61,6 @@
       goto('/trucks');
     } catch (error) {
       console.error('Error creating truck:', error);
-      // You might want to add error handling UI here
     }
   }
 
@@ -215,19 +216,6 @@
                   step="0.1"
                   required
                 />
-              </div>
-
-              <div class="input-field">
-                <label for="status">Status</label>
-                <select
-                  id="status"
-                  bind:value={formData.status}
-                  required
-                >
-                  {#each statusTypes as type}
-                    <option value={type}>{type.replace('_', ' ')}</option>
-                  {/each}
-                </select>
               </div>
 
               <div class="input-field">

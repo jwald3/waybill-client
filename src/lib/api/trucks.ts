@@ -15,7 +15,7 @@ export interface Truck {
   license_plate: LicensePlate;
   mileage: number;
   status: 'IN_TRANSIT' | 'MAINTENANCE' | 'AVAILABLE';
-  trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLATBED';
+  trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLAT_BED' | 'TANKER' | 'AUTO_CARRIER' | 'LIVE_STOCK' | 'INTERMODAL' | 'LOGGING' | 'PNEUMATIC_TANK';
   capacity_tons: number;
   fuel_type: string;
   last_maintenance: string;
@@ -31,8 +31,7 @@ export interface CreateTruckPayload {
   year: number;
   license_plate: LicensePlate;
   mileage: number;
-  status: 'IN_TRANSIT' | 'MAINTENANCE' | 'AVAILABLE';
-  trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLATBED';
+  trailer_type: 'DRY_VAN' | 'REFRIGERATED' | 'FLAT_BED' | 'TANKER' | 'AUTO_CARRIER' | 'LIVE_STOCK' | 'INTERMODAL' | 'LOGGING' | 'PNEUMATIC_TANK';
   capacity_tons: number;
   fuel_type: string;
   last_maintenance: string;
@@ -102,12 +101,8 @@ export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fet
 
     const responseData = await response.json();
     
-    if (!responseData.data) {
-      console.error('Unexpected response format:', responseData);
-      throw new Error('Invalid response format from API');
-    }
-    
-    return responseData.data;
+    // Handle both response formats - either wrapped in data property or direct truck object
+    return responseData.data || responseData;
   } catch (err) {
     console.error('Error creating truck:', err);
     throw err;
