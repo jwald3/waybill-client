@@ -25,14 +25,6 @@ export interface Facility {
   updated_at: string;
 }
 
-interface FacilityResponse {
-  data: Facility;
-}
-
-interface SingleFacilityResponse {
-  data: Facility;
-}
-
 export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Promise<Facility> {
   const url = `${API_BASE_URL}/facilities/${id}`;
   console.log('Fetching facility from URL:', url);
