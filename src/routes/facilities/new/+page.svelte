@@ -3,24 +3,9 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
+  import { createFacility, type CreateFacilityPayload } from '$lib/api/facilities';
   
-  let formData: {
-    facility_number: string;
-    name: string;
-    type: string;
-    address: {
-      street: string;
-      city: string;
-      state: string;
-      zip: string;
-    };
-    contact_info: {
-      phone: string;
-      email: string;
-    };
-    parking_capacity: number;
-    services_available: string[];
-  } = {
+  let formData: CreateFacilityPayload = {
     facility_number: '',
     name: '',
     type: 'A',
@@ -57,6 +42,8 @@
     'INSPECTION'
   ];
 
+  let zipError = '';
+
   function toTitleCase(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
@@ -69,20 +56,22 @@
     }
   }
 
+  function handleZipInput(e: Event) {
+    const input = e.currentTarget as HTMLInputElement;
+    input.value = input.value.replace(/\D/g, '').slice(0, 5);
+    
+    if (input.value.length === 5) {
+      zipError = '';
+    } else {
+      zipError = 'Please enter a 5-digit ZIP code';
+    }
+    
+    formData.address.zip = input.value;
+  }
+
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/facilities', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create facility');
-      }
-
+      await createFacility(formData);
       goto('/facilities');
     } catch (error) {
       console.error('Error creating facility:', error);
@@ -196,10 +185,14 @@
                 <input
                   id="zip"
                   type="text"
-                  bind:value={formData.address.zip}
+                  value={formData.address.zip}
                   required
-                  pattern="[0-9]{5}"
+                  inputmode="numeric"
+                  on:input={handleZipInput}
                 />
+                {#if zipError}
+                  <span class="error">{zipError}</span>
+                {/if}
               </div>
             </div>
           </section>
@@ -311,5 +304,11 @@
     .service-checkbox {
       padding: var(--spacing-sm);
     }
+  }
+
+  .error {
+    color: red;
+    font-size: 0.8em;
+    margin-top: 0.2em;
   }
 </style> 

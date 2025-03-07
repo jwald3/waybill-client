@@ -25,6 +25,16 @@ export interface Facility {
   updated_at: string;
 }
 
+export interface CreateFacilityPayload {
+  facility_number: string;
+  name: string;
+  type: string;
+  address: Address;
+  contact_info: ContactInfo;
+  parking_capacity: number;
+  services_available: string[];
+}
+
 export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Promise<Facility> {
   const url = `${API_BASE_URL}/facilities/${id}`;
   
@@ -64,4 +74,40 @@ export async function getFacility(id: string, fetchFn: typeof fetch = fetch): Pr
 
 export async function getFacilities(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Facility>> {
   return fetchApi<Facility>('/facilities', fetchFn);
+}
+
+export async function createFacility(
+  facility: CreateFacilityPayload, 
+  fetchFn: typeof fetch = fetch
+): Promise<Facility> {
+  const url = `${API_BASE_URL}/facilities`;
+  
+  try {
+    const response = await fetchFn(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(facility)
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    return responseData.data || responseData;
+  } catch (err) {
+    console.error('Error creating facility:', err);
+    throw err;
+  }
 } 
