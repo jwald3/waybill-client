@@ -219,7 +219,9 @@
                     checked={formData.services_available.includes(service)}
                     on:change={() => handleServiceToggle(service)}
                   />
-                  <span class="new-form-checkbox-label">{service}</span>
+                  <div class="service-label">
+                    <span>{service}</span>
+                  </div>
                 </label>
               {/each}
             </div>
@@ -242,28 +244,52 @@
 <style>
   .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: var(--spacing-md);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
   }
 
   .service-checkbox {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm);
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: var(--transition-all);
   }
 
   .service-checkbox:hover {
-    background: var(--bg-secondary);
+    border-color: var(--theme-color);
+    transform: translateY(-1px);
+  }
+
+  .service-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+  }
+
+  .service-label {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--text-primary);
   }
 
   @media (max-width: 768px) {
     .services-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      padding: var(--spacing-sm);
+    }
+
+    .service-checkbox {
+      padding: var(--spacing-sm);
     }
   }
 </style> 
