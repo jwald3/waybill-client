@@ -3,6 +3,10 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
+  import { getTrips } from '$lib/api/trips';
+  import { getTrucks } from '$lib/api/trucks';
+  import { getDrivers } from '$lib/api/drivers';
+  import { API_BASE_URL } from '$lib/api/client';
   
   let formData = {
     trip_id: '',
@@ -15,24 +19,10 @@
     damage_estimate: 0
   };
 
-  // Sample data for dropdowns - in a real app these would come from API calls
-  const trips = [
-    { id: '67b1020533184bdafb38b5ec', label: '209100240 - NYC to Boston' },
-    { id: '67b1020533184bdafb38b5ed', label: '209100241 - Boston to Albany' },
-    { id: '67b1020533184bdafb38b5ee', label: '209100242 - Albany to Buffalo' }
-  ];
-
-  const trucks = [
-    { id: '67b0d790c7baa8eb47fafe70', label: 'A236286 - Ford Big Truck' },
-    { id: '67b0d790c7baa8eb47fafe71', label: 'B445789 - Peterbilt 579' },
-    { id: '67b0d790c7baa8eb47fafe72', label: 'C789012 - Kenworth T680' }
-  ];
-
-  const drivers = [
-    { id: '67b0db7dc7baa8eb47fafe72', label: 'John Smith' },
-    { id: '67b0db7dc7baa8eb47fafe73', label: 'Sarah Johnson' },
-    { id: '67b0db7dc7baa8eb47fafe74', label: 'Mike Williams' }
-  ];
+  // Load data from APIs
+  let tripsPromise = getTrips();
+  let trucksPromise = getTrucks();
+  let driversPromise = getDrivers();
 
   const incidentTypes = [
     'TRAFFIC_ACCIDENT',
@@ -48,9 +38,21 @@
       .join(' ');
   }
 
+  function formatTripLabel(trip: any): string {
+    return `${trip.trip_number} - ${trip.cargo.description}`;
+  }
+
+  function formatTruckLabel(truck: any): string {
+    return `${truck.truck_number} - ${truck.year} ${truck.make} ${truck.model}`;
+  }
+
+  function formatDriverLabel(driver: any): string {
+    return `${driver.first_name} ${driver.last_name}`;
+  }
+
   async function handleSubmit() {
     try {
-      const response = await fetch('http://localhost:8000/api/v1/incident-reports', {
+      const response = await fetch(`${API_BASE_URL}/incident-reports`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,44 +91,74 @@
             <div class="input-grid">
               <div class="input-field">
                 <label for="trip">Trip</label>
-                <select
-                  id="trip"
-                  bind:value={formData.trip_id}
-                  required
-                >
-                  <option value="">Select Trip</option>
-                  {#each trips as trip}
-                    <option value={trip.id}>{trip.label}</option>
-                  {/each}
-                </select>
+                {#await tripsPromise}
+                  <select disabled>
+                    <option>Loading trips...</option>
+                  </select>
+                {:then tripsResponse}
+                  <select
+                    id="trip"
+                    bind:value={formData.trip_id}
+                    required
+                  >
+                    <option value="">Select Trip</option>
+                    {#each tripsResponse.items as trip}
+                      <option value={trip.id}>{formatTripLabel(trip)}</option>
+                    {/each}
+                  </select>
+                {:catch error}
+                  <select disabled>
+                    <option>Error loading trips</option>
+                  </select>
+                {/await}
               </div>
 
               <div class="input-field">
                 <label for="truck">Truck</label>
-                <select
-                  id="truck"
-                  bind:value={formData.truck_id}
-                  required
-                >
-                  <option value="">Select Truck</option>
-                  {#each trucks as truck}
-                    <option value={truck.id}>{truck.label}</option>
-                  {/each}
-                </select>
+                {#await trucksPromise}
+                  <select disabled>
+                    <option>Loading trucks...</option>
+                  </select>
+                {:then trucksResponse}
+                  <select
+                    id="truck"
+                    bind:value={formData.truck_id}
+                    required
+                  >
+                    <option value="">Select Truck</option>
+                    {#each trucksResponse.items as truck}
+                      <option value={truck.id}>{formatTruckLabel(truck)}</option>
+                    {/each}
+                  </select>
+                {:catch error}
+                  <select disabled>
+                    <option>Error loading trucks</option>
+                  </select>
+                {/await}
               </div>
 
               <div class="input-field">
                 <label for="driver">Driver</label>
-                <select
-                  id="driver"
-                  bind:value={formData.driver_id}
-                  required
-                >
-                  <option value="">Select Driver</option>
-                  {#each drivers as driver}
-                    <option value={driver.id}>{driver.label}</option>
-                  {/each}
-                </select>
+                {#await driversPromise}
+                  <select disabled>
+                    <option>Loading drivers...</option>
+                  </select>
+                {:then driversResponse}
+                  <select
+                    id="driver"
+                    bind:value={formData.driver_id}
+                    required
+                  >
+                    <option value="">Select Driver</option>
+                    {#each driversResponse.items as driver}
+                      <option value={driver.id}>{formatDriverLabel(driver)}</option>
+                    {/each}
+                  </select>
+                {:catch error}
+                  <select disabled>
+                    <option>Error loading drivers</option>
+                  </select>
+                {/await}
               </div>
 
               <div class="input-field">
