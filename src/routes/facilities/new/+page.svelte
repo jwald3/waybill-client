@@ -35,17 +35,17 @@
 
   const availableServices = [
     'REPAIRS',
-    'FUELING',
-    'WASHING',
-    'STORAGE',
-    'MAINTENANCE',
-    'INSPECTION'
+    'LOADING_UNLOADING',
+    'LODGING',
+    'FUELING'
   ];
 
   let zipError = '';
 
   function toTitleCase(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    return str.split('_')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ');
   }
 
   function handleServiceToggle(service: string) {
