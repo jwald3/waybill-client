@@ -4,7 +4,23 @@
   import { icons } from '$lib/icons';
   import { goto } from '$app/navigation';
   
-  let formData = {
+  let formData: {
+    facility_number: string;
+    name: string;
+    type: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
+    contact_info: {
+      phone: string;
+      email: string;
+    };
+    parking_capacity: number;
+    services_available: string[];
+  } = {
     facility_number: '',
     name: '',
     type: 'A',
@@ -40,6 +56,10 @@
     'MAINTENANCE',
     'INSPECTION'
   ];
+
+  function toTitleCase(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  }
 
   function handleServiceToggle(service: string) {
     if (formData.services_available.includes(service)) {
@@ -220,7 +240,7 @@
                     on:change={() => handleServiceToggle(service)}
                   />
                   <div class="service-label">
-                    <span>{service}</span>
+                    <span>{toTitleCase(service)}</span>
                   </div>
                 </label>
               {/each}
