@@ -184,7 +184,8 @@
                   class="form-input"
                   placeholder="Describe what happened..."
                   required
-                />
+                >
+                </textarea>
               </div>
             </div>
           </section>
