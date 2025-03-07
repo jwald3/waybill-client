@@ -102,7 +102,7 @@
   <div class="page">
     <h1 class="page-title">Add New Facility</h1>
 
-    <Card title="Facility Details" icon={icons.facility}>
+    <Card title="Facility Details" icon={icons.facilities}>
       <form on:submit|preventDefault={handleSubmit}>
         <div class="form-content">
           <section class="form-group">
