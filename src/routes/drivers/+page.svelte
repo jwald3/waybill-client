@@ -4,6 +4,14 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import type { Driver } from '$lib/api/drivers';
+  import { 
+    activateDriver, 
+    suspendDriver, 
+    terminateDriver, 
+    type EmploymentStatus, 
+    getAvailableStatusTransitions 
+  } from '$lib/api/drivers';
+
   export let data;
   
   let isNavExpanded = true;
@@ -14,7 +22,6 @@
   $: stats = {
     active: drivers.filter(d => d.employment_status === 'ACTIVE').length,
     suspended: drivers.filter(d => d.employment_status === 'SUSPENDED').length,
-    onLeave: drivers.filter(d => d.employment_status === 'ON_LEAVE').length,
     total: drivers.length
   };
 
@@ -29,7 +36,25 @@
   let sortDirection: 'asc' | 'desc' = 'asc';
 
   // Status options
-  const statusTypes = ['ALL', 'ACTIVE', 'SUSPENDED', 'ON_LEAVE', 'TERMINATED'];
+  const statusTypes = ['ALL', 'ACTIVE', 'SUSPENDED', 'TERMINATED'];
+
+  // Add these new interfaces
+  interface UpdateStatusModal {
+    isOpen: boolean;
+    driverId: string | null;
+    currentStatus: EmploymentStatus | null;
+    selectedStatus: EmploymentStatus | null;
+  }
+
+  // Add this state
+  let updateStatusModal: UpdateStatusModal = {
+    isOpen: false,
+    driverId: null,
+    currentStatus: null,
+    selectedStatus: null
+  };
+
+  let updateStatusError: string | null = null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -128,6 +153,64 @@
       direction: sortField === 'employment_status' ? sortDirection : undefined
     }
   ];
+
+  function openUpdateStatus(driver: Driver) {
+    if (!['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
+      console.error('Invalid current status:', driver.employment_status);
+      return;
+    }
+    
+    updateStatusModal = {
+      isOpen: true,
+      driverId: driver.id,
+      currentStatus: driver.employment_status as EmploymentStatus,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  function closeUpdateStatus() {
+    updateStatusModal = {
+      isOpen: false,
+      driverId: null,
+      currentStatus: null,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  async function handleUpdateStatus() {
+    if (!updateStatusModal.driverId || !updateStatusModal.selectedStatus) return;
+
+    try {
+      updateStatusError = null;
+      let updatedDriver: Driver;
+
+      switch (updateStatusModal.selectedStatus) {
+        case 'ACTIVE':
+          updatedDriver = await activateDriver(updateStatusModal.driverId);
+          break;
+        case 'SUSPENDED':
+          updatedDriver = await suspendDriver(updateStatusModal.driverId);
+          break;
+        case 'TERMINATED':
+          updatedDriver = await terminateDriver(updateStatusModal.driverId);
+          break;
+        default:
+          throw new Error('Invalid status selected');
+      }
+
+      // Update the drivers array with the updated driver
+      drivers = drivers.map(driver => 
+        driver.id === updatedDriver.id ? updatedDriver : driver
+      );
+
+      closeUpdateStatus();
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      updateStatusError = 'Failed to update driver status. Please try again.';
+    }
+  }
 </script>
 
 <svelte:head>
@@ -150,13 +233,6 @@
         <div class="stat-content">
           <p class="stat-number">{stats.suspended}</p>
           <p class="stat-label">Temporarily Suspended</p>
-        </div>
-      </Card>
-
-      <Card title="On Leave" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.onLeave}</p>
-          <p class="stat-label">Currently on Leave</p>
         </div>
       </Card>
     </div>
@@ -215,7 +291,11 @@
             <div class="record-actions">
               <a href="/drivers/{driver.id}" class="action-button">View Details</a>
               <button class="action-button">Edit</button>
-              <button class="action-button">Update Status</button>
+              {#if driver.employment_status !== 'TERMINATED'}
+                <button class="action-button" on:click={() => openUpdateStatus(driver)}>
+                  Update Status
+                </button>
+              {/if}
             </div>
           </div>
         {/each}
@@ -277,6 +357,49 @@
       </div>
     </Card>
   </div>
+
+  <!-- Add this modal markup just before the closing Layout tag -->
+  {#if updateStatusModal.isOpen}
+    <div class="modal-backdrop" on:click={closeUpdateStatus}>
+      <div class="modal-content" on:click|stopPropagation>
+        <div class="modal-header">
+          <h3>Update Driver Status</h3>
+          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
+        </div>
+        <div class="modal-body">
+          {#if updateStatusError}
+            <div class="error-message">
+              {updateStatusError}
+            </div>
+          {/if}
+
+          <div class="form-group">
+            <label for="status-action">New Status</label>
+            <select 
+              id="status-action"
+              bind:value={updateStatusModal.selectedStatus}
+              class="form-select"
+            >
+              <option value="">Select a new status...</option>
+              {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
+                <option value={status.value}>{status.label}</option>
+              {/each}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
+          <button 
+            class="action-button primary"
+            on:click={handleUpdateStatus}
+            disabled={!updateStatusModal.selectedStatus}
+          >
+            Update Status
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
 </Layout>
 
 <style>
@@ -349,5 +472,111 @@
 
   .action-button.primary:hover {
     opacity: 0.9;
+  }
+
+  /* Add these modal styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .modal-body {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
+  .error-message {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .form-select,
+  .form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+  }
+
+  .form-select:focus,
+  .form-input:focus {
+    outline: none;
+    border-color: var(--theme-color);
   }
 </style> 
