@@ -100,7 +100,7 @@
           </div>
         </Card>
 
-        <Card title="License Information" icon={icons.id}>
+        <Card title="License Information" icon={icons.notes}>
           <div class="detail-group">
             <div class="detail-row">
               <div class="detail-item">
@@ -121,7 +121,7 @@
           </div>
         </Card>
 
-        <Card title="Contact Information" icon={icons.location}>
+        <Card title="Contact Information" icon={icons.facilities}>
           <div class="detail-group">
             <div class="detail-row">
               <div class="detail-item full-width">
