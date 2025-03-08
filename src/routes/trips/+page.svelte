@@ -316,7 +316,7 @@
                 </div>
                 
                 {#if expandedNotes[trip.id]}
-                  {#each trip.notes as note}
+                  {#each [...trip.notes].reverse() as note}
                     <div class="note">
                       <div class="note-content">
                         <span class="note-time">{formatDate(note.note_timestamp)}</span>
@@ -327,8 +327,8 @@
                 {:else}
                   <div class="note latest-note">
                     <div class="note-content">
-                      <span class="note-time">{formatDate(trip.notes[0].note_timestamp)}</span>
-                      <p>{trip.notes[0].content}</p>
+                      <span class="note-time">{formatDate(trip.notes[trip.notes.length - 1].note_timestamp)}</span>
+                      <p>{trip.notes[trip.notes.length - 1].content}</p>
                     </div>
                     {#if trip.notes.length > 1}
                       <div class="note-indicator">+{trip.notes.length - 1}</div>
