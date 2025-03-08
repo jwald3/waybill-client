@@ -4,7 +4,7 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import type { Trip, TripNote } from '$lib/api/trips';
-  import { getTrips, addTripNote } from '$lib/api/trips';
+  import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
   
   let isNavExpanded = true;
 
@@ -202,6 +202,107 @@
       direction: sortField === 'trip_number' ? sortDirection : undefined
     }
   ];
+
+  // Add these new interfaces
+  interface UpdateStatusModal {
+    isOpen: boolean;
+    tripId: string | null;
+    currentStatus: TripStatus | null;
+    selectedAction: string | null;
+    datetime: string;
+  }
+
+  // Add this state
+  let updateStatusModal: UpdateStatusModal = {
+    isOpen: false,
+    tripId: null,
+    currentStatus: null,
+    selectedAction: null,
+    datetime: new Date().toISOString().slice(0, 16) // Format: YYYY-MM-DDThh:mm
+  };
+
+  let updateStatusError: string | null = null;
+
+  function getAvailableActions(status: TripStatus): Array<{ value: string, label: string }> {
+    switch (status) {
+      case 'SCHEDULED':
+        return [
+          { value: 'begin', label: 'Begin Trip' },
+          { value: 'cancel', label: 'Cancel Trip' }
+        ];
+      case 'IN_TRANSIT':
+        return [
+          { value: 'complete', label: 'Mark as Completed' },
+          { value: 'fail', label: 'Mark as Failed' }
+        ];
+      default:
+        return [];
+    }
+  }
+
+  function openUpdateStatus(trip: Trip) {
+    updateStatusModal = {
+      isOpen: true,
+      tripId: trip.id,
+      currentStatus: trip.status as TripStatus,
+      selectedAction: null,
+      datetime: new Date().toISOString().slice(0, 16)
+    };
+    updateStatusError = null;
+  }
+
+  function closeUpdateStatus() {
+    updateStatusModal = {
+      isOpen: false,
+      tripId: null,
+      currentStatus: null,
+      selectedAction: null,
+      datetime: new Date().toISOString().slice(0, 16)
+    };
+    updateStatusError = null;
+  }
+
+  async function handleUpdateStatus() {
+    if (!updateStatusModal.tripId || !updateStatusModal.selectedAction) return;
+
+    try {
+      updateStatusError = null;
+      let updatedTrip: Trip;
+
+      switch (updateStatusModal.selectedAction) {
+        case 'begin':
+          updatedTrip = await beginTrip(updateStatusModal.tripId, {
+            departure_time: new Date(updateStatusModal.datetime).toISOString()
+          });
+          break;
+        case 'complete':
+          updatedTrip = await finishTripSuccess(updateStatusModal.tripId, {
+            arrival_time: new Date(updateStatusModal.datetime).toISOString()
+          });
+          break;
+        case 'fail':
+          updatedTrip = await finishTripFailure(updateStatusModal.tripId, {
+            arrival_time: new Date(updateStatusModal.datetime).toISOString()
+          });
+          break;
+        case 'cancel':
+          updatedTrip = await cancelTrip(updateStatusModal.tripId);
+          break;
+        default:
+          throw new Error('Invalid action');
+      }
+
+      // Update the trips array with the updated trip
+      trips = trips.map(trip => 
+        trip.id === updatedTrip.id ? updatedTrip : trip
+      );
+
+      closeUpdateStatus();
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      updateStatusError = 'Failed to update trip status. Please try again.';
+    }
+  }
 </script>
 
 <svelte:head>
@@ -340,7 +441,11 @@
 
             <div class="record-actions">
               <a href="/trips/{trip.id}" class="action-button">View Details</a>
-              <button class="action-button">Update Status</button>
+              {#if ['SCHEDULED', 'IN_TRANSIT'].includes(trip.status)}
+                <button class="action-button" on:click={() => openUpdateStatus(trip)}>
+                  Update Status
+                </button>
+              {/if}
               <button class="action-button" on:click={() => openAddNote(trip.id)}>
                 Add Note
               </button>
@@ -434,6 +539,62 @@
             disabled={!addNoteModal.content.trim()}
           >
             Add Note
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
+
+  {#if updateStatusModal.isOpen}
+    <div class="modal-backdrop" on:click={closeUpdateStatus}>
+      <div class="modal-content" on:click|stopPropagation>
+        <div class="modal-header">
+          <h3>Update Trip Status</h3>
+          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
+        </div>
+        <div class="modal-body">
+          {#if updateStatusError}
+            <div class="error-message">
+              {updateStatusError}
+            </div>
+          {/if}
+
+          <div class="form-group">
+            <label for="status-action">Action</label>
+            <select 
+              id="status-action"
+              bind:value={updateStatusModal.selectedAction}
+              class="form-select"
+            >
+              <option value="">Select an action...</option>
+              {#each getAvailableActions(updateStatusModal.currentStatus) as action}
+                <option value={action.value}>{action.label}</option>
+              {/each}
+            </select>
+          </div>
+
+          {#if updateStatusModal.selectedAction && updateStatusModal.selectedAction !== 'cancel'}
+            <div class="form-group">
+              <label for="status-datetime">
+                {updateStatusModal.selectedAction === 'begin' ? 'Departure' : 'Arrival'} Time
+              </label>
+              <input
+                type="datetime-local"
+                id="status-datetime"
+                bind:value={updateStatusModal.datetime}
+                class="form-input"
+              />
+            </div>
+          {/if}
+        </div>
+        <div class="modal-footer">
+          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
+          <button 
+            class="action-button primary"
+            on:click={handleUpdateStatus}
+            disabled={!updateStatusModal.selectedAction}
+          >
+            Update Status
           </button>
         </div>
       </div>
@@ -688,5 +849,33 @@
     border-radius: var(--radius-md);
     margin-bottom: var(--spacing-md);
     font-size: var(--font-size-sm);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .form-select,
+  .form-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+  }
+
+  .form-select:focus,
+  .form-input:focus {
+    outline: none;
+    border-color: var(--theme-color);
   }
 </style> 

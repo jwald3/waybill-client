@@ -33,6 +33,16 @@ export interface AddTripNoteRequest {
   content: string;
 }
 
+export type TripStatus = 'SCHEDULED' | 'IN_TRANSIT' | 'COMPLETED' | 'FAILED_DELIVERY' | 'CANCELED';
+
+interface BeginTripRequest {
+  departure_time: string;
+}
+
+interface FinishTripRequest {
+  arrival_time: string;
+}
+
 export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
   return fetchApi<Trip>('/trips', fetchFn);
 }
@@ -110,4 +120,90 @@ export async function addTripNote(
     console.error('Error adding trip note:', err);
     throw err;
   }
+}
+
+export async function beginTrip(
+  tripId: string, 
+  data: BeginTripRequest,
+  fetchFn: typeof fetch = fetch
+): Promise<Trip> {
+  const url = `${API_BASE_URL}/trips/${tripId}/begin`;
+  
+  const response = await fetchFn(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to begin trip: ${response.statusText}`);
+  }
+
+  return response.json().then(res => res.data);
+}
+
+export async function finishTripSuccess(
+  tripId: string,
+  data: FinishTripRequest,
+  fetchFn: typeof fetch = fetch
+): Promise<Trip> {
+  const url = `${API_BASE_URL}/trips/${tripId}/finish/success`;
+  
+  const response = await fetchFn(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to complete trip: ${response.statusText}`);
+  }
+
+  return response.json().then(res => res.data);
+}
+
+export async function finishTripFailure(
+  tripId: string,
+  data: FinishTripRequest,
+  fetchFn: typeof fetch = fetch
+): Promise<Trip> {
+  const url = `${API_BASE_URL}/trips/${tripId}/finish/failure`;
+  
+  const response = await fetchFn(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to mark trip as failed: ${response.statusText}`);
+  }
+
+  return response.json().then(res => res.data);
+}
+
+export async function cancelTrip(
+  tripId: string,
+  fetchFn: typeof fetch = fetch
+): Promise<Trip> {
+  const url = `${API_BASE_URL}/trips/${tripId}/cancel`;
+  
+  const response = await fetchFn(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to cancel trip: ${response.statusText}`);
+  }
+
+  return response.json().then(res => res.data);
 } 
