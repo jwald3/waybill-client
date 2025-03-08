@@ -3,12 +3,88 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import type { Driver } from '$lib/api/drivers';
+  import { 
+    activateDriver, 
+    suspendDriver, 
+    terminateDriver, 
+    type EmploymentStatus, 
+    getAvailableStatusTransitions 
+  } from '$lib/api/drivers';
 
   export let data;
-  const driver: Driver = data.driver;
+  let driver: Driver = data.driver;
   
   let isNavExpanded = true;
   let error: string | null = null;
+
+  // Add these new interfaces
+  interface UpdateStatusModal {
+    isOpen: boolean;
+    currentStatus: EmploymentStatus | null;
+    selectedStatus: EmploymentStatus | null;
+  }
+
+  // Add this state
+  let updateStatusModal: UpdateStatusModal = {
+    isOpen: false,
+    currentStatus: null,
+    selectedStatus: null
+  };
+
+  let updateStatusError: string | null = null;
+
+  function openUpdateStatus() {
+    if (!['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
+      console.error('Invalid current status:', driver.employment_status);
+      return;
+    }
+    
+    updateStatusModal = {
+      isOpen: true,
+      currentStatus: driver.employment_status as EmploymentStatus,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  function closeUpdateStatus() {
+    updateStatusModal = {
+      isOpen: false,
+      currentStatus: null,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  async function handleUpdateStatus() {
+    if (!updateStatusModal.selectedStatus) return;
+
+    try {
+      updateStatusError = null;
+      let updatedDriver: Driver;
+
+      switch (updateStatusModal.selectedStatus) {
+        case 'ACTIVE':
+          updatedDriver = await activateDriver(driver.id);
+          break;
+        case 'SUSPENDED':
+          updatedDriver = await suspendDriver(driver.id);
+          break;
+        case 'TERMINATED':
+          updatedDriver = await terminateDriver(driver.id);
+          break;
+        default:
+          throw new Error('Invalid status selected');
+      }
+
+      // Update the driver data
+      driver = updatedDriver;
+      closeUpdateStatus();
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      updateStatusError = 'Failed to update driver status. Please try again.';
+    }
+  }
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -148,12 +224,14 @@
       </div>
 
       <div class="action-buttons">
-        <button class="action-button primary">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/>
-          </svg>
-          Update Status
-        </button>
+        {#if driver.employment_status !== 'TERMINATED'}
+          <button class="action-button primary" on:click={openUpdateStatus}>
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/>
+            </svg>
+            Update Status
+          </button>
+        {/if}
         <button class="action-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
@@ -170,6 +248,49 @@
     {/if}
   </div>
 </Layout>
+
+<!-- Add the modal markup -->
+{#if updateStatusModal.isOpen}
+  <div class="modal-backdrop" on:click={closeUpdateStatus}>
+    <div class="modal-content" on:click|stopPropagation>
+      <div class="modal-header">
+        <h3>Update Driver Status</h3>
+        <button class="modal-close" on:click={closeUpdateStatus}>×</button>
+      </div>
+      <div class="modal-body">
+        {#if updateStatusError}
+          <div class="error-message">
+            {updateStatusError}
+          </div>
+        {/if}
+
+        <div class="form-group">
+          <label for="status-action">New Status</label>
+          <select 
+            id="status-action"
+            bind:value={updateStatusModal.selectedStatus}
+            class="form-select"
+          >
+            <option value="">Select a new status...</option>
+            {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
+              <option value={status.value}>{status.label}</option>
+            {/each}
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
+        <button 
+          class="action-button primary"
+          on:click={handleUpdateStatus}
+          disabled={!updateStatusModal.selectedStatus}
+        >
+          Update Status
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   .page-header {
@@ -372,5 +493,99 @@
     text-align: center;
     padding: 2rem;
     color: var(--text-secondary);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .modal-body {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+  }
+
+  .form-select:focus {
+    outline: none;
+    border-color: var(--theme-color);
   }
 </style> 
