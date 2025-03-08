@@ -58,7 +58,7 @@
       </div>
 
       <div class="details-grid">
-        <Card title="Facility Information" icon={icons.location}>
+        <Card title="Facility Information" icon={icons.facilities}>
           <div class="detail-group">
             <div class="detail-row">
               <div class="detail-item">
@@ -83,7 +83,7 @@
           </div>
         </Card>
 
-        <Card title="Location Details" icon={icons.map}>
+        <Card title="Location Details" icon={icons.routes}>
           <div class="detail-group">
             <div class="detail-row">
               <div class="detail-item full-width">
