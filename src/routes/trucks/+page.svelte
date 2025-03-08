@@ -4,7 +4,15 @@
   import { icons } from '$lib/icons';
   import ListControls from '$lib/components/ListControls.svelte';
   import type { Truck } from '$lib/api/trucks';
-  
+  import { 
+    setTruckAvailable,
+    setTruckInTransit,
+    setTruckInMaintenance,
+    retireTruck,
+    type TruckStatus,
+    getAvailableStatusTransitions
+  } from '$lib/api/trucks';
+
   export let data;
   let trucks: Truck[] = data.trucks;
 
@@ -31,6 +39,24 @@
 
   // Status options
   const statusTypes = ['ALL', 'IN_TRANSIT', 'MAINTENANCE', 'AVAILABLE'];
+
+  // Add these new interfaces
+  interface UpdateStatusModal {
+    isOpen: boolean;
+    truckId: string | null;
+    currentStatus: TruckStatus | null;
+    selectedStatus: TruckStatus | null;
+  }
+
+  // Add this state
+  let updateStatusModal: UpdateStatusModal = {
+    isOpen: false,
+    truckId: null,
+    currentStatus: null,
+    selectedStatus: null
+  };
+
+  let updateStatusError: string | null = null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -128,6 +154,67 @@
       direction: sortField === 'last_maintenance' ? sortDirection : undefined
     }
   ];
+
+  function openUpdateStatus(truck: Truck) {
+    if (truck.status === 'RETIRED') {
+      console.error('Cannot update retired truck');
+      return;
+    }
+    
+    updateStatusModal = {
+      isOpen: true,
+      truckId: truck.id,
+      currentStatus: truck.status,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  function closeUpdateStatus() {
+    updateStatusModal = {
+      isOpen: false,
+      truckId: null,
+      currentStatus: null,
+      selectedStatus: null
+    };
+    updateStatusError = null;
+  }
+
+  async function handleUpdateStatus() {
+    if (!updateStatusModal.truckId || !updateStatusModal.selectedStatus) return;
+
+    try {
+      updateStatusError = null;
+      let updatedTruck: Truck;
+
+      switch (updateStatusModal.selectedStatus) {
+        case 'AVAILABLE':
+          updatedTruck = await setTruckAvailable(updateStatusModal.truckId);
+          break;
+        case 'IN_TRANSIT':
+          updatedTruck = await setTruckInTransit(updateStatusModal.truckId);
+          break;
+        case 'UNDER_MAINTENANCE':
+          updatedTruck = await setTruckInMaintenance(updateStatusModal.truckId);
+          break;
+        case 'RETIRED':
+          updatedTruck = await retireTruck(updateStatusModal.truckId);
+          break;
+        default:
+          throw new Error('Invalid status selected');
+      }
+
+      // Update the trucks array with the updated truck
+      trucks = trucks.map(truck => 
+        truck.id === updatedTruck.id ? updatedTruck : truck
+      );
+
+      closeUpdateStatus();
+    } catch (error) {
+      console.error('Failed to update status:', error);
+      updateStatusError = 'Failed to update truck status. Please try again.';
+    }
+  }
 </script>
 
 <svelte:head>
@@ -216,7 +303,11 @@
             <div class="record-actions">
               <a href="/trucks/{truck.id}" class="action-button">View Details</a>
               <button class="action-button">Schedule Maintenance</button>
-              <button class="action-button">Update Status</button>
+              {#if truck.status !== 'RETIRED'}
+                <button class="action-button" on:click={() => openUpdateStatus(truck)}>
+                  Update Status
+                </button>
+              {/if}
             </div>
           </div>
         {/each}
@@ -270,6 +361,49 @@
         </div>
       </div>
     </Card>
+
+    <!-- Add the modal markup -->
+    {#if updateStatusModal.isOpen}
+      <div class="modal-backdrop" on:click={closeUpdateStatus}>
+        <div class="modal-content" on:click|stopPropagation>
+          <div class="modal-header">
+            <h3>Update Truck Status</h3>
+            <button class="modal-close" on:click={closeUpdateStatus}>×</button>
+          </div>
+          <div class="modal-body">
+            {#if updateStatusError}
+              <div class="error-message">
+                {updateStatusError}
+              </div>
+            {/if}
+
+            <div class="form-group">
+              <label for="status-action">New Status</label>
+              <select 
+                id="status-action"
+                bind:value={updateStatusModal.selectedStatus}
+                class="form-select"
+              >
+                <option value="">Select a new status...</option>
+                {#each getAvailableStatusTransitions(updateStatusModal.currentStatus ?? 'AVAILABLE') as status}
+                  <option value={status.value}>{status.label}</option>
+                {/each}
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
+            <button 
+              class="action-button primary"
+              on:click={handleUpdateStatus}
+              disabled={!updateStatusModal.selectedStatus}
+            >
+              Update Status
+            </button>
+          </div>
+        </div>
+      </div>
+    {/if}
   </div>
 </Layout>
 
@@ -353,5 +487,109 @@
 
   :global(.action-button.primary:hover) {
     opacity: 0.9;
+  }
+
+  /* Add these modal styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    width: 90%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .modal-header h3 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+  }
+
+  .modal-close:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
+
+  .modal-body {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
+  .error-message {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+  }
+
+  .form-select:focus {
+    outline: none;
+    border-color: var(--theme-color);
   }
 </style> 
