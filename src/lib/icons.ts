@@ -38,5 +38,14 @@ export const icons = {
   </svg>`,
   back: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
     <path d="M19 12H5M12 19l-7-7 7-7"/>
+  </svg>`,
+  calendar: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+  </svg>`,
+  box: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+  </svg>`,
+  notes: `<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+    <path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/>
   </svg>`
 }; 
