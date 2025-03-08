@@ -62,8 +62,7 @@
     .filter(trip => {
       const matchesSearch = searchQuery === '' || 
         trip.trip_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        trip.cargo.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        trip.location?.toLowerCase().includes(searchQuery.toLowerCase());
+        trip.cargo.description.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesStatus = selectedStatus === 'ALL' || 
         trip.status === selectedStatus;
