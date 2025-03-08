@@ -29,6 +29,10 @@ export interface Trip {
   updated_at: string;
 }
 
+export interface AddTripNoteRequest {
+  content: string;
+}
+
 export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
   return fetchApi<Trip>('/trips', fetchFn);
 }
@@ -67,6 +71,43 @@ export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promis
     return responseData.data;
   } catch (err) {
     console.error('Error fetching trip:', err);
+    throw err;
+  }
+}
+
+export async function addTripNote(
+  tripId: string, 
+  note: AddTripNoteRequest, 
+  fetchFn: typeof fetch = fetch
+): Promise<Trip> {
+  const url = `${API_BASE_URL}/trips/${tripId}/notes`;
+  
+  try {
+    const response = await fetchFn(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(note)
+    });
+
+    if (!response.ok) {
+      console.error('API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        url: response.url
+      });
+      
+      const errorText = await response.text();
+      console.error('Error response body:', errorText);
+      
+      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+    }
+
+    const responseData = await response.json();
+    return responseData.data;
+  } catch (err) {
+    console.error('Error adding trip note:', err);
     throw err;
   }
 } 

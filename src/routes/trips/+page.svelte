@@ -4,7 +4,7 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import type { Trip, TripNote } from '$lib/api/trips';
-  import { getTrips } from '$lib/api/trips';
+  import { getTrips, addTripNote } from '$lib/api/trips';
   
   let isNavExpanded = true;
 
@@ -152,28 +152,34 @@
     };
   }
 
-  function handleAddNote() {
+  async function handleAddNote() {
     if (!addNoteModal.content.trim() || !addNoteModal.tripId) return;
 
-    const tripIndex = trips.findIndex(t => t.id === addNoteModal.tripId);
-    if (tripIndex === -1) return;
+    try {
+      addNoteError = null; // Reset any previous errors
+      
+      // Now updatedTrip contains the full updated trip data
+      const updatedTrip = await addTripNote(addNoteModal.tripId, {
+        content: addNoteModal.content.trim()
+      });
 
-    const newNote: TripNote = {
-      note_timestamp: new Date().toISOString(),
-      content: addNoteModal.content.trim()
-    };
+      // Update the trips array with the complete updated trip
+      trips = trips.map(trip => 
+        trip.id === updatedTrip.id ? updatedTrip : trip
+      );
 
-    // Update the trips array with the new note
-    trips[tripIndex] = {
-      ...trips[tripIndex],
-      notes: [newNote, ...trips[tripIndex].notes]
-    };
+      // Auto-expand notes for the trip that just got a new note
+      expandedNotes[addNoteModal.tripId] = true;
 
-    // Auto-expand notes for the trip that just got a new note
-    expandedNotes[addNoteModal.tripId] = true;
-
-    closeAddNote();
+      closeAddNote();
+    } catch (error) {
+      console.error('Failed to add note:', error);
+      addNoteError = 'Failed to add note. Please try again.';
+    }
   }
+
+  // Add error handling state
+  let addNoteError: string | null = null;
 
   // Add this reactive statement to update sort buttons when sort state changes
   $: sortButtons = [
@@ -409,6 +415,11 @@
           <button class="modal-close" on:click={closeAddNote}>×</button>
         </div>
         <div class="modal-body">
+          {#if addNoteError}
+            <div class="error-message">
+              {addNoteError}
+            </div>
+          {/if}
           <textarea
             bind:value={addNoteModal.content}
             placeholder="Enter note content..."
@@ -668,5 +679,14 @@
     display: flex;
     justify-content: flex-end;
     gap: var(--spacing-md);
+  }
+
+  .error-message {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
   }
 </style> 
