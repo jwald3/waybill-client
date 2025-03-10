@@ -2,7 +2,82 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
+  import { onMount } from 'svelte';
+  import { getTrips } from '$lib/api/trips';
+  import { getDrivers } from '$lib/api/drivers';
+  import type { Trip } from '$lib/api/trips';
+  import type { Driver } from '$lib/api/drivers';
+
   let isNavExpanded = true;
+  let trips: Trip[] = [];
+  let drivers: Driver[] = [];
+  let loading = true;
+
+  onMount(async () => {
+    try {
+      const [tripsResponse, driversResponse] = await Promise.all([
+        getTrips(),
+        getDrivers()
+      ]);
+
+      trips = tripsResponse.items;
+      drivers = driversResponse.items;
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      loading = false;
+    }
+  });
+
+  // Compute active trips (those with status IN_PROGRESS)
+  $: activeTrips = trips.filter(trip => trip.status === 'IN_PROGRESS');
+  
+  // Compute active drivers (those with ACTIVE status)
+  $: activeDrivers = drivers.filter(driver => driver.employment_status === 'ACTIVE');
+  
+  // Get completed trips, sorted by completion date
+  $: completedTrips = trips
+    .filter(trip => trip.status === 'COMPLETED' && trip.arrival_time.actual)
+    .sort((a, b) => new Date(b.arrival_time.actual!).getTime() - new Date(a.arrival_time.actual!).getTime())
+    .slice(0, 5); // Show only the 5 most recent
+
+  // Calculate on-time delivery percentage
+  $: onTimeDeliveries = trips
+    .filter(trip => trip.status === 'COMPLETED')
+    .filter(trip => {
+      if (!trip.arrival_time.actual || !trip.arrival_time.scheduled) return false;
+      const actual = new Date(trip.arrival_time.actual);
+      const scheduled = new Date(trip.arrival_time.scheduled);
+      return actual <= scheduled;
+    });
+
+  $: onTimePercentage = trips.length > 0 
+    ? Math.round((onTimeDeliveries.length / trips.filter(t => t.status === 'COMPLETED').length) * 100) 
+    : 0;
+
+  // Helper function to format date/time
+  function formatTime(isoString: string): string {
+    return new Date(isoString).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  // Helper function to format date
+  function formatDate(isoString: string): string {
+    return new Date(isoString).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
+  // Helper to calculate if a trip is on schedule
+  function isOnSchedule(trip: Trip): boolean {
+    const now = new Date();
+    const scheduled = new Date(trip.arrival_time.scheduled);
+    return now <= scheduled;
+  }
 </script>
 
 <svelte:head>
@@ -22,8 +97,8 @@
           </span>
           <h2>Active Trips</h2>
         </div>
-        <p class="number">24</p>
-        <p class="subtitle">8 arriving today</p>
+        <p class="number">{activeTrips.length}</p>
+        <p class="subtitle">{trips.filter(t => t.status === 'COMPLETED').length} completed total</p>
       </div>
 
       <div class="card">
@@ -33,8 +108,8 @@
           </span>
           <h2>Drivers on Duty</h2>
         </div>
-        <p class="number">18</p>
-        <p class="subtitle">85% of fleet active</p>
+        <p class="number">{activeDrivers.length}</p>
+        <p class="subtitle">{Math.round((activeDrivers.length / drivers.length) * 100)}% of fleet active</p>
       </div>
 
       <div class="card">
@@ -42,50 +117,75 @@
           <span class="icon">
             {@html icons.chart}
           </span>
-          <h2>Deliveries Today</h2>
+          <h2>Delivery Performance</h2>
         </div>
-        <p class="number">42</p>
-        <p class="subtitle">93% on time</p>
+        <p class="number">{onTimePercentage}%</p>
+        <p class="subtitle">On-time delivery rate</p>
       </div>
     </div>
 
     <!-- Active Trips -->
     <Card title="Active Trips" icon={icons.truck} className="section">
       <div class="trips">
-        {#each Array(3) as _, i}
-          <div class="trip-item">
-            <div class="avatar">JD</div>
-            <div class="trip-info">
-              <p class="route">Chicago, IL → Detroit, MI</p>
-              <p class="details">John Doe • Truck #1234</p>
-            </div>
-            <div class="status">
-              <span class="chip success">On Schedule</span>
-              <div class="eta-container">
-                <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
-                  <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
-                </svg>
-                <span class="eta-text">2:30 PM</span>
+        {#if loading}
+          <div class="loading">Loading trips...</div>
+        {:else if activeTrips.length === 0}
+          <div class="empty-state">No active trips at the moment</div>
+        {:else}
+          {#each activeTrips as trip}
+            <div class="trip-item">
+              <div class="avatar">
+                {trip.trip_number.slice(0, 2)}
+              </div>
+              <div class="trip-info">
+                <p class="route">Trip #{trip.trip_number}</p>
+                <p class="details">
+                  {trip.cargo.description} • {trip.cargo.weight.toLocaleString()}lbs
+                  {#if trip.cargo.hazmat}
+                    <span class="hazmat-badge">HAZMAT</span>
+                  {/if}
+                </p>
+              </div>
+              <div class="status">
+                <span class="chip {isOnSchedule(trip) ? 'success' : 'warning'}">
+                  {isOnSchedule(trip) ? 'On Schedule' : 'Delayed'}
+                </span>
+                <div class="eta-container">
+                  <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
+                  </svg>
+                  <span class="eta-text">ETA: {formatTime(trip.arrival_time.scheduled)}</span>
+                </div>
               </div>
             </div>
-          </div>
-        {/each}
+          {/each}
+        {/if}
       </div>
     </Card>
 
     <!-- Recent Deliveries -->
     <Card title="Recent Deliveries" icon={icons.truck} className="section">
       <div class="deliveries">
-        {#each Array(3) as _, i}
-          <div class="delivery-item">
-            <div class="avatar">MS</div>
-            <div class="delivery-info">
-              <p class="route">New York, NY → Boston, MA</p>
-              <p class="details">Mike Smith • Completed at 10:45 AM</p>
+        {#if loading}
+          <div class="loading">Loading deliveries...</div>
+        {:else if completedTrips.length === 0}
+          <div class="empty-state">No completed deliveries yet</div>
+        {:else}
+          {#each completedTrips as trip}
+            <div class="delivery-item">
+              <div class="avatar">
+                {trip.trip_number.slice(0, 2)}
+              </div>
+              <div class="delivery-info">
+                <p class="route">Trip #{trip.trip_number}</p>
+                <p class="details">
+                  {trip.cargo.description} • Completed {formatDate(trip.arrival_time.actual || '')} at {formatTime(trip.arrival_time.actual || '')}
+                </p>
+              </div>
+              <span class="chip info">Delivered</span>
             </div>
-            <span class="chip info">Delivered</span>
-          </div>
-        {/each}
+          {/each}
+        {/if}
       </div>
     </Card>
   </div>
@@ -336,6 +436,11 @@
     color: white;
   }
 
+  .chip.warning {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: white;
+  }
+
   .section {
     margin-bottom: 0;
   }
@@ -545,5 +650,28 @@
   [data-color-mode="dark"] .card {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
                 0 12px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .loading, .empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .empty-state {
+    background: var(--surface-color);
+    border-radius: 12px;
+    border: 1px dashed var(--border-color);
+  }
+
+  .hazmat-badge {
+    background: #ef4444;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
   }
 </style>
