@@ -9,16 +9,21 @@
 
   export let data;
   let facilities: Facility[] = data.facilities;
+  let error = data.error;
 
   // Make stats calculation reactive based on facilities data
-  $: stats = {
+  $: stats = facilities ? {
     totalFacilities: facilities.length,
     totalCapacity: facilities.reduce((sum, f) => sum + f.parking_capacity, 0),
     averageUtilization: Math.round(
       facilities.reduce((sum, _, i) => 
         sum + (75 + (Math.sin(i) * 10) + (Math.random() * 10))
-      , 0) / facilities.length
+      , 0) / (facilities.length || 1)
     )
+  } : {
+    totalFacilities: 0,
+    totalCapacity: 0,
+    averageUtilization: 0
   };
 
   // Pagination settings
@@ -131,146 +136,157 @@
   <div class="page">
     <h1 class="page-title">Facility Management</h1>
     
-    <div class="stats-grid">
-      <Card title="Total Facilities" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalFacilities}</p>
-          <p class="stat-label">Active Facilities</p>
+    {#if error}
+      <Card title="Error" icon={icons.truck}>
+        <div class="error-message">
+          <p>{error}</p>
+          <button class="action-button" on:click={() => window.location.reload()}>
+            Retry
+          </button>
         </div>
       </Card>
+    {:else}
+      <div class="stats-grid">
+        <Card title="Total Facilities" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalFacilities}</p>
+            <p class="stat-label">Active Facilities</p>
+          </div>
+        </Card>
 
-      <Card title="Total Capacity" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
-          <p class="stat-label">Parking Spaces</p>
-        </div>
-      </Card>
+        <Card title="Total Capacity" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
+            <p class="stat-label">Parking Spaces</p>
+          </div>
+        </Card>
 
-      <Card title="Average Utilization" icon={icons.chart}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
-          <p class="stat-label">Facility Space Utilized</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Facility Records" icon={icons.truck}>
-      <ListControls
-        searchPlaceholder="Search facilities..."
-        bind:searchQuery
-        bind:selectedFilter={selectedType}
-        filterOptions={facilityTypes}
-        formatFilterLabel={formatTypeLabel}
-        {sortButtons}
-        addNewHref="/facilities/new"
-        addNewLabel="Add New Facility"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedType = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {paginatedRecords.length} of {filteredRecords.length} facilities
+        <Card title="Average Utilization" icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
+            <p class="stat-label">Facility Space Utilized</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="records-list">
-        {#each paginatedRecords as facility}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <h3>{facility.name}</h3>
-                <span class="facility-number">{facility.facility_number}</span>
-              </div>
-              <span class="type-badge type-{facility.type.toLowerCase()}">
-                {formatTypeBadge(facility.type)}
-              </span>
-            </div>
+      <Card title="Facility Records" icon={icons.truck}>
+        <ListControls
+          searchPlaceholder="Search facilities..."
+          bind:searchQuery
+          bind:selectedFilter={selectedType}
+          filterOptions={facilityTypes}
+          formatFilterLabel={formatTypeLabel}
+          {sortButtons}
+          addNewHref="/facilities/new"
+          addNewLabel="Add New Facility"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedType = value}
+          onSort={handleSort}
+        />
 
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">Address</span>
-                <span class="value">{facility.address.street}</span>
-                <span class="sub-value">{facility.address.city}, {facility.address.state} {facility.address.zip}</span>
+        <div class="results-summary">
+          Showing {paginatedRecords.length} of {filteredRecords.length} facilities
+        </div>
+
+        <div class="records-list">
+          {#each paginatedRecords as facility}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <h3>{facility.name}</h3>
+                  <span class="facility-number">{facility.facility_number}</span>
+                </div>
+                <span class="type-badge type-{facility.type.toLowerCase()}">
+                  {formatTypeBadge(facility.type)}
+                </span>
               </div>
 
-              <div class="detail">
-                <span class="label">Contact</span>
-                <span class="value">{facility.contact_info.phone}</span>
-                <span class="sub-value">{facility.contact_info.email}</span>
-              </div>
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">Address</span>
+                  <span class="value">{facility.address.street}</span>
+                  <span class="sub-value">{facility.address.city}, {facility.address.state} {facility.address.zip}</span>
+                </div>
 
-              <div class="detail">
-                <span class="label">Capacity</span>
-                <span class="value">{facility.parking_capacity.toLocaleString()} spaces</span>
-              </div>
+                <div class="detail">
+                  <span class="label">Contact</span>
+                  <span class="value">{facility.contact_info.phone}</span>
+                  <span class="sub-value">{facility.contact_info.email}</span>
+                </div>
 
-              <div class="detail">
-                <span class="label">Services</span>
-                <div class="services-list">
-                  {#each facility.services_available as service}
-                    <span class="service-badge">{service}</span>
-                  {/each}
+                <div class="detail">
+                  <span class="label">Capacity</span>
+                  <span class="value">{facility.parking_capacity.toLocaleString()} spaces</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Services</span>
+                  <div class="services-list">
+                    {#each facility.services_available as service}
+                      <span class="service-badge">{service}</span>
+                    {/each}
+                  </div>
                 </div>
               </div>
+
+              <div class="record-actions">
+                <a href="/facilities/{facility.id}" class="action-button">View Details</a>
+                <button class="action-button">Edit Facility</button>
+                <button class="action-button">Schedule Maintenance</button>
+              </div>
             </div>
-
-            <div class="record-actions">
-              <a href="/facilities/{facility.id}" class="action-button">View Details</a>
-              <button class="action-button">Edit Facility</button>
-              <button class="action-button">Schedule Maintenance</button>
-            </div>
-          </div>
-        {/each}
-      </div>
-
-      <div class="pagination">
-        <div class="pagination-controls">
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-          >
-            First
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-          >
-            Previous
-          </button>
-
-          {#each Array(totalPages) as _, i}
-            {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
-              <button
-                class="page-button"
-                class:active={currentPage === i + 1}
-                on:click={() => goToPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
-              <span class="page-ellipsis">...</span>
-            {/if}
           {/each}
-
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-          >
-            Next
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-          >
-            Last
-          </button>
         </div>
-      </div>
-    </Card>
+
+        <div class="pagination">
+          <div class="pagination-controls">
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
+            >
+              First
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+            >
+              Previous
+            </button>
+
+            {#each Array(totalPages) as _, i}
+              {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
+                <button
+                  class="page-button"
+                  class:active={currentPage === i + 1}
+                  on:click={() => goToPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+            >
+              Last
+            </button>
+          </div>
+        </div>
+      </Card>
+    {/if}
   </div>
 </Layout>
 
@@ -447,5 +463,16 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
+  }
+
+  .error-message {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .error-message p {
+    color: var(--error-color, #dc2626);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
   }
 </style> 
