@@ -1,9 +1,11 @@
 <script lang="ts">
   export let title: string;
   export let icon: string;
+  let className = '';
+  export { className as class };
 </script>
 
-<div class="card">
+<div class="card {className}">
   <div class="card-header">
     <div class="header-content">
       <div class="icon-wrapper">

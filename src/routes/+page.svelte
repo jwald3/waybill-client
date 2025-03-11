@@ -1,6 +1,7 @@
 <script lang="ts">
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
+  import Chip from '$lib/components/Chip.svelte';
   import { icons } from '$lib/icons';
   import { onMount } from 'svelte';
   import { getTrips } from '$lib/api/trips';
@@ -125,7 +126,7 @@
     </div>
 
     <!-- Active Trips -->
-    <Card title="Active Trips" icon={icons.truck} className="section">
+    <Card title="Active Trips" icon={icons.truck} class="section">
       <div class="trips">
         {#if loading}
           <div class="loading">Loading trips...</div>
@@ -147,9 +148,9 @@
                 </p>
               </div>
               <div class="status">
-                <span class="chip {isOnSchedule(trip) ? 'success' : 'warning'}">
+                <Chip variant={isOnSchedule(trip) ? 'success' : 'warning'}>
                   {isOnSchedule(trip) ? 'On Schedule' : 'Delayed'}
-                </span>
+                </Chip>
                 <div class="eta-container">
                   <svg class="clock-icon" viewBox="0 0 24 24" width="16" height="16">
                     <path fill="currentColor" d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13H11v6l5.2 3.2.8-1.3-4.5-2.7V7z"/>
@@ -164,7 +165,7 @@
     </Card>
 
     <!-- Recent Deliveries -->
-    <Card title="Recent Deliveries" icon={icons.truck} className="section">
+    <Card title="Recent Deliveries" icon={icons.truck} class="section">
       <div class="deliveries">
         {#if loading}
           <div class="loading">Loading deliveries...</div>
@@ -182,7 +183,7 @@
                   {trip.cargo.description} • Completed {formatDate(trip.arrival_time.actual || '')} at {formatTime(trip.arrival_time.actual || '')}
                 </p>
               </div>
-              <span class="chip info">Delivered</span>
+              <Chip variant="info">Delivered</Chip>
             </div>
           {/each}
         {/if}
