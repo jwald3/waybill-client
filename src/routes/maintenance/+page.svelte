@@ -6,6 +6,7 @@
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   import type { MaintenanceLog } from '$lib/api/maintenance';
   import { getMaintenanceLogs } from '$lib/api/maintenance';
+  import Chip from '$lib/components/Chip.svelte';
   
   let isNavExpanded = true;
 
@@ -180,7 +181,17 @@
             <div class="record-header">
               <div class="record-title">
                 <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
-                <span class="chip {record.service_type.toLowerCase()}">{record.service_type.replace('_', ' ')}</span>
+                <div class="record-info">
+                  <Chip
+                    variant={record.service_type.toLowerCase() === 'routine_maintenance' ? 'info' :
+                            record.service_type.toLowerCase() === 'repair' ? 'warning' :
+                            record.service_type.toLowerCase() === 'emergency' ? 'error' :
+                            'default'}
+                    size="small"
+                  >
+                    {record.service_type.replace('_', ' ')}
+                  </Chip>
+                </div>
               </div>
               <div class="cost">
                 {formatCurrency(record.cost)}

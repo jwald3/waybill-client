@@ -6,6 +6,7 @@
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
   import { getIncidents } from '$lib/api/incidents';
+  import Chip from '$lib/components/Chip.svelte';
   
   let isNavExpanded = true;
 

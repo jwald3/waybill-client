@@ -143,7 +143,7 @@
                 <p class="details">
                   {trip.cargo.description} • {trip.cargo.weight.toLocaleString()}lbs
                   {#if trip.cargo.hazmat}
-                    <span class="hazmat-badge">HAZMAT</span>
+                    <Chip variant="error" size="small">HAZMAT</Chip>
                   {/if}
                 </p>
               </div>
@@ -416,30 +416,25 @@
     font-weight: 500;
   }
 
-  .chip {
-    padding: 0.7rem 1.4rem;
-    border-radius: 12px;
+  .eta-container {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
     font-size: 0.9rem;
-    font-weight: 600;
+    font-weight: 500;
+    background: var(--surface-color);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+  }
+
+  .clock-icon {
+    color: var(--theme-color);
+  }
+
+  .eta-text {
     letter-spacing: 0.5px;
-    text-transform: uppercase;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    white-space: nowrap;
-  }
-
-  .chip.success {
-    background: linear-gradient(135deg, #059669, #10b981);
-    color: white;
-  }
-
-  .chip.info {
-    background: var(--theme-gradient);
-    color: white;
-  }
-
-  .chip.warning {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24);
-    color: white;
   }
 
   .section {
@@ -493,27 +488,6 @@
     background: #94a3b8;
   }
 
-  .eta-container {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 500;
-    background: var(--surface-color);
-    padding: 0.4rem 0.8rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-  }
-
-  .clock-icon {
-    color: var(--theme-color);
-  }
-
-  .eta-text {
-    letter-spacing: 0.5px;
-  }
-
   @media (min-width: 769px) and (max-width: 1200px) {
     .dashboard {
       padding: 1.5rem;
@@ -558,11 +532,6 @@
       gap: 0.75rem;
     }
 
-    .chip {
-      padding: 0.6rem 1.2rem;
-      font-size: 0.85rem;
-    }
-
     .eta-container {
       padding: 0.4rem 0.8rem;
       font-size: 0.85rem;
@@ -604,11 +573,6 @@
 
     .details {
       font-size: 0.9rem;
-    }
-
-    .chip {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
     }
 
     .avatar {
@@ -664,15 +628,5 @@
     background: var(--surface-color);
     border-radius: 12px;
     border: 1px dashed var(--border-color);
-  }
-
-  .hazmat-badge {
-    background: #ef4444;
-    color: white;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-left: 0.5rem;
   }
 </style>
