@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import type { Facility } from '$lib/api/facilities';
   
@@ -137,14 +138,7 @@
     <h1 class="page-title">Facility Management</h1>
     
     {#if error}
-      <Card title="Error" icon={icons.truck}>
-        <div class="error-message">
-          <p>{error}</p>
-          <button class="action-button" on:click={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
-      </Card>
+      <ErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Total Facilities" icon={icons.truck}>
@@ -463,16 +457,5 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
-  }
-
-  .error-message {
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .error-message p {
-    color: var(--error-color, #dc2626);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
   }
 </style> 

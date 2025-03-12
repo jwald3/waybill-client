@@ -7,6 +7,7 @@
   import type { MaintenanceLog } from '$lib/api/maintenance';
   import { getMaintenanceLogs } from '$lib/api/maintenance';
   import Chip from '$lib/components/Chip.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   
   let isNavExpanded = true;
 
@@ -140,14 +141,7 @@
     <h1 class="page-title">Maintenance Management</h1>
     
     {#if error}
-      <Card title="Error" icon={icons.maintenance}>
-        <div class="error-message">
-          <p>{error}</p>
-          <button class="action-button" on:click={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
-      </Card>
+      <ErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Routine Maintenance" icon={icons.maintenance}>
@@ -384,16 +378,5 @@
     .stat-number {
       font-size: 1.625rem;
     }
-  }
-
-  .error-message {
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .error-message p {
-    color: var(--error-color, #dc2626);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
   }
 </style> 

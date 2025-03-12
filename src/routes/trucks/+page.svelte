@@ -12,6 +12,7 @@
     type TruckStatus,
     getAvailableStatusTransitions
   } from '$lib/api/trucks';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
 
   export let data;
   let trucks: Truck[] = data.trucks || [];
@@ -224,17 +225,10 @@
 
 <Layout {isNavExpanded}>
   <div class="page">
-    <h1 class="page-title">Fleet Management</h1>
+    <h1 class="page-title">Trucks</h1>
     
     {#if error}
-      <Card title="Error" icon={icons.truck}>
-        <div class="error-message">
-          <p>{error}</p>
-          <button class="action-button" on:click={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
-      </Card>
+      <ErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Total Fleet" icon={icons.truck}>

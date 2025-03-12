@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
+  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import type { Driver } from '$lib/api/drivers';
   import { 
@@ -227,14 +228,7 @@
     <h1 class="page-title">Driver Management</h1>
     
     {#if error}
-      <Card title="Error" icon={icons.drivers}>
-        <div class="error-message">
-          <p>{error}</p>
-          <button class="action-button" on:click={() => window.location.reload()}>
-            Retry
-          </button>
-        </div>
-      </Card>
+      <ErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Active Drivers" icon={icons.drivers}>
