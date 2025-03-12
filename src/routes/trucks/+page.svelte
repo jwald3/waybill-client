@@ -14,7 +14,8 @@
   } from '$lib/api/trucks';
 
   export let data;
-  let trucks: Truck[] = data.trucks;
+  let trucks: Truck[] = data.trucks || [];
+  let error = data.error;
 
   let isNavExpanded = true;
 
@@ -225,186 +226,197 @@
   <div class="page">
     <h1 class="page-title">Fleet Management</h1>
     
-    <div class="stats-grid">
-      <Card title="Total Fleet" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.totalTrucks}</p>
-          <p class="stat-label">Registered Trucks</p>
+    {#if error}
+      <Card title="Error" icon={icons.truck}>
+        <div class="error-message">
+          <p>{error}</p>
+          <button class="action-button" on:click={() => window.location.reload()}>
+            Retry
+          </button>
         </div>
       </Card>
-
-      <Card title="Active Fleet" icon={icons.truck}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.activeFleet}</p>
-          <p class="stat-label">Available & In Transit</p>
-        </div>
-      </Card>
-
-      <Card title="Fleet Utilization" icon={icons.chart}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
-          <p class="stat-label">Currently In Transit</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Truck Records" icon={icons.truck}>
-      <ListControls
-        searchPlaceholder="Search trucks..."
-        bind:searchQuery
-        bind:selectedFilter={selectedStatus}
-        filterOptions={statusTypes}
-        formatFilterLabel={formatStatusLabel}
-        {sortButtons}
-        addNewHref="/trucks/new"
-        addNewLabel="Add New Truck"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedStatus = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {paginatedRecords.length} of {filteredRecords.length} trucks
-      </div>
-
-      <div class="records-list">
-        {#each paginatedRecords as truck}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <h3>{truck.make} {truck.model}</h3>
-                <span class="truck-number">{truck.truck_number}</span>
-              </div>
-              <span class="status-badge {truck.status.toLowerCase()}">
-                {truck.status.replace('_', ' ')}
-              </span>
-            </div>
-
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">Vehicle Info</span>
-                <span class="value">{truck.year} • VIN: {truck.vin}</span>
-                <span class="sub-value">License: {truck.license_plate.number} ({truck.license_plate.state})</span>
-              </div>
-
-              <div class="detail">
-                <span class="label">Usage</span>
-                <span class="value">{formatNumber(truck.mileage)} miles</span>
-                <span class="sub-value">Last Maintenance: {formatDate(truck.last_maintenance)}</span>
-              </div>
-
-              <div class="detail">
-                <span class="label">Specifications</span>
-                <span class="value">{truck.trailer_type.replace('_', ' ')}</span>
-                <span class="sub-value">Capacity: {truck.capacity_tons} tons • {truck.fuel_type}</span>
-              </div>
-            </div>
-
-            <div class="record-actions">
-              <a href="/trucks/{truck.id}" class="action-button">View Details</a>
-              <button class="action-button">Schedule Maintenance</button>
-              {#if truck.status !== 'RETIRED'}
-                <button class="action-button" on:click={() => openUpdateStatus(truck)}>
-                  Update Status
-                </button>
-              {/if}
-            </div>
+    {:else}
+      <div class="stats-grid">
+        <Card title="Total Fleet" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.totalTrucks}</p>
+            <p class="stat-label">Registered Trucks</p>
           </div>
-        {/each}
+        </Card>
+
+        <Card title="Active Fleet" icon={icons.truck}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.activeFleet}</p>
+            <p class="stat-label">Available & In Transit</p>
+          </div>
+        </Card>
+
+        <Card title="Fleet Utilization" icon={icons.chart}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
+            <p class="stat-label">Currently In Transit</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="pagination">
-        <div class="pagination-controls">
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-          >
-            First
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-          >
-            Previous
-          </button>
+      <Card title="Truck Records" icon={icons.truck}>
+        <ListControls
+          searchPlaceholder="Search trucks..."
+          bind:searchQuery
+          bind:selectedFilter={selectedStatus}
+          filterOptions={statusTypes}
+          formatFilterLabel={formatStatusLabel}
+          {sortButtons}
+          addNewHref="/trucks/new"
+          addNewLabel="Add New Truck"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedStatus = value}
+          onSort={handleSort}
+        />
 
-          {#each Array(totalPages) as _, i}
-            {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
-              <button
-                class="page-button"
-                class:active={currentPage === i + 1}
-                on:click={() => goToPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
-              <span class="page-ellipsis">...</span>
-            {/if}
+        <div class="results-summary">
+          Showing {paginatedRecords.length} of {filteredRecords.length} trucks
+        </div>
+
+        <div class="records-list">
+          {#each paginatedRecords as truck}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <h3>{truck.make} {truck.model}</h3>
+                  <span class="truck-number">{truck.truck_number}</span>
+                </div>
+                <span class="status-badge {truck.status.toLowerCase()}">
+                  {truck.status.replace('_', ' ')}
+                </span>
+              </div>
+
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">Vehicle Info</span>
+                  <span class="value">{truck.year} • VIN: {truck.vin}</span>
+                  <span class="sub-value">License: {truck.license_plate.number} ({truck.license_plate.state})</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Usage</span>
+                  <span class="value">{formatNumber(truck.mileage)} miles</span>
+                  <span class="sub-value">Last Maintenance: {formatDate(truck.last_maintenance)}</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Specifications</span>
+                  <span class="value">{truck.trailer_type.replace('_', ' ')}</span>
+                  <span class="sub-value">Capacity: {truck.capacity_tons} tons • {truck.fuel_type}</span>
+                </div>
+              </div>
+
+              <div class="record-actions">
+                <a href="/trucks/{truck.id}" class="action-button">View Details</a>
+                <button class="action-button">Schedule Maintenance</button>
+                {#if truck.status !== 'RETIRED'}
+                  <button class="action-button" on:click={() => openUpdateStatus(truck)}>
+                    Update Status
+                  </button>
+                {/if}
+              </div>
+            </div>
           {/each}
-
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-          >
-            Next
-          </button>
-          <button
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-          >
-            Last
-          </button>
         </div>
-      </div>
-    </Card>
 
-    <!-- Add the modal markup -->
-    {#if updateStatusModal.isOpen}
-      <div class="modal-backdrop" on:click={closeUpdateStatus}>
-        <div class="modal-content" on:click|stopPropagation>
-          <div class="modal-header">
-            <h3>Update Truck Status</h3>
-            <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-          </div>
-          <div class="modal-body">
-            {#if updateStatusError}
-              <div class="error-message">
-                {updateStatusError}
-              </div>
-            {/if}
-
-            <div class="form-group">
-              <label for="status-action">New Status</label>
-              <select 
-                id="status-action"
-                bind:value={updateStatusModal.selectedStatus}
-                class="form-select"
-              >
-                <option value="">Select a new status...</option>
-                {#each getAvailableStatusTransitions(updateStatusModal.currentStatus ?? 'AVAILABLE') as status}
-                  <option value={status.value}>{status.label}</option>
-                {/each}
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-            <button 
-              class="action-button primary"
-              on:click={handleUpdateStatus}
-              disabled={!updateStatusModal.selectedStatus}
+        <div class="pagination">
+          <div class="pagination-controls">
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
             >
-              Update Status
+              First
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+            >
+              Previous
+            </button>
+
+            {#each Array(totalPages) as _, i}
+              {#if i + 1 === currentPage || i + 1 === 1 || i + 1 === totalPages || (i + 1 >= currentPage - 1 && i + 1 <= currentPage + 1)}
+                <button
+                  class="page-button"
+                  class:active={currentPage === i + 1}
+                  on:click={() => goToPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              {:else if i + 1 === currentPage - 2 || i + 1 === currentPage + 2}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+            >
+              Next
+            </button>
+            <button
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+            >
+              Last
             </button>
           </div>
         </div>
-      </div>
+      </Card>
     {/if}
   </div>
+
+  <!-- Keep the modal outside the error condition -->
+  {#if updateStatusModal.isOpen}
+    <div class="modal-backdrop" on:click={closeUpdateStatus}>
+      <div class="modal-content" on:click|stopPropagation>
+        <div class="modal-header">
+          <h3>Update Truck Status</h3>
+          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
+        </div>
+        <div class="modal-body">
+          {#if updateStatusError}
+            <div class="error-message">
+              {updateStatusError}
+            </div>
+          {/if}
+
+          <div class="form-group">
+            <label for="status-action">New Status</label>
+            <select 
+              id="status-action"
+              bind:value={updateStatusModal.selectedStatus}
+              class="form-select"
+            >
+              <option value="">Select a new status...</option>
+              {#each getAvailableStatusTransitions(updateStatusModal.currentStatus ?? 'AVAILABLE') as status}
+                <option value={status.value}>{status.label}</option>
+              {/each}
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
+          <button 
+            class="action-button primary"
+            on:click={handleUpdateStatus}
+            disabled={!updateStatusModal.selectedStatus}
+          >
+            Update Status
+          </button>
+        </div>
+      </div>
+    </div>
+  {/if}
 </Layout>
 
 <style>
@@ -559,12 +571,14 @@
   }
 
   .error-message {
-    background: #fee2e2;
-    color: #dc2626;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-sm);
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .error-message p {
+    color: var(--error-color, #dc2626);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
   }
 
   .form-group {
