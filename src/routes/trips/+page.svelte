@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import type { Trip, TripNote } from '$lib/api/trips';
   import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
@@ -322,7 +322,7 @@
     <h1 class="page-title">Trip Management</h1>
     
     {#if error}
-      <ErrorMessage message={error} />
+      <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Active Trips" icon={icons.trips}>

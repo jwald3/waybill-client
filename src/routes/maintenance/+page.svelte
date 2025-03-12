@@ -7,7 +7,7 @@
   import type { MaintenanceLog } from '$lib/api/maintenance';
   import { getMaintenanceLogs } from '$lib/api/maintenance';
   import Chip from '$lib/components/Chip.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   
   let isNavExpanded = true;
 
@@ -141,7 +141,7 @@
     <h1 class="page-title">Maintenance Management</h1>
     
     {#if error}
-      <ErrorMessage message={error} />
+      <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Routine Maintenance" icon={icons.maintenance}>

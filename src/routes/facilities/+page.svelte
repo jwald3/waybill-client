@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import type { Facility } from '$lib/api/facilities';
   
@@ -138,7 +138,7 @@
     <h1 class="page-title">Facility Management</h1>
     
     {#if error}
-      <ErrorMessage message={error} />
+      <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Total Facilities" icon={icons.truck}>

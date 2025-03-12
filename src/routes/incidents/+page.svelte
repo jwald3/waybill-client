@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
-  import ErrorMessage from '$lib/components/ErrorMessage.svelte';
+  import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
@@ -143,7 +143,7 @@
     <h1 class="page-title">Incident Reports</h1>
     
     {#if error}
-      <ErrorMessage message={error} />
+      <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
         <Card title="Total Incidents" icon={icons.chart}>
