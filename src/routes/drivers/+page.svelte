@@ -17,12 +17,17 @@
   let isNavExpanded = true;
 
   let drivers: Driver[] = data.drivers;
+  let error = data.error;
 
   // Stats calculation - make reactive based on drivers data
-  $: stats = {
+  $: stats = drivers ? {
     active: drivers.filter(d => d.employment_status === 'ACTIVE').length,
     suspended: drivers.filter(d => d.employment_status === 'SUSPENDED').length,
     total: drivers.length
+  } : {
+    active: 0,
+    suspended: 0,
+    total: 0
   };
 
   // Pagination settings
@@ -221,141 +226,152 @@
   <div class="page">
     <h1 class="page-title">Driver Management</h1>
     
-    <div class="stats-grid">
-      <Card title="Active Drivers" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.active}</p>
-          <p class="stat-label">Currently Active</p>
+    {#if error}
+      <Card title="Error" icon={icons.drivers}>
+        <div class="error-message">
+          <p>{error}</p>
+          <button class="action-button" on:click={() => window.location.reload()}>
+            Retry
+          </button>
         </div>
       </Card>
-
-      <Card title="Suspended" icon={icons.drivers}>
-        <div class="stat-content">
-          <p class="stat-number">{stats.suspended}</p>
-          <p class="stat-label">Temporarily Suspended</p>
-        </div>
-      </Card>
-    </div>
-
-    <Card title="Driver Records" icon={icons.drivers}>
-      <ListControls
-        searchPlaceholder="Search drivers..."
-        bind:searchQuery
-        bind:selectedFilter={selectedStatus}
-        filterOptions={statusTypes}
-        formatFilterLabel={formatStatusLabel}
-        {sortButtons}
-        addNewHref="/drivers/new"
-        addNewLabel="Add New Driver"
-        onSearch={(value) => searchQuery = value}
-        onFilterChange={(value) => selectedStatus = value}
-        onSort={handleSort}
-      />
-
-      <div class="results-summary">
-        Showing {filteredRecords.length} of {drivers.length} drivers
-      </div>
-
-      <div class="records-list">
-        {#each paginatedRecords as driver}
-          <div class="record-item">
-            <div class="record-header">
-              <div class="record-title">
-                <div class="avatar">
-                  {driver.first_name[0]}{driver.last_name[0]}
-                </div>
-                <div class="driver-info">
-                  <h3>{driver.first_name} {driver.last_name}</h3>
-                  <p class="driver-contact">{driver.email} • {driver.phone}</p>
-                </div>
-              </div>
-              <span class="status-badge {driver.employment_status.toLowerCase()}">
-                {formatStatusBadge(driver.employment_status)}
-              </span>
-            </div>
-
-            <div class="record-details">
-              <div class="detail">
-                <span class="label">License</span>
-                <span class="value">{driver.license_number}</span>
-                <span class="sub-value">{driver.license_state} • Expires: {formatDate(driver.license_expiration)}</span>
-              </div>
-
-              <div class="detail">
-                <span class="label">Address</span>
-                <span class="value">{driver.address.street}</span>
-                <span class="sub-value">{driver.address.city}, {driver.address.state} {driver.address.zip}</span>
-              </div>
-            </div>
-
-            <div class="record-actions">
-              <a href="/drivers/{driver.id}" class="action-button">View Details</a>
-              <button class="action-button">Edit</button>
-              {#if driver.employment_status !== 'TERMINATED'}
-                <button class="action-button" on:click={() => openUpdateStatus(driver)}>
-                  Update Status
-                </button>
-              {/if}
-            </div>
+    {:else}
+      <div class="stats-grid">
+        <Card title="Active Drivers" icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.active}</p>
+            <p class="stat-label">Currently Active</p>
           </div>
-        {/each}
+        </Card>
+
+        <Card title="Suspended" icon={icons.drivers}>
+          <div class="stat-content">
+            <p class="stat-number">{stats.suspended}</p>
+            <p class="stat-label">Temporarily Suspended</p>
+          </div>
+        </Card>
       </div>
 
-      <div class="pagination">
-        <div class="pagination-info">
-          Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} drivers
+      <Card title="Driver Records" icon={icons.drivers}>
+        <ListControls
+          searchPlaceholder="Search drivers..."
+          bind:searchQuery
+          bind:selectedFilter={selectedStatus}
+          filterOptions={statusTypes}
+          formatFilterLabel={formatStatusLabel}
+          {sortButtons}
+          addNewHref="/drivers/new"
+          addNewLabel="Add New Driver"
+          onSearch={(value) => searchQuery = value}
+          onFilterChange={(value) => selectedStatus = value}
+          onSort={handleSort}
+        />
+
+        <div class="results-summary">
+          Showing {filteredRecords.length} of {drivers.length} drivers
         </div>
-        <div class="pagination-controls">
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(1)}
-            title="First page"
-          >
-            ««
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === 1}
-            on:click={() => goToPage(currentPage - 1)}
-            title="Previous page"
-          >
-            «
-          </button>
-          
-          {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-            {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
-              <button 
-                class="page-button"
-                class:active={page === currentPage}
-                on:click={() => goToPage(page)}
-              >
-                {page}
-              </button>
-            {:else if page === currentPage - 3 || page === currentPage + 3}
-              <span class="page-ellipsis">...</span>
-            {/if}
+
+        <div class="records-list">
+          {#each paginatedRecords as driver}
+            <div class="record-item">
+              <div class="record-header">
+                <div class="record-title">
+                  <div class="avatar">
+                    {driver.first_name[0]}{driver.last_name[0]}
+                  </div>
+                  <div class="driver-info">
+                    <h3>{driver.first_name} {driver.last_name}</h3>
+                    <p class="driver-contact">{driver.email} • {driver.phone}</p>
+                  </div>
+                </div>
+                <span class="status-badge {driver.employment_status.toLowerCase()}">
+                  {formatStatusBadge(driver.employment_status)}
+                </span>
+              </div>
+
+              <div class="record-details">
+                <div class="detail">
+                  <span class="label">License</span>
+                  <span class="value">{driver.license_number}</span>
+                  <span class="sub-value">{driver.license_state} • Expires: {formatDate(driver.license_expiration)}</span>
+                </div>
+
+                <div class="detail">
+                  <span class="label">Address</span>
+                  <span class="value">{driver.address.street}</span>
+                  <span class="sub-value">{driver.address.city}, {driver.address.state} {driver.address.zip}</span>
+                </div>
+              </div>
+
+              <div class="record-actions">
+                <a href="/drivers/{driver.id}" class="action-button">View Details</a>
+                <button class="action-button">Edit</button>
+                {#if driver.employment_status !== 'TERMINATED'}
+                  <button class="action-button" on:click={() => openUpdateStatus(driver)}>
+                    Update Status
+                  </button>
+                {/if}
+              </div>
+            </div>
           {/each}
-
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(currentPage + 1)}
-            title="Next page"
-          >
-            »
-          </button>
-          <button 
-            class="page-button"
-            disabled={currentPage === totalPages}
-            on:click={() => goToPage(totalPages)}
-            title="Last page"
-          >
-            »»
-          </button>
         </div>
-      </div>
-    </Card>
+
+        <div class="pagination">
+          <div class="pagination-info">
+            Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} drivers
+          </div>
+          <div class="pagination-controls">
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(1)}
+              title="First page"
+            >
+              ««
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === 1}
+              on:click={() => goToPage(currentPage - 1)}
+              title="Previous page"
+            >
+              «
+            </button>
+            
+            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
+              {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
+                <button 
+                  class="page-button"
+                  class:active={page === currentPage}
+                  on:click={() => goToPage(page)}
+                >
+                  {page}
+                </button>
+              {:else if page === currentPage - 3 || page === currentPage + 3}
+                <span class="page-ellipsis">...</span>
+              {/if}
+            {/each}
+
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(currentPage + 1)}
+              title="Next page"
+            >
+              »
+            </button>
+            <button 
+              class="page-button"
+              disabled={currentPage === totalPages}
+              on:click={() => goToPage(totalPages)}
+              title="Last page"
+            >
+              »»
+            </button>
+          </div>
+        </div>
+      </Card>
+    {/if}
   </div>
 
   <!-- Add this modal markup just before the closing Layout tag -->
@@ -381,9 +397,11 @@
               class="form-select"
             >
               <option value="">Select a new status...</option>
-              {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
-                <option value={status.value}>{status.label}</option>
-              {/each}
+              {#if updateStatusModal.currentStatus}
+                {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
+                  <option value={status.value}>{status.label}</option>
+                {/each}
+              {/if}
             </select>
           </div>
         </div>
@@ -578,5 +596,16 @@
   .form-input:focus {
     outline: none;
     border-color: var(--theme-color);
+  }
+
+  .error-message {
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .error-message p {
+    color: var(--error-color, #dc2626);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
   }
 </style> 
