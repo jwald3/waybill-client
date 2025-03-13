@@ -859,12 +859,6 @@
     padding: 2rem;
   }
 
-  .error-message p {
-    color: var(--error-color, #dc2626);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
-
   .form-group {
     margin-bottom: var(--spacing-lg);
   }
