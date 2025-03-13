@@ -297,51 +297,6 @@
 </Layout>
 
 <style>
-  .chip {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .chip.routine_maintenance {
-    background: #dbeafe;
-    color: #2563eb;
-  }
-
-  .chip.repair {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  .chip.emergency {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .item-priority {
-    font-size: 0.875rem;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-  }
-
-  .item-priority.high {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .item-priority.medium {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  .item-priority.critical {
-    background: #fecaca;
-    color: #b91c1c;
-  }
-
   .description {
     color: var(--text-secondary);
     font-size: 0.95rem;
@@ -356,10 +311,6 @@
   }
 
   @media (max-width: 768px) {
-    .maintenance-item {
-      padding: 1rem;
-    }
-
     .stat-content {
       padding: 0.875rem 1rem;
       min-height: 100px;
