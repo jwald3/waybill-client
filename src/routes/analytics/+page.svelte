@@ -2,6 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import MetricCard from '$lib/components/MetricCard.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import { icons } from '$lib/icons';
   import PieChart from '$lib/components/PieChart.svelte';
   import LineChart from '$lib/components/LineChart.svelte';
@@ -121,10 +122,10 @@
         <Card title="Recent Trips" icon={icons.route}>
           <div class="trips-list">
             {#each data.recentData.trips as trip}
-              <div class="trip-item">
+              <a href="/trips/{trip.id}" class="trip-item">
                 <div class="trip-header">
                   <div class="trip-id">
-                    <span class="status-badge {trip.status.toLowerCase()}">{trip.status}</span>
+                    <StatusBadge status={trip.status} type="trip" />
                     <span class="trip-number">{trip.tripNumber}</span>
                   </div>
                   <div class="trip-stats">
@@ -135,7 +136,7 @@
                     <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
                   </div>
                 </div>
-              </div>
+              </a>
             {/each}
           </div>
         </Card>
@@ -148,15 +149,15 @@
           </div>
           <div class="maintenance-list">
             {#each data.recentData.maintenance as log}
-              <div class="maintenance-item">
+              <a href="/maintenance/{log.id}" class="maintenance-item">
                 <div class="item-row">
-                  <span class="status-badge {log.type.toLowerCase()}">{log.type}</span>
+                  <StatusBadge status={log.type} type="maintenance" />
                   <span class="cost">${log.cost}</span>
                 </div>
                 <div class="item-row secondary">
                   <span>{new Date(log.date).toLocaleDateString()}</span>
                 </div>
-              </div>
+              </a>
             {/each}
           </div>
         </Card>
@@ -164,16 +165,16 @@
         <Card title="Recent Incidents" icon={icons.alert}>
           <div class="incidents-list">
             {#each data.recentData.incidents as incident}
-              <div class="incident-item">
+              <a href="/incidents/{incident.id}" class="incident-item">
                 <div class="item-row">
-                  <span class="status-badge {incident.type.toLowerCase()}">{incident.type}</span>
+                  <StatusBadge status={incident.type} type="incident" />
                   <span class="cost">${incident.damageEstimate}</span>
                 </div>
                 <p class="incident-desc">{incident.description}</p>
                 <div class="item-row secondary">
                   <span>{new Date(incident.date).toLocaleDateString()}</span>
                 </div>
-              </div>
+              </a>
             {/each}
           </div>
         </Card>
@@ -256,6 +257,15 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     background: var(--bg-secondary);
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+  }
+
+  .trip-item:hover, .maintenance-item:hover, .incident-item:hover {
+    border-color: var(--theme-color);
+    background: color-mix(in srgb, var(--theme-color) 2%, var(--bg-secondary));
+    transform: translateY(-1px);
   }
 
   .trip-header {
@@ -304,6 +314,11 @@
     margin: var(--spacing-xs) 0;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
+  }
+
+  .cost {
+    font-weight: 600;
+    color: var(--theme-color);
   }
 
   .status-badge {
