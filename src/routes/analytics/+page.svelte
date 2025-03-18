@@ -10,44 +10,47 @@
   
   let isNavExpanded = true;
 
-  // Real metrics from server data
+  // Key metrics
   const metrics = [
     {
-      title: "On-Time Delivery Rate",
-      value: `${data.metrics.onTimeRate}%`,
-      trend: { value: `${data.metrics.totalTrips} total trips`, positive: true },
+      title: "Fleet Status",
+      value: `${data.metrics.fleet.available} / ${data.metrics.fleet.total}`,
+      trend: { 
+        value: `${data.metrics.fleet.inTransit} trucks in transit`, 
+        positive: true 
+      },
       icon: icons.truck
     },
     {
-      title: "Average Trip Duration",
-      value: `${data.metrics.avgDuration}h`,
-      trend: { value: `${data.metrics.incidentCount} incidents reported`, positive: true },
+      title: "Delivery Performance",
+      value: `${data.metrics.delivery.onTimeRate}%`,
+      trend: { 
+        value: `${data.metrics.delivery.failedDeliveries} failed deliveries`, 
+        positive: data.metrics.delivery.failedDeliveries === 0 
+      },
       icon: icons.chart
     },
     {
-      title: "Fuel Efficiency",
-      value: `${data.metrics.avgMpg} mpg`,
-      trend: { value: `${data.metrics.activeDrivers} active drivers`, positive: true },
+      title: "Fleet Efficiency",
+      value: `${data.metrics.efficiency.avgMpg} mpg`,
+      trend: { 
+        value: `$${data.metrics.efficiency.maintenanceCost} maintenance costs`, 
+        positive: false 
+      },
       icon: icons.analytics
     }
   ];
 
-  // Recent trips from server data
-  const recentTrips = data.recentTrips;
-
-  // Fleet status data from server
-  const fleetStatusData = data.fleetStatus;
-
-  // Performance data (could be enhanced with more historical data)
+  // Performance data from recent trips
   const performanceData = {
-    labels: recentTrips.map(() => ''),  // Empty labels for now
+    labels: data.recentData.trips.map(() => ''),  // Empty labels for now
     datasets: [{
       label: 'Distance (miles)',
-      data: recentTrips.map(t => t.distance),
+      data: data.recentData.trips.map(t => t.distance),
       color: '#6366f1'
     }, {
       label: 'Fuel Usage (gal)',
-      data: recentTrips.map(t => t.fuelUsage),
+      data: data.recentData.trips.map(t => t.fuelUsage),
       color: '#10b981'
     }]
   };
@@ -69,104 +72,96 @@
 <svelte:window bind:innerWidth={windowWidth} />
 
 <svelte:head>
-  <title>Analytics & Insights | Waybill</title>
+  <title>Fleet Analytics | Waybill</title>
 </svelte:head>
 
 <Layout {isNavExpanded}>
   <div class="analytics">
-    <h1 class="analytics-title">Analytics & Insights</h1>
+    <h1 class="analytics-title">Fleet Analytics</h1>
 
-    <!-- Metrics Grid -->
+    <!-- Key Metrics -->
     <div class="stats-grid">
       {#each metrics as metric}
         <MetricCard {...metric} />
       {/each}
     </div>
 
-    <div class="analytics-content">
-      <!-- Performance Chart Card -->
-      <Card title="Performance Trends" icon={icons.chart}>
-        <div class="chart-container">
-          <div class="chart-header">
-            <div class="chart-legend">
-              {#each performanceData.datasets as dataset}
-                <span class="legend-item">
-                  <span class="dot" style="background-color: {dataset.color}"></span>
-                  {dataset.label}
-                </span>
-              {/each}
-            </div>
-            <select class="time-range">
-              <option>Last 7 Days</option>
-              <option>Last 30 Days</option>
-              <option>Last Quarter</option>
-            </select>
+    <div class="analytics-grid">
+      <!-- Fleet Overview -->
+      <Card title="Fleet Overview" icon={icons.truck}>
+        <div class="fleet-stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Mileage</span>
+            <span class="stat-value">{data.metrics.efficiency.totalMileage} mi</span>
           </div>
-          <div class="chart-body">
-            <LineChart data={performanceData} />
+          <div class="stat-item">
+            <span class="stat-label">Fuel Used</span>
+            <span class="stat-value">{data.metrics.efficiency.totalFuelUsage} gal</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Active Trips</span>
+            <span class="stat-value">{data.metrics.delivery.activeTrips}</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <PieChart data={data.charts.fleetStatus} />
+        </div>
+      </Card>
+
+      <!-- Maintenance Overview -->
+      <Card title="Maintenance Overview" icon={icons.wrench}>
+        <div class="maintenance-stats">
+          <div class="chart-container">
+            <PieChart data={data.charts.maintenanceTypes} />
+          </div>
+          <div class="maintenance-list">
+            {#each data.recentData.maintenance as log}
+              <div class="maintenance-item">
+                <div class="maintenance-type {log.type.toLowerCase()}">{log.type}</div>
+                <div class="maintenance-details">
+                  <span class="date">{new Date(log.date).toLocaleDateString()}</span>
+                  <span class="cost">${log.cost}</span>
+                </div>
+              </div>
+            {/each}
           </div>
         </div>
       </Card>
 
-      <!-- Cost Analysis Grid -->
-      <div class="analysis-grid">
-        <Card title="Fleet Status" icon={icons.truck}>
-          <div class="cost-analysis">
-            <div class="cost-chart">
-              <PieChart data={fleetStatusData} />
-            </div>
-            <div class="cost-legend">
-              {#each fleetStatusData as item}
-                <div class="cost-legend-item">
-                  <div class="cost-legend-color" style="background-color: {item.color}"></div>
-                  <div class="cost-legend-details">
-                    <span class="cost-legend-label">{item.label}</span>
-                    <span class="cost-legend-value">{item.value}</span>
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </div>
-        </Card>
-
-        <!-- Side Cards Grid -->
-        <div class="side-cards">
-          <Card title="Recent Trips" icon={icons.chart}>
-            <div class="routes-table">
-              <div class="table-header">
-                <span>Trip Number</span>
-                <span class="center">Distance</span>
-                <span class="right">Status</span>
+      <!-- Recent Incidents -->
+      <Card title="Recent Incidents" icon={icons.alert}>
+        <div class="incidents-list">
+          {#each data.recentData.incidents as incident}
+            <div class="incident-item">
+              <div class="incident-type {incident.type.toLowerCase()}">{incident.type}</div>
+              <p class="incident-desc">{incident.description}</p>
+              <div class="incident-details">
+                <span class="date">{new Date(incident.date).toLocaleDateString()}</span>
+                <span class="damage">${incident.damageEstimate}</span>
               </div>
-              {#each recentTrips as trip}
-                <div class="table-row">
-                  <span class="route-name">{trip.tripNumber}</span>
-                  <span class="trips">{trip.distance} mi</span>
-                  <span class="revenue">{trip.status}</span>
-                </div>
-              {/each}
             </div>
-          </Card>
-
-          <Card title="Driver Performance" icon={icons.people}>
-            <div class="drivers-list">
-              {#each topDrivers as driver}
-                <div class="driver-item">
-                  <div class="driver-info">
-                    <div class="avatar">{driver.avatar}</div>
-                    <div class="details">
-                      <span class="name">{driver.name}</span>
-                      <span class="stats">
-                        {driver.state}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              {/each}
-            </div>
-          </Card>
+          {/each}
         </div>
-      </div>
+      </Card>
+
+      <!-- Active Trips -->
+      <Card title="Recent Trips" icon={icons.route}>
+        <div class="trips-list">
+          {#each data.recentData.trips as trip}
+            <div class="trip-item">
+              <div class="trip-header">
+                <span class="trip-number">{trip.tripNumber}</span>
+                <span class="trip-status {trip.status.toLowerCase()}">{trip.status}</span>
+              </div>
+              <div class="trip-details">
+                <span>Distance: {trip.distance} mi</span>
+                <span>Fuel: {trip.fuelUsage} gal</span>
+                <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
+              </div>
+            </div>
+          {/each}
+        </div>
+      </Card>
     </div>
   </div>
 </Layout>
@@ -198,123 +193,145 @@
     border-radius: 3px;
   }
 
-  .analytics-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-height: 600px;
-  }
-
-  .analysis-grid {
+  .analytics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 600px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
     gap: 1.5rem;
+    margin-top: 2rem;
   }
 
-  .side-cards {
+  .fleet-stats {
     display: grid;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
 
-  .cost-analysis {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    height: 100%;
+  .stat-item {
+    background: var(--surface-color);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
   }
 
-  .cost-chart {
+  .chart-container {
     width: 100%;
     height: 300px;
   }
 
-  .chart-container {
+  .maintenance-stats {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    height: 600px;
+    gap: 1.5rem;
   }
 
-  .chart-header {
+  .maintenance-list {
+    height: 275px;
+    overflow-y: auto;
+  }
+
+  .maintenance-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem;
-    background: var(--surface-color);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-  }
-
-  .chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  .dot.delivery { background: var(--theme-color); }
-  .dot.fuel { background: #10b981; }
-  .dot.cost { background: #f59e0b; }
-  .dot.maintenance { background: #ef4444; }
-  .dot.labor { background: #8b5cf6; }
-  .dot.other { background: #64748b; }
-
-  .time-range {
-    padding: 0.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    background: var(--bg-secondary);
-  }
-
-  .table-header, .table-row {
-    display: grid;
-    grid-template-columns: minmax(200px, 2fr) minmax(80px, 1fr) minmax(100px, 1fr);
-    gap: 1.5rem;
-    padding: 0.875rem 1.25rem;
-    align-items: center;
-  }
-
-  .table-header {
-    position: sticky;
-    top: 0;
-    background: var(--surface-color);
-    border-radius: 8px;
-    font-weight: 600;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 1px solid var(--border-color);
-  }
-
-  .table-row {
+    padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: 8px;
   }
 
-  .table-row:last-child {
+  .maintenance-item:last-child {
     border-bottom: none;
   }
 
-  .route-name {
-    color: var(--theme-color);
-    font-weight: 500;
+  .maintenance-type {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .maintenance-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .date {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .cost {
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .incidents-list {
+    height: 275px;
+    overflow-y: auto;
+  }
+
+  .incident-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: 8px;
+  }
+
+  .incident-item:last-child {
+    border-bottom: none;
+  }
+
+  .incident-type {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .incident-desc {
+    color: var(--text-secondary);
+  }
+
+  .trip-list {
+    height: 275px;
+    overflow-y: auto;
+  }
+
+  .trip-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: 8px;
+  }
+
+  .trip-item:last-child {
+    border-bottom: none;
+  }
+
+  .trip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .trip-number {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .trip-status {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .trip-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
   }
 
   .trips {
@@ -470,7 +487,7 @@
   }
 
   @media (max-width: 1200px) {
-    .analysis-grid {
+    .analytics-grid {
       grid-template-columns: 1fr;
     }
 
@@ -493,7 +510,7 @@
       margin-bottom: 2rem;
     }
 
-    .analysis-grid {
+    .analytics-grid {
       grid-template-columns: 1fr;
     }
 
