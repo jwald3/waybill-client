@@ -8,6 +8,7 @@
   import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;
 
@@ -319,10 +320,8 @@
               <div class="record-header">
                 <div class="record-title">
                   <h3>Trip #{trip.trip_number}</h3>
-                  <span class="status-badge {trip.status.toLowerCase()}">
-                    {trip.status.replace('_', ' ')}
-                  </span>
                 </div>
+                <StatusBadge status={trip.status} type="trip" />
                 {#if trip.cargo.hazmat}
                   <span class="hazmat-badge">HAZMAT</span>
                 {/if}
@@ -486,44 +485,6 @@
 </Layout>
 
 <style>
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .status-badge.scheduled {
-    background: #dbeafe;
-    color: #2563eb;
-  }
-
-  .status-badge.in_progress {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  .status-badge.completed {
-    background: #dcfce7;
-    color: #059669;
-  }
-
-  .status-badge.canceled {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-badge.failed_delivery {
-    background: #fae8ff;
-    color: #9d174d;
-  }
-
-  .status-badge.retired {
-    background: #f3f4f6;
-    color: #6b7280;
-  }
-
   .hazmat-badge {
     background: #fecaca;
     color: #b91c1c;
@@ -532,7 +493,7 @@
     font-size: 0.875rem;
     font-weight: 600;
   }
-
+  
   .detail-group {
     display: flex;
     flex-direction: column;
@@ -647,65 +608,5 @@
   .note:not(.latest-note) p {
     white-space: normal;
     overflow: visible;
-  }
-
-  /* Add these new styles */
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-  }
-
-  .modal-close:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .error-message {
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-select,
-  .form-input {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-  }
-
-  .form-select:focus,
-  .form-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
   }
 </style> 

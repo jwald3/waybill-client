@@ -13,6 +13,7 @@
     type EmploymentStatus, 
     getAvailableStatusTransitions 
   } from '$lib/api/drivers';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
 
   export let data;
   
@@ -253,9 +254,7 @@
                     <p class="driver-contact">{driver.email} • {driver.phone}</p>
                   </div>
                 </div>
-                <span class="status-badge {driver.employment_status.toLowerCase()}">
-                  {formatStatusBadge(driver.employment_status)}
-                </span>
+                <StatusBadge status={driver.employment_status} type="driver" />
               </div>
 
               <div class="record-details">
@@ -376,119 +375,5 @@
   .driver-contact {
     color: var(--text-secondary);
     font-size: 0.9rem;
-  }
-
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .status-badge.active {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .status-badge.suspended {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-badge.on_leave {
-    background: #fef9c3;
-    color: #854d0e;
-  }
-
-  .status-badge.terminated {
-    background: #f3f4f6;
-    color: #4b5563;
-  }
-
-  .action-button.primary {
-    padding: var(--spacing-md) var(--spacing-xl);
-    background: var(--theme-color);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-weight: 500;
-    cursor: pointer;
-    transition: var(--transition-all);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .action-button.primary:hover {
-    opacity: 0.9;
-  }
-
-  /* Add these modal styles */
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-  }
-
-  .modal-close:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .error-message {
-    background: #fee2e2;
-    color: #dc2626;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-sm);
-  }
-
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-select,
-  .form-input {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-  }
-
-  .form-select:focus,
-  .form-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
-  .error-message {
-    text-align: center;
-    padding: 2rem;
   }
 </style> 

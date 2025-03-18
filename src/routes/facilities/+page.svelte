@@ -4,6 +4,7 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import type { Facility } from '$lib/api/facilities';
   
   let isNavExpanded = true;
@@ -102,10 +103,6 @@
     return `Type ${type}`;
   }
 
-  function formatTypeBadge(type: string): string {
-    return `TYPE ${type}`;
-  }
-
   // Add this reactive statement to update sort buttons when sort state changes
   $: sortButtons = [
     {
@@ -190,9 +187,7 @@
                   <h3>{facility.name}</h3>
                   <span class="facility-number">{facility.facility_number}</span>
                 </div>
-                <span class="type-badge type-{facility.type.toLowerCase()}">
-                  {formatTypeBadge(facility.type)}
-                </span>
+                <StatusBadge status={facility.type} type="facility" />
               </div>
 
               <div class="record-details">
@@ -285,96 +280,10 @@
 </Layout>
 
 <style>
-  .facility-types {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .type-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .type-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .type-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .type-name {
-    flex: 1;
-    font-size: 0.95rem;
-    color: var(--text-primary);
-  }
-
-  .type-count {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .type-bar-bg {
-    height: 8px;
-    background: var(--border-color);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-
-  .type-bar {
-    height: 100%;
-    border-radius: 4px;
-    transition: width 0.3s ease;
-  }
-
-  .type-dot.type-a,
-  .type-bar.type-a {
-    background: #15803d;
-  }
-
-  .type-dot.type-b,
-  .type-bar.type-b {
-    background: #1d4ed8;
-  }
-
-  .type-dot.type-c,
-  .type-bar.type-c {
-    background: #854d0e;
-  }
 
   .facility-number {
     color: var(--text-secondary);
     font-size: 0.9rem;
-  }
-
-  .type-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .type-badge.type-a {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .type-badge.type-b {
-    background: #dbeafe;
-    color: #1d4ed8;
-  }
-
-  .type-badge.type-c {
-    background: #fef9c3;
-    color: #854d0e;
   }
 
   .services-list {
@@ -390,72 +299,5 @@
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 500;
-  }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-
-  .service-stat {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    border-radius: 12px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-  }
-
-  .service-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-  }
-
-  .service-icon.repairs {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-  }
-
-  .service-icon.fueling {
-    background: linear-gradient(135deg, #0891b2, #06b6d4);
-  }
-
-  .service-icon.washing {
-    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
-  }
-
-  .service-icon.storage {
-    background: linear-gradient(135deg, #0d9488, #14b8a6);
-  }
-
-  .service-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .service-count {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1;
-  }
-
-  .service-name {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  @media (max-width: 768px) {
-    .services-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
   }
 </style> 

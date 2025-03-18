@@ -14,6 +14,7 @@
   } from '$lib/api/trucks';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
 
   export let data;
   let trucks: Truck[] = data.trucks || [];
@@ -257,9 +258,7 @@
                   <h3>{truck.make} {truck.model}</h3>
                   <span class="truck-number">{truck.truck_number}</span>
                 </div>
-                <span class="status-badge {truck.status.toLowerCase()}">
-                  {truck.status.replace('_', ' ')}
-                </span>
+                <StatusBadge status={truck.status} type="truck" />
               </div>
 
               <div class="record-details">
@@ -386,33 +385,6 @@
     font-size: 0.9rem;
   }
 
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .status-badge.in_transit {
-    background: #dbeafe;
-    color: #1d4ed8;
-  }
-
-  .status-badge.maintenance {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-badge.available {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .status-badge.retired {
-    background: #f3f4f6;
-    color: #6b7280;
-  }
-
   :global(.action-button.primary) {
     padding: var(--spacing-md) var(--spacing-xl);
     background: var(--theme-color);
@@ -439,63 +411,5 @@
 
   :global(.action-button.primary:hover) {
     opacity: 0.9;
-  }
-
-  /* Add these modal styles */
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-  }
-
-  .modal-close:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .error-message {
-    text-align: center;
-    padding: 2rem;
-  }
-
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-select {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-  }
-
-  .form-select:focus {
-    outline: none;
-    border-color: var(--theme-color);
   }
 </style> 

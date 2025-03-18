@@ -8,6 +8,7 @@
   import type { IncidentReport } from '$lib/api/incidents';
   import { getIncidents } from '$lib/api/incidents';
   import Chip from '$lib/components/Chip.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;
 
@@ -188,7 +189,7 @@
                   <h3 class="themed-text">Incident #{incident.id}</h3>
                   <span class="incident-date">{formatDate(incident.date)}</span>
                 </div>
-                <span class="status-chip {incident.type.toLowerCase()}">{incident.type.replace(/_/g, ' ')}</span>
+                <StatusBadge status={incident.type} type="incident" />
               </div>
               <div class="record-details">
                 <div class="detail">
@@ -261,39 +262,6 @@
   .incident-date {
     color: var(--text-secondary);
     font-size: var(--font-size-sm);
-  }
-
-  .status-chip {
-    padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-xs);
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .status-chip.traffic_accident {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-chip.mechanical_failure {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  .status-chip.weather_delay {
-    background: #e0e7ff;
-    color: #4f46e5;
-  }
-
-  .status-chip.cargo_issue {
-    background: #f3e8ff;
-    color: #7c3aed;
-  }
-
-  .status-chip.other {
-    background: #f3f4f6;
-    color: #4b5563;
   }
 
   .incident-description {
