@@ -3,8 +3,8 @@
   import { icons } from '$lib/icons';
   import { page } from '$app/stores';
 
-  // Random fun messages for different status codes
-  const errorMessages = {
+  // Add type for the error messages object
+  const errorMessages: Record<number | 'default', string[]> = {
     404: [
       "Looks like this truck took a wrong turn!",
       "This route isn't on our delivery schedule.",
