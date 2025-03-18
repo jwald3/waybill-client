@@ -23,6 +23,14 @@ export async function getIncidents(fetchFn: typeof fetch = fetch): Promise<ApiRe
 }
 
 export async function getIncident(id: string, fetchFn: typeof fetch = fetch): Promise<IncidentReport> {
-  const response = await fetchApi<IncidentReport>(`/incident-reports/${id}`, fetchFn);
-  return response.items[0];
+  try {
+    const response = await fetchApi<IncidentReport>(`/incident-reports/${id}`, fetchFn);
+    if (!response?.items?.length) {
+      throw new Error('Incident not found');
+    }
+    return response.items[0];
+  } catch (err) {
+    console.error('Error fetching incident:', err);
+    throw new Error(err instanceof Error ? err.message : 'Failed to load incident');
+  }
 } 
