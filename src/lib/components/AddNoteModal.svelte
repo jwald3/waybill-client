@@ -38,34 +38,36 @@
 </script>
 
 <Modal {isOpen} title="Add Note" {onClose}>
-  {#if error}
-    <div class="error-message">
-      <p>{error}</p>
-    </div>
-  {/if}
+  <div class="modal-content">
+    {#if error}
+      <div class="error-message">
+        <p>{error}</p>
+      </div>
+    {/if}
 
-  <div class="form-group">
-    <label for="note-text">Note</label>
-    <textarea
-      id="note-text"
-      bind:value={noteText}
-      placeholder="Enter your note here..."
-      rows="4"
-      class="form-textarea"
-      disabled={isSubmitting}
-    ></textarea>
+    <div class="form-group">
+      <label for="note-text" class="form-label">Note</label>
+      <textarea
+        id="note-text"
+        bind:value={noteText}
+        placeholder="Enter your note here..."
+        rows="4"
+        class="form-input"
+        disabled={isSubmitting}
+      ></textarea>
+    </div>
   </div>
 
-  <div slot="footer">
+  <div slot="footer" class="modal-footer">
     <button 
-      class="action-button" 
+      class="form-cancel" 
       on:click={onClose}
       disabled={isSubmitting}
     >
       Cancel
     </button>
     <button 
-      class="action-button primary"
+      class="form-submit"
       on:click={handleSubmit}
       disabled={isSubmitting || !noteText.trim()}
     >
@@ -75,6 +77,17 @@
 </Modal>
 
 <style>
+  .modal-content {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
   .error-message {
     padding: 0 0 var(--spacing-md);
   }
@@ -85,25 +98,14 @@
     font-size: var(--font-size-sm);
   }
 
-  .form-textarea {
+  :global(.form-input) {
     width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
+    min-height: 120px;
     resize: vertical;
-    min-height: 100px;
   }
 
-  .form-textarea:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
-  .form-textarea:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+  :global(.form-cancel),
+  :global(.form-submit) {
+    min-width: 100px;
   }
 </style> 
