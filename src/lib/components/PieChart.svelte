@@ -37,11 +37,11 @@
       const config: ChartConfiguration = {
         type: 'doughnut',
         data: {
-          labels: data.map(d => d.label),
+          labels: data.map((d: {label: string}) => d.label),
           datasets: [{
-            data: data.map(d => d.value),
-            backgroundColor: data.map(d => d.color),
-            hoverBackgroundColor: data.map(d => d.color + 'ee'),
+            data: data.map((d: {value: number}) => d.value),
+            backgroundColor: data.map((d: {color: string}) => d.color),
+            hoverBackgroundColor: data.map((d: {color: string}) => d.color + 'ee'),
             borderWidth: 0,
             borderRadius: 4,
             spacing: 2,
@@ -62,7 +62,9 @@
               }
             }
           },
+          // @ts-ignore
           cutout: '65%',
+          // @ts-ignore
           radius: '90%'
         }
       };
