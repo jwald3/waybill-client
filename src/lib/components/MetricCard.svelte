@@ -103,6 +103,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;  
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -173,10 +174,5 @@
     .trend {
       font-size: 0.85rem;
     }
-  }
-
-  [data-color-mode="dark"] .metric-card {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-                0 12px 16px rgba(0, 0, 0, 0.1);
   }
 </style> 

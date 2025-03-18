@@ -57,6 +57,7 @@
           <button 
             class="secondary-button"
             on:click={() => history.back()}
+            aria-label="Go Back"
           >
             <span class="icon">{@html icons.back}</span>
             Go Back
