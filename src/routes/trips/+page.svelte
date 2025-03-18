@@ -6,6 +6,7 @@
   import { icons } from '$lib/icons';
   import type { Trip, TripNote } from '$lib/api/trips';
   import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
+  import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   
   let isNavExpanded = true;
 
@@ -129,61 +130,37 @@
     expandedNotes[tripId] = !expandedNotes[tripId];
   }
 
-  // Add these new interfaces/types
-  interface AddNoteModal {
-    isOpen: boolean;
-    tripId: string | null;
-    content: string;
-  }
+  // Remove the AddNoteModal interface and simplify the state
+  let isAddNoteModalOpen = false;
+  let currentTripId: string | null = null;
 
-  // Add these new state variables
-  let addNoteModal: AddNoteModal = {
-    isOpen: false,
-    tripId: null,
-    content: ''
-  };
-
-  // Add these new functions
+  // Simplify the open/close functions
   function openAddNote(tripId: string) {
-    addNoteModal = {
-      isOpen: true,
-      tripId,
-      content: ''
-    };
+    currentTripId = tripId;
+    isAddNoteModalOpen = true;
   }
 
   function closeAddNote() {
-    addNoteModal = {
-      isOpen: false,
-      tripId: null,
-      content: ''
-    };
+    currentTripId = null;
+    isAddNoteModalOpen = false;
   }
 
-  async function handleAddNote() {
-    if (!addNoteModal.content.trim() || !addNoteModal.tripId) return;
+  // Modify handleAddNote to work with the new component
+  async function handleAddNote(noteContent: string) {
+    if (!currentTripId) return;
 
-    try {
-      addNoteError = null; // Reset any previous errors
-      
-      // Now updatedTrip contains the full updated trip data
-      const updatedTrip = await addTripNote(addNoteModal.tripId, {
-        content: addNoteModal.content.trim()
-      });
+    // Now updatedTrip contains the full updated trip data
+    const updatedTrip = await addTripNote(currentTripId, {
+      content: noteContent.trim()
+    });
 
-      // Update the trips array with the complete updated trip
-      trips = trips.map(trip => 
-        trip.id === updatedTrip.id ? updatedTrip : trip
-      );
+    // Update the trips array with the complete updated trip
+    trips = trips.map(trip => 
+      trip.id === updatedTrip.id ? updatedTrip : trip
+    );
 
-      // Auto-expand notes for the trip that just got a new note
-      expandedNotes[addNoteModal.tripId] = true;
-
-      closeAddNote();
-    } catch (error) {
-      console.error('Failed to add note:', error);
-      addNoteError = 'Failed to add note. Please try again.';
-    }
+    // Auto-expand notes for the trip that just got a new note
+    expandedNotes[currentTripId] = true;
   }
 
   // Add error handling state
@@ -524,38 +501,11 @@
   </div>
 
   <!-- Add this modal markup just before the closing Layout tag -->
-  {#if addNoteModal.isOpen}
-    <div class="modal-backdrop" on:click={closeAddNote}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Add Note</h3>
-          <button class="modal-close" on:click={closeAddNote}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if addNoteError}
-            <div class="error-message">
-              {addNoteError}
-            </div>
-          {/if}
-          <textarea
-            bind:value={addNoteModal.content}
-            placeholder="Enter note content..."
-            rows="4"
-          ></textarea>
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeAddNote}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleAddNote}
-            disabled={!addNoteModal.content.trim()}
-          >
-            Add Note
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <AddNoteModal
+    isOpen={isAddNoteModalOpen}
+    onClose={closeAddNote}
+    onSubmit={handleAddNote}
+  />
 
   {#if updateStatusModal.isOpen}
     <div class="modal-backdrop" on:click={closeUpdateStatus}>
