@@ -408,6 +408,11 @@
     color: #15803d;
   }
 
+  .status-badge.retired {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
   :global(.action-button.primary) {
     padding: var(--spacing-md) var(--spacing-xl);
     background: var(--theme-color);

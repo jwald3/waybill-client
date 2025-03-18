@@ -519,6 +519,11 @@
     color: #9d174d;
   }
 
+  .status-badge.retired {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+
   .hazmat-badge {
     background: #fecaca;
     color: #b91c1c;
