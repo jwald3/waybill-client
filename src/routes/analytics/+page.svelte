@@ -9,6 +9,8 @@
   
   export let data;
   
+  console.log('Trips data:', data.recentData.trips);
+  
   let isNavExpanded = true;
 
   // Key metrics
@@ -55,9 +57,6 @@
       color: '#10b981'
     }]
   };
-
-  // Top drivers from server data
-  const topDrivers = data.topDrivers;
 
   // Add responsive state management
   let windowWidth: number;
@@ -119,7 +118,7 @@
           </div>
         </Card>
 
-        <Card title="Recent Trips" icon={icons.route}>
+        <Card title="Recent Trips" icon={icons.routes}>
           <div class="trips-list">
             {#each data.recentData.trips as trip}
               <a href="/trips/{trip.id}" class="trip-item">
@@ -162,7 +161,7 @@
           </div>
         </Card>
 
-        <Card title="Recent Incidents" icon={icons.alert}>
+        <Card title="Recent Incidents" icon={icons.incidents}>
           <div class="incidents-list">
             {#each data.recentData.incidents as incident}
               <a href="/incidents/{incident.id}" class="incident-item">
@@ -320,21 +319,6 @@
     font-weight: 600;
     color: var(--theme-color);
   }
-
-  .status-badge {
-    padding: 2px var(--spacing-xs);
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-xs);
-    font-weight: 500;
-    text-transform: lowercase;
-  }
-
-  .status-badge.completed { background: #dcfce7; color: #059669; }
-  .status-badge.in_transit { background: #dbeafe; color: #3b82f6; }
-  .status-badge.failed_delivery { background: #fee2e2; color: #dc2626; }
-  .status-badge.routine_maintenance { background: #dcfce7; color: #059669; }
-  .status-badge.repair { background: #fef3c7; color: #d97706; }
-  .status-badge.emergency { background: #fee2e2; color: #dc2626; }
 
   @media (max-width: 1200px) {
     .dashboard-grid {

@@ -88,6 +88,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .slice(0, 5)
         .map(trip => ({
+          id: trip.id,
           tripNumber: trip.trip_number,
           distance: trip.distance_miles,
           status: trip.status,
@@ -98,6 +99,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .slice(0, 5)
         .map(incident => ({
+          id: incident.id,
           type: incident.type,
           description: incident.description,
           date: incident.date,
@@ -107,6 +109,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
         .slice(0, 5)
         .map(log => ({
+          id: log.id,
           type: log.service_type,
           cost: log.cost,
           date: log.date,

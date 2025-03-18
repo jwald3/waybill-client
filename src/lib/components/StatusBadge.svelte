@@ -7,7 +7,7 @@
   type FacilityType = string;
 
   export let status: TruckStatus | TripStatus | DriverStatus | IncidentType | FacilityType;
-  export let type: 'truck' | 'trip' | 'driver' | 'incident' | 'facility' = 'truck';
+  export let type: 'truck' | 'trip' | 'driver' | 'incident' | 'facility' | 'maintenance' = 'truck';
 
   // Format the status text for display
   $: displayText = formatStatusText(status);
