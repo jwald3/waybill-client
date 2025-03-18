@@ -340,6 +340,7 @@
     margin: 0.75rem 0;
     background: var(--theme-gradient);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
     letter-spacing: -2px;
@@ -441,33 +442,6 @@
     letter-spacing: 0.5px;
   }
 
-  .section {
-    margin-bottom: 0;
-  }
-
-  .section:last-child {
-    margin-bottom: 0;
-  }
-
-  .section h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 1.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .section h2::before {
-    content: '';
-    display: block;
-    width: 6px;
-    height: 28px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-    transform: rotate(-5deg);
-  }
-
   .trips, .deliveries {
     max-height: 480px;
     overflow-y: auto;
@@ -541,15 +515,6 @@
       font-size: 0.85rem;
       min-width: 110px;
     }
-
-    .section {
-      margin-bottom: 1.5rem;
-    }
-
-    .section h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
   }
 
   @media (max-width: 768px) {
@@ -589,36 +554,6 @@
       font-size: 0.85rem;
       padding: 0.3rem 0.6rem;
     }
-  }
-
-  .route-meta {
-    color: var(--theme-color);
-  }
-
-  .tool-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  /* Update the background patterns for dark mode */
-  [data-color-mode="dark"] :global(body) {
-    background-image: url("data:image/svg+xml,%3Csvg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M96 36h-6l-6 6v6h6l6-6zM84 36H60v12h24zM56 36h-8v12h8zM40 36h-4v12h4zM96 52h-6l-6 6v6h6l6-6zM84 52H60v12h24zM56 52h-8v12h8zM40 52h-4v12h4z'/%3E%3Cpath d='M142 64h4v4h-4zM134 64h4v4h-4zM126 64h4v4h-4zM118 64h4v4h-4z'/%3E%3Cpath d='M96 84v-6l-6-6h-6v6l6 6zM84 84H60V72h24zM56 84h-8V72h8zM40 84h-4V72h4z'/%3E%3Cpath d='M142 96h4v4h-4zM134 96h4v4h-4zM126 96h4v4h-4zM118 96h4v4h-4z'/%3E%3Cpath d='M24 120v6l6 6h6v-6l-6-6zM60 120v12H36v-12zM88 120v12H64v-12zM104 120v12h-12v-12z'/%3E%3C/g%3E%3C/svg%3E");
-  }
-
-  /* Update the gradient overlay for dark mode */
-  [data-color-mode="dark"] .dashboard::before {
-    background: radial-gradient(circle at top right, 
-                rgba(99, 102, 241, 0.1) 0%, 
-                transparent 50%),
-              radial-gradient(circle at bottom left, 
-                rgba(99, 102, 241, 0.1) 0%, 
-                transparent 50%);
-  }
-
-  /* Update box shadows for dark mode */
-  [data-color-mode="dark"] .card {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1),
-                0 12px 16px rgba(0, 0, 0, 0.1);
   }
 
   .loading, .empty-state {
