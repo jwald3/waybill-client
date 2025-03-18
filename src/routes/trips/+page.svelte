@@ -514,6 +514,11 @@
     color: #dc2626;
   }
 
+  .status-badge.failed_delivery {
+    background: #fae8ff;
+    color: #9d174d;
+  }
+
   .hazmat-badge {
     background: #fecaca;
     color: #b91c1c;
