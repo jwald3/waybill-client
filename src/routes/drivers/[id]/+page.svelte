@@ -16,7 +16,6 @@
   let driver: Driver = data.driver;
   
   let isNavExpanded = true;
-  let error: string | null = null;
 
   let isUpdateStatusModalOpen = false;
   let currentDriverStatus: EmploymentStatus | null = null;

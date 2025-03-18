@@ -9,8 +9,7 @@
     finishTripFailure, 
     cancelTrip,
     type TripStatus,
-    addTripNote,
-    type AddTripNoteRequest
+    addTripNote
   } from '$lib/api/trips';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
@@ -20,18 +19,11 @@
   export let data;
   let trip: Trip = data.trip;
 
-  interface TripNote {
-    note_timestamp: string;
-    content: string;
-  }
-
   let isUpdateStatusModalOpen = false;
   let currentTripForUpdate: {
     id: string;
     status: TripStatus;
   } | null = null;
-
-  let updateStatusError: string | null = null;
 
   let isAddNoteModalOpen = false;
 

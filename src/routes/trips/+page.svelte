@@ -4,8 +4,8 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
-  import type { Trip, TripNote } from '$lib/api/trips';
-  import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
+  import type { Trip } from '$lib/api/trips';
+  import { addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
@@ -56,10 +56,6 @@
 
   // Status options
   const rawStatusTypes = ['ALL', 'SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELED'];
-  const statusTypes = rawStatusTypes.map(status => ({
-    value: status,
-    label: formatStatusLabel(status)
-  }));
 
   function formatStatusLabel(status: string): string {
     if (status === 'ALL') return 'All Statuses';
@@ -164,9 +160,6 @@
     // Auto-expand notes for the trip that just got a new note
     expandedNotes[currentTripId] = true;
   }
-
-  // Add error handling state
-  let addNoteError: string | null = null;
 
   // Add this reactive statement to update sort buttons when sort state changes
   $: sortButtons = [

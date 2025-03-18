@@ -5,7 +5,6 @@
   import StatusBadge from '$lib/components/StatusBadge.svelte';
   import { icons } from '$lib/icons';
   import PieChart from '$lib/components/PieChart.svelte';
-  import LineChart from '$lib/components/LineChart.svelte';
   
   export let data;
   
