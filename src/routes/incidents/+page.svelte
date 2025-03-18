@@ -6,8 +6,6 @@
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
-  import { getIncidents } from '$lib/api/incidents';
-  import Chip from '$lib/components/Chip.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;

@@ -4,7 +4,7 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
-  import Chip from '$lib/components/Chip.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   
   let isNavExpanded = true;
@@ -190,15 +190,10 @@
                 <div class="record-title">
                   <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
                   <div class="record-info">
-                    <Chip
-                      variant={record.service_type.toLowerCase() === 'routine_maintenance' ? 'info' :
-                              record.service_type.toLowerCase() === 'repair' ? 'warning' :
-                              record.service_type.toLowerCase() === 'emergency' ? 'error' :
-                              'default'}
-                      size="small"
-                    >
-                      {record.service_type.replace('_', ' ')}
-                    </Chip>
+                    <StatusBadge
+                      status={record.service_type}
+                      type="maintenance"
+                    />
                   </div>
                 </div>
                 <div class="cost">

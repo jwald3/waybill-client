@@ -4,9 +4,10 @@
   type TripStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED' | 'FAILED_DELIVERY' | 'ON_SCHEDULE' | 'DELAYED' | 'HAZMAT';
   type DriverStatus = 'ACTIVE' | 'SUSPENDED' | 'TERMINATED' | 'ON_LEAVE';
   type IncidentType = 'TRAFFIC_ACCIDENT' | 'MECHANICAL_FAILURE' | 'WEATHER_DELAY' | 'CARGO_ISSUE' | 'OTHER';
+  type MaintenanceType = 'ROUTINE_MAINTENANCE' | 'REPAIR' | 'EMERGENCY';
   type FacilityType = string;
 
-  export let status: TruckStatus | TripStatus | DriverStatus | IncidentType | FacilityType;
+  export let status: TruckStatus | TripStatus | DriverStatus | IncidentType | MaintenanceType | FacilityType;
   export let type: 'truck' | 'trip' | 'driver' | 'incident' | 'facility' | 'maintenance' = 'truck';
 
   // Format the status text for display
@@ -68,6 +69,13 @@
           case 'A': return 'success';
           case 'B': return 'info';
           case 'C': return 'warning';
+          default: return 'neutral';
+        }
+      case 'maintenance':
+        switch (status) {
+          case 'ROUTINE_MAINTENANCE': return 'info';
+          case 'REPAIR': return 'warning';
+          case 'EMERGENCY': return 'error';
           default: return 'neutral';
         }
       default:
