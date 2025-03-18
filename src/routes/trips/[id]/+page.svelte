@@ -13,6 +13,7 @@
     type AddTripNoteRequest
   } from '$lib/api/trips';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
+  import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   
   let isNavExpanded = true;
   
@@ -32,17 +33,7 @@
 
   let updateStatusError: string | null = null;
 
-  interface AddNoteModal {
-    isOpen: boolean;
-    content: string;
-  }
-
-  let addNoteModal: AddNoteModal = {
-    isOpen: false,
-    content: ''
-  };
-
-  let addNoteError: string | null = null;
+  let isAddNoteModalOpen = false;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -130,37 +121,19 @@
   }
 
   function openAddNote() {
-    addNoteModal = {
-      isOpen: true,
-      content: ''
-    };
-    addNoteError = null;
+    isAddNoteModalOpen = true;
   }
 
   function closeAddNote() {
-    addNoteModal = {
-      isOpen: false,
-      content: ''
-    };
-    addNoteError = null;
+    isAddNoteModalOpen = false;
   }
 
-  async function handleAddNote() {
-    if (!addNoteModal.content.trim()) return;
+  async function handleAddNote(noteContent: string) {
+    const updatedTrip = await addTripNote(trip.id, {
+      content: noteContent.trim()
+    });
 
-    try {
-      addNoteError = null;
-      
-      const updatedTrip = await addTripNote(trip.id, {
-        content: addNoteModal.content.trim()
-      });
-
-      trip = updatedTrip;
-      closeAddNote();
-    } catch (error) {
-      console.error('Failed to add note:', error);
-      addNoteError = 'Failed to add note. Please try again.';
-    }
+    trip = updatedTrip;
   }
 </script>
 
@@ -318,39 +291,11 @@
     availableActions={currentTripForUpdate ? getAvailableActions(currentTripForUpdate.status) : []}
   />
 
-  {#if addNoteModal.isOpen}
-    <div class="modal-backdrop" on:click={closeAddNote}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Add Note</h3>
-          <button class="modal-close" on:click={closeAddNote}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if addNoteError}
-            <div class="error-message">
-              {addNoteError}
-            </div>
-          {/if}
-          <textarea
-            bind:value={addNoteModal.content}
-            placeholder="Enter note content..."
-            rows="4"
-            class="form-input"
-          ></textarea>
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeAddNote}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleAddNote}
-            disabled={!addNoteModal.content.trim()}
-          >
-            Add Note
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <AddNoteModal
+    isOpen={isAddNoteModalOpen}
+    onClose={closeAddNote}
+    onSubmit={handleAddNote}
+  />
 </Layout>
 
 <style>
@@ -607,103 +552,5 @@
       width: 100%;
       justify-content: center;
     }
-  }
-
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal-content {
-    background: var(--bg-primary);
-    border-radius: var(--radius-lg);
-    width: 90%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .modal-header {
-    padding: var(--spacing-lg);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .modal-header h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-  }
-
-  .modal-close:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .modal-body {
-    padding: var(--spacing-lg);
-  }
-
-  .modal-footer {
-    padding: var(--spacing-lg);
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
-  }
-
-  .error-message {
-    background: #fee2e2;
-    color: #dc2626;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
-    font-size: var(--font-size-sm);
-  }
-
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-select,
-  .form-input {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-  }
-
-  .form-select:focus,
-  .form-input:focus {
-    outline: none;
-    border-color: var(--theme-color);
   }
 </style> 
