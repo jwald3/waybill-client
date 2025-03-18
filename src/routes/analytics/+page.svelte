@@ -76,493 +76,274 @@
 </svelte:head>
 
 <Layout {isNavExpanded}>
-  <div class="analytics">
-    <h1 class="analytics-title">Fleet Analytics</h1>
+  <div class="page">
+    <h1 class="page-title">Fleet Analytics</h1>
 
-    <!-- Key Metrics -->
     <div class="stats-grid">
       {#each metrics as metric}
         <MetricCard {...metric} />
       {/each}
     </div>
 
-    <div class="analytics-grid">
-      <!-- Fleet Overview -->
-      <Card title="Fleet Overview" icon={icons.truck}>
-        <div class="fleet-stats">
-          <div class="stat-item">
-            <span class="stat-label">Total Mileage</span>
-            <span class="stat-value">{data.metrics.efficiency.totalMileage} mi</span>
+    <div class="dashboard-grid">
+      <div class="main-column">
+        <Card title="Fleet Overview" icon={icons.truck}>
+          <div class="overview-stats">
+            <div class="stat-item">
+              <span class="label">Total Mileage</span>
+              <span class="value">{data.metrics.efficiency.totalMileage} mi</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">Fuel Used</span>
+              <span class="value">{data.metrics.efficiency.totalFuelUsage} gal</span>
+            </div>
+            <div class="stat-item">
+              <span class="label">Active Trips</span>
+              <span class="value">{data.metrics.delivery.activeTrips}</span>
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Fuel Used</span>
-            <span class="stat-value">{data.metrics.efficiency.totalFuelUsage} gal</span>
+          <div class="chart-row">
+            <div class="chart-container">
+              <PieChart data={data.charts.fleetStatus} />
+            </div>
+            <div class="chart-legend">
+              {#each data.charts.fleetStatus as status}
+                <div class="legend-item">
+                  <span class="legend-color" style="background-color: {status.color}"></span>
+                  <span class="legend-label">{status.label}</span>
+                  <span class="legend-value">{status.value}</span>
+                </div>
+              {/each}
+            </div>
           </div>
-          <div class="stat-item">
-            <span class="stat-label">Active Trips</span>
-            <span class="stat-value">{data.metrics.delivery.activeTrips}</span>
-          </div>
-        </div>
-        <div class="chart-container">
-          <PieChart data={data.charts.fleetStatus} />
-        </div>
-      </Card>
+        </Card>
 
-      <!-- Maintenance Overview -->
-      <Card title="Maintenance Overview" icon={icons.wrench}>
-        <div class="maintenance-stats">
-          <div class="chart-container">
+        <Card title="Recent Trips" icon={icons.route}>
+          <div class="trips-list">
+            {#each data.recentData.trips as trip}
+              <div class="trip-item">
+                <div class="trip-header">
+                  <div class="trip-id">
+                    <span class="status-badge {trip.status.toLowerCase()}">{trip.status}</span>
+                    <span class="trip-number">{trip.tripNumber}</span>
+                  </div>
+                  <div class="trip-stats">
+                    <span>{trip.distance} mi</span>
+                    <span class="separator">•</span>
+                    <span>{trip.fuelUsage} gal</span>
+                    <span class="separator">•</span>
+                    <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              </div>
+            {/each}
+          </div>
+        </Card>
+      </div>
+
+      <div class="side-column">
+        <Card title="Maintenance Overview" icon={icons.maintenance}>
+          <div class="chart-container-small">
             <PieChart data={data.charts.maintenanceTypes} />
           </div>
           <div class="maintenance-list">
             {#each data.recentData.maintenance as log}
               <div class="maintenance-item">
-                <div class="maintenance-type {log.type.toLowerCase()}">{log.type}</div>
-                <div class="maintenance-details">
-                  <span class="date">{new Date(log.date).toLocaleDateString()}</span>
+                <div class="item-row">
+                  <span class="status-badge {log.type.toLowerCase()}">{log.type}</span>
                   <span class="cost">${log.cost}</span>
+                </div>
+                <div class="item-row secondary">
+                  <span>{new Date(log.date).toLocaleDateString()}</span>
                 </div>
               </div>
             {/each}
           </div>
-        </div>
-      </Card>
+        </Card>
 
-      <!-- Recent Incidents -->
-      <Card title="Recent Incidents" icon={icons.alert}>
-        <div class="incidents-list">
-          {#each data.recentData.incidents as incident}
-            <div class="incident-item">
-              <div class="incident-type {incident.type.toLowerCase()}">{incident.type}</div>
-              <p class="incident-desc">{incident.description}</p>
-              <div class="incident-details">
-                <span class="date">{new Date(incident.date).toLocaleDateString()}</span>
-                <span class="damage">${incident.damageEstimate}</span>
+        <Card title="Recent Incidents" icon={icons.alert}>
+          <div class="incidents-list">
+            {#each data.recentData.incidents as incident}
+              <div class="incident-item">
+                <div class="item-row">
+                  <span class="status-badge {incident.type.toLowerCase()}">{incident.type}</span>
+                  <span class="cost">${incident.damageEstimate}</span>
+                </div>
+                <p class="incident-desc">{incident.description}</p>
+                <div class="item-row secondary">
+                  <span>{new Date(incident.date).toLocaleDateString()}</span>
+                </div>
               </div>
-            </div>
-          {/each}
-        </div>
-      </Card>
-
-      <!-- Active Trips -->
-      <Card title="Recent Trips" icon={icons.route}>
-        <div class="trips-list">
-          {#each data.recentData.trips as trip}
-            <div class="trip-item">
-              <div class="trip-header">
-                <span class="trip-number">{trip.tripNumber}</span>
-                <span class="trip-status {trip.status.toLowerCase()}">{trip.status}</span>
-              </div>
-              <div class="trip-details">
-                <span>Distance: {trip.distance} mi</span>
-                <span>Fuel: {trip.fuelUsage} gal</span>
-                <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
-              </div>
-            </div>
-          {/each}
-        </div>
-      </Card>
+            {/each}
+          </div>
+        </Card>
+      </div>
     </div>
   </div>
 </Layout>
 
 <style>
-  .analytics {
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-
-  .analytics-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    color: var(--text-primary);
-    font-weight: 800;
-    position: relative;
-    letter-spacing: -1px;
-  }
-
-  .analytics-title::after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 100px;
-    height: 6px;
-    background: var(--theme-gradient);
-    border-radius: 3px;
-  }
-
-  .analytics-grid {
+  .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-md);
   }
 
-  .fleet-stats {
+  .main-column, .side-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .overview-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-bottom: 1rem;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
   }
 
-  .stat-item {
-    background: var(--surface-color);
-    padding: 1rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+  .chart-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--spacing-md);
+    align-items: center;
   }
 
   .chart-container {
-    width: 100%;
-    height: 300px;
+    height: 250px;
   }
 
-  .maintenance-stats {
+  .chart-container-small {
+    height: 180px;
+  }
+
+  .chart-legend {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    min-width: 150px;
   }
 
-  .maintenance-list {
-    height: 275px;
-    overflow-y: auto;
-  }
-
-  .maintenance-item {
+  .legend-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-color);
-    border-radius: 8px;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs);
   }
 
-  .maintenance-item:last-child {
-    border-bottom: none;
+  .legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
   }
 
-  .maintenance-type {
-    font-weight: 600;
-    color: var(--text-primary);
+  .legend-value {
+    margin-left: auto;
+    font-weight: 500;
   }
 
-  .maintenance-details {
+  .trips-list, .maintenance-list, .incidents-list {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--spacing-xs);
   }
 
-  .date {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .cost {
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-
-  .incidents-list {
-    height: 275px;
-    overflow-y: auto;
-  }
-
-  .incident-item {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-color);
-    border-radius: 8px;
-  }
-
-  .incident-item:last-child {
-    border-bottom: none;
-  }
-
-  .incident-type {
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-  }
-
-  .incident-desc {
-    color: var(--text-secondary);
-  }
-
-  .trip-list {
-    height: 275px;
-    overflow-y: auto;
-  }
-
-  .trip-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-color);
-    border-radius: 8px;
-  }
-
-  .trip-item:last-child {
-    border-bottom: none;
+  .trip-item, .maintenance-item, .incident-item {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
   }
 
   .trip-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .trip-id {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
   }
 
   .trip-number {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .trip-status {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .trip-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .trips {
-    color: var(--text-secondary);
-    text-align: center;
-  }
-
-  .revenue {
-    font-weight: 600;
-    color: #10b981;
-    text-align: right;
-  }
-
-  .table-header .center {
-    text-align: center;
-  }
-
-  .table-header .right {
-    text-align: right;
-  }
-
-  .drivers-list {
-    height: 275px;
-    overflow-y: auto;
-  }
-
-  .driver-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-color);
-    border-radius: 8px;
-  }
-
-  .driver-item:last-child {
-    border-bottom: none;
-  }
-
-  .driver-info {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .avatar {
-    width: 40px;
-    height: 40px;
-    background: var(--theme-gradient);
-    color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    transform: rotate(-3deg);
-  }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .name {
-    font-weight: 600;
-    color: var(--text-primary);
-  }
-
-  .stats {
-    font-size: 0.875rem;
+    font-family: monospace;
     color: var(--text-secondary);
   }
 
-  .chart-body {
-    flex: 1;
-    display: flex;
-    height: calc(100% - 80px);
-  }
-
-  /* Update chart styles */
-  :global(.chart-wrapper) {
-    background: var(--surface-color);
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid var(--border-color);
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  :global(.chart-wrapper canvas) {
-    height: 100% !important;
-    width: 100% !important;
-  }
-
-  .cost-legend {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 1.25rem;
-    background: var(--bg-secondary);
-    border-radius: 12px;
-    border: 1px solid var(--border-color);
-  }
-
-  .cost-legend-item {
+  .trip-stats {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: var(--surface-color);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    transition: all 0.2s ease;
+    gap: var(--spacing-xs);
+    color: var(--text-secondary);
+    font-size: var(--font-size-sm);
   }
 
-  .cost-legend-item:hover {
-    background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
-    transform: translateX(4px);
-    border-color: var(--theme-color);
+  .separator {
+    color: var(--border-color);
   }
 
-  .cost-legend-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 3px;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-  }
-
-  .cost-legend-item:hover .cost-legend-color {
-    transform: scale(1.2);
-  }
-
-  .cost-legend-details {
+  .item-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex: 1;
   }
 
-  .cost-legend-label {
+  .item-row.secondary {
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .incident-desc {
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .status-badge {
+    padding: 2px var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
     font-weight: 500;
-    color: var(--text-primary);
+    text-transform: lowercase;
   }
 
-  .cost-legend-value {
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
+  .status-badge.completed { background: #dcfce7; color: #059669; }
+  .status-badge.in_transit { background: #dbeafe; color: #3b82f6; }
+  .status-badge.failed_delivery { background: #fee2e2; color: #dc2626; }
+  .status-badge.routine_maintenance { background: #dcfce7; color: #059669; }
+  .status-badge.repair { background: #fef3c7; color: #d97706; }
+  .status-badge.emergency { background: #fee2e2; color: #dc2626; }
 
   @media (max-width: 1200px) {
-    .analytics-grid {
+    .dashboard-grid {
       grid-template-columns: 1fr;
     }
 
-    .chart-container {
-      height: 500px;
-    }
-
-    .chart-body {
-      height: calc(100% - 80px);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .analytics {
-      padding: 1rem;
-    }
-
-    .analytics-title {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .analytics-grid {
+    .chart-row {
       grid-template-columns: 1fr;
     }
 
-    .chart-container {
-      height: 400px;
-    }
-
-    .chart-body {
-      height: calc(100% - 80px);
-    }
-
-    .cost-chart {
-      height: 300px;
+    .chart-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
   }
 
-  /* Update scrollbar styles for dark mode */
-  .routes-table::-webkit-scrollbar,
-  .drivers-list::-webkit-scrollbar {
-    width: 6px;
-  }
+  @media (max-width: 640px) {
+    .overview-stats {
+      grid-template-columns: 1fr;
+    }
 
-  .routes-table::-webkit-scrollbar-track,
-  .drivers-list::-webkit-scrollbar-track {
-    background: var(--surface-color);
-    border-radius: 3px;
-  }
-
-  .routes-table::-webkit-scrollbar-thumb,
-  .drivers-list::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 3px;
-  }
-
-  .routes-table::-webkit-scrollbar-thumb:hover,
-  .drivers-list::-webkit-scrollbar-thumb:hover {
-    background: var(--text-secondary);
-  }
-
-  /* Update alert icons for dark mode */
-  [data-color-mode="dark"] .alert-icon.warning {
-    background: color-mix(in srgb, #d97706 15%, var(--surface-color));
-    color: #fbbf24;
-  }
-
-  [data-color-mode="dark"] .alert-icon.success {
-    background: color-mix(in srgb, #059669 15%, var(--surface-color));
-    color: #34d399;
-  }
-
-  [data-color-mode="dark"] .alert-icon.error {
-    background: color-mix(in srgb, #dc2626 15%, var(--surface-color));
-    color: #f87171;
+    .trip-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style> 
