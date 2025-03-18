@@ -1,13 +1,11 @@
 import type { PageServerLoad } from './$types';
-import { getDrivers } from '$lib/api/drivers';
 import { getTrips } from '$lib/api/trips';
 import { getTrucks } from '$lib/api/trucks';
 import { getIncidents } from '$lib/api/incidents';
 import { getMaintenanceLogs } from '$lib/api/maintenance';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-  const [driversRes, tripsRes, trucksRes, incidentsRes, maintenanceRes] = await Promise.all([
-    getDrivers(fetch),
+  const [ tripsRes, trucksRes, incidentsRes, maintenanceRes] = await Promise.all([
     getTrips(fetch),
     getTrucks(fetch),
     getIncidents(fetch),
@@ -15,15 +13,13 @@ export const load: PageServerLoad = async ({ fetch }) => {
   ]);
 
   // Delivery Performance
-  const completedTrips = tripsRes.items.filter(trip => 
-    trip.status === 'COMPLETED' || trip.status === 'FAILED_DELIVERY'
-  );
+  const completedTrips = tripsRes.items.filter(trip => trip.status === 'COMPLETED');
   const onTimeDeliveries = completedTrips.filter(trip => 
     trip.arrival_time.actual && new Date(trip.arrival_time.actual) <= new Date(trip.arrival_time.scheduled)
   );
   const onTimeRate = completedTrips.length ? 
     ((onTimeDeliveries.length / completedTrips.length) * 100).toFixed(1) : "0.0";
-  const failedDeliveries = completedTrips.filter(trip => trip.status === 'FAILED_DELIVERY').length;
+  const failedDeliveries = tripsRes.items.filter(trip => trip.status === 'CANCELED').length;
 
   // Fleet Efficiency
   const tripsWithFuel = tripsRes.items.filter(trip => trip.fuel_usage_gallons > 0 && trip.distance_miles > 0);
