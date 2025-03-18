@@ -7,6 +7,7 @@
   import type { Trip, TripNote } from '$lib/api/trips';
   import { getTrips, addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
+  import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   
   let isNavExpanded = true;
 
@@ -188,25 +189,58 @@
     }
   ];
 
-  // Add these new interfaces
-  interface UpdateStatusModal {
-    isOpen: boolean;
-    tripId: string | null;
-    currentStatus: TripStatus | null;
-    selectedAction: string | null;
-    datetime: string;
+  // Replace the UpdateStatusModal interface and state with:
+  let isUpdateStatusModalOpen = false;
+  let currentTripForUpdate: {
+    id: string;
+    status: TripStatus;
+  } | null = null;
+
+  // Simplify the open/close functions
+  function openUpdateStatus(trip: Trip) {
+    currentTripForUpdate = {
+      id: trip.id,
+      status: trip.status as TripStatus
+    };
+    isUpdateStatusModalOpen = true;
   }
 
-  // Add this state
-  let updateStatusModal: UpdateStatusModal = {
-    isOpen: false,
-    tripId: null,
-    currentStatus: null,
-    selectedAction: null,
-    datetime: new Date().toISOString().slice(0, 16) // Format: YYYY-MM-DDThh:mm
-  };
+  function closeUpdateStatus() {
+    currentTripForUpdate = null;
+    isUpdateStatusModalOpen = false;
+  }
 
-  let updateStatusError: string | null = null;
+  // Modify handleUpdateStatus to work with the new component
+  async function handleUpdateStatus(action: string, datetime?: string) {
+    if (!currentTripForUpdate?.id) return;
+    if (action !== 'cancel' && !datetime) return;
+
+    // Convert datetime to proper ISO format with UTC timezone
+    const formattedDatetime = datetime ? new Date(datetime).toISOString() : undefined;
+
+    let updatedTrip: Trip;
+
+    switch (action) {
+      case 'begin':
+        updatedTrip = await beginTrip(currentTripForUpdate.id, {
+          departure_time: formattedDatetime!
+        });
+        break;
+      case 'complete':
+      case 'fail':
+        updatedTrip = await (action === 'complete' ? finishTripSuccess : finishTripFailure)(currentTripForUpdate.id, {
+          arrival_time: formattedDatetime!
+        });
+        break;
+      case 'cancel':
+        updatedTrip = await cancelTrip(currentTripForUpdate.id);
+        break;
+      default:
+        throw new Error('Invalid action');
+    }
+
+    trips = trips.map(trip => trip.id === updatedTrip.id ? updatedTrip : trip);
+  }
 
   function getAvailableActions(status: TripStatus): Array<{ value: string, label: string }> {
     switch (status) {
@@ -222,70 +256,6 @@
         ];
       default:
         return [];
-    }
-  }
-
-  function openUpdateStatus(trip: Trip) {
-    updateStatusModal = {
-      isOpen: true,
-      tripId: trip.id,
-      currentStatus: trip.status as TripStatus,
-      selectedAction: null,
-      datetime: new Date().toISOString().slice(0, 16)
-    };
-    updateStatusError = null;
-  }
-
-  function closeUpdateStatus() {
-    updateStatusModal = {
-      isOpen: false,
-      tripId: null,
-      currentStatus: null,
-      selectedAction: null,
-      datetime: new Date().toISOString().slice(0, 16)
-    };
-    updateStatusError = null;
-  }
-
-  async function handleUpdateStatus() {
-    if (!updateStatusModal.tripId || !updateStatusModal.selectedAction) return;
-
-    try {
-      updateStatusError = null;
-      let updatedTrip: Trip;
-
-      switch (updateStatusModal.selectedAction) {
-        case 'begin':
-          updatedTrip = await beginTrip(updateStatusModal.tripId, {
-            departure_time: new Date(updateStatusModal.datetime).toISOString()
-          });
-          break;
-        case 'complete':
-          updatedTrip = await finishTripSuccess(updateStatusModal.tripId, {
-            arrival_time: new Date(updateStatusModal.datetime).toISOString()
-          });
-          break;
-        case 'fail':
-          updatedTrip = await finishTripFailure(updateStatusModal.tripId, {
-            arrival_time: new Date(updateStatusModal.datetime).toISOString()
-          });
-          break;
-        case 'cancel':
-          updatedTrip = await cancelTrip(updateStatusModal.tripId);
-          break;
-        default:
-          throw new Error('Invalid action');
-      }
-
-      // Update the trips array with the updated trip
-      trips = trips.map(trip => 
-        trip.id === updatedTrip.id ? updatedTrip : trip
-      );
-
-      closeUpdateStatus();
-    } catch (error) {
-      console.error('Failed to update status:', error);
-      updateStatusError = 'Failed to update trip status. Please try again.';
     }
   }
 </script>
@@ -507,61 +477,12 @@
     onSubmit={handleAddNote}
   />
 
-  {#if updateStatusModal.isOpen}
-    <div class="modal-backdrop" on:click={closeUpdateStatus}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Update Trip Status</h3>
-          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if updateStatusError}
-            <div class="error-message">
-              {updateStatusError}
-            </div>
-          {/if}
-
-          <div class="form-group">
-            <label for="status-action">Action</label>
-            <select 
-              id="status-action"
-              bind:value={updateStatusModal.selectedAction}
-              class="form-select"
-            >
-              <option value="">Select an action...</option>
-              {#if updateStatusModal.currentStatus}
-                {#each getAvailableActions(updateStatusModal.currentStatus) as action}
-                  <option value={action.value}>{action.label}</option>
-                {/each}
-              {/if}
-            </select>
-          </div>
-
-          {#if updateStatusModal.selectedAction && updateStatusModal.selectedAction !== 'cancel'}
-            <div class="form-group">
-              <label for="datetime">{updateStatusModal.selectedAction === 'begin' ? 'Departure' : 'Arrival'} Time</label>
-              <input
-                type="datetime-local"
-                id="datetime"
-                bind:value={updateStatusModal.datetime}
-                class="form-input"
-              />
-            </div>
-          {/if}
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleUpdateStatus}
-            disabled={!updateStatusModal.selectedAction}
-          >
-            Update Status
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <UpdateStatusModal
+    isOpen={isUpdateStatusModalOpen}
+    onClose={closeUpdateStatus}
+    onSubmit={handleUpdateStatus}
+    availableActions={currentTripForUpdate ? getAvailableActions(currentTripForUpdate.status) : []}
+  />
 </Layout>
 
 <style>
@@ -748,13 +669,6 @@
     align-items: center;
   }
 
-  .modal-header h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
   .modal-close {
     background: none;
     border: none;
@@ -779,23 +693,6 @@
     padding: var(--spacing-lg);
   }
 
-  .modal-body textarea {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-    resize: vertical;
-    min-height: 100px;
-  }
-
-  .modal-body textarea:focus {
-    outline: none;
-    border-color: var(--theme-color);
-  }
-
   .modal-footer {
     padding: var(--spacing-lg);
     border-top: 1px solid var(--border-color);
@@ -811,13 +708,6 @@
 
   .form-group {
     margin-bottom: var(--spacing-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
   }
 
   .form-select,
