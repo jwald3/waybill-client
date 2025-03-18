@@ -4,8 +4,6 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
-  import type { MaintenanceLog } from '$lib/api/maintenance';
-  import { getMaintenanceLogs } from '$lib/api/maintenance';
   import Chip from '$lib/components/Chip.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   
