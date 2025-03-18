@@ -314,15 +314,4 @@
       justify-content: center;
     }
   }
-
-  .number {
-    font-size: 4rem;
-    font-weight: 800;
-    margin: 0.75rem 0;
-    background: var(--theme-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-  }
 </style> 
