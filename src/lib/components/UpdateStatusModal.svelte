@@ -1,6 +1,5 @@
 <script lang="ts">
   import Modal from './Modal.svelte';
-  import type { TripStatus } from '$lib/api/trips';
 
   export let isOpen = false;
   export let onClose: () => void;
