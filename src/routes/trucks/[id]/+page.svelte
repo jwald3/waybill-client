@@ -344,16 +344,17 @@
     padding: 0.75rem 1.5rem;
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    background: white;
-    color: var(--text-primary);
-    font-weight: 600;
+    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+    color: var(--theme-color);
+    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
   }
 
   .action-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
+    background: var(--theme-color);
+    color: white;
   }
 
   .action-button.primary {
@@ -363,8 +364,6 @@
   }
 
   .action-button.primary:hover {
-    background: var(--theme-color-dark);
-    border-color: var(--theme-color-dark);
-    color: white;
+    opacity: 0.9;
   }
 </style> 
