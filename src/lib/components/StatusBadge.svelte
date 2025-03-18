@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { colorMode } from '$lib/stores/theme';
+
   // Define all possible status types from across the app
   type TruckStatus = 'AVAILABLE' | 'IN_TRANSIT' | 'UNDER_MAINTENANCE' | 'RETIRED';
   type TripStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED' | 'FAILED_DELIVERY' | 'ON_SCHEDULE' | 'DELAYED' | 'HAZMAT';
@@ -82,9 +84,12 @@
         return 'neutral';
     }
   }
+
+  // Subscribe to the color mode
+  $: isDark = $colorMode === 'dark';
 </script>
 
-<span class="status-badge {colorClass}">
+<span class="status-badge {colorClass} {isDark ? 'dark' : ''}">
   {displayText}
 </span>
 
@@ -102,11 +107,19 @@
     background: #dcfce7;
     color: #15803d;
   }
+  .success.dark {
+    background: #064e3b;
+    color: #86efac;
+  }
 
   /* Info - Blue */
   .info {
     background: #dbeafe;
     color: #1d4ed8;
+  }
+  .info.dark {
+    background: #1e3a8a;
+    color: #93c5fd;
   }
 
   /* Warning - Yellow/Orange */
@@ -114,11 +127,19 @@
     background: #fef3c7;
     color: #d97706;
   }
+  .warning.dark {
+    background: #78350f;
+    color: #fcd34d;
+  }
 
   /* Error - Red */
   .error {
     background: #fee2e2;
     color: #dc2626;
+  }
+  .error.dark {
+    background: #7f1d1d;
+    color: #fca5a5;
   }
 
   /* Purple */
@@ -126,10 +147,18 @@
     background: #f3e8ff;
     color: #7c3aed;
   }
+  .purple.dark {
+    background: #4c1d95;
+    color: #c4b5fd;
+  }
 
   /* Neutral - Gray */
   .neutral {
     background: #f3f4f6;
     color: #6b7280;
+  }
+  .neutral.dark {
+    background: #374151;
+    color: #d1d5db;
   }
 </style> 
