@@ -6,107 +6,54 @@
   import PieChart from '$lib/components/PieChart.svelte';
   import LineChart from '$lib/components/LineChart.svelte';
   
+  export let data;
+  
   let isNavExpanded = true;
 
-  // Dummy data for metrics
+  // Real metrics from server data
   const metrics = [
     {
       title: "On-Time Delivery Rate",
-      value: "94.2%",
-      trend: { value: "2.1% from last month", positive: true },
+      value: `${data.metrics.onTimeRate}%`,
+      trend: { value: `${data.metrics.totalTrips} total trips`, positive: true },
       icon: icons.truck
     },
     {
       title: "Average Trip Duration",
-      value: "4h 12m",
-      trend: { value: "18min longer than target", positive: false },
+      value: `${data.metrics.avgDuration}h`,
+      trend: { value: `${data.metrics.incidentCount} incidents reported`, positive: true },
       icon: icons.chart
     },
     {
       title: "Fuel Efficiency",
-      value: "7.2 mpg",
-      trend: { value: "0.4 mpg improvement", positive: true },
+      value: `${data.metrics.avgMpg} mpg`,
+      trend: { value: `${data.metrics.activeDrivers} active drivers`, positive: true },
       icon: icons.analytics
     }
   ];
 
-  // Dummy data for top routes
-  const topRoutes = [
-    { from: "Chicago", to: "Detroit", trips: 145, revenue: "$58,400" },
-    { from: "New York", to: "Boston", trips: 132, revenue: "$42,900" },
-    { from: "Los Angeles", to: "San Francisco", trips: 128, revenue: "$51,200" }
-  ];
+  // Recent trips from server data
+  const recentTrips = data.recentTrips;
 
-  const costData = [
-    { label: 'Fuel', value: 42, color: '#10b981' },
-    { label: 'Maintenance', value: 28, color: '#ef4444' },
-    { label: 'Labor', value: 22, color: '#8b5cf6' },
-    { label: 'Other', value: 8, color: '#64748b' }
-  ];
+  // Fleet status data from server
+  const fleetStatusData = data.fleetStatus;
 
+  // Performance data (could be enhanced with more historical data)
   const performanceData = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    datasets: [
-      {
-        label: 'Delivery Times',
-        data: [24, 28, 26, 32, 29, 24, 25],
-        color: '#6366f1'
-      },
-      {
-        label: 'Fuel Consumption',
-        data: [18, 22, 19, 24, 21, 18, 19],
-        color: '#10b981'
-      },
-      {
-        label: 'Operating Costs',
-        data: [12, 15, 13, 17, 14, 12, 13],
-        color: '#f59e0b'
-      }
-    ]
+    labels: recentTrips.map(() => ''),  // Empty labels for now
+    datasets: [{
+      label: 'Distance (miles)',
+      data: recentTrips.map(t => t.distance),
+      color: '#6366f1'
+    }, {
+      label: 'Fuel Usage (gal)',
+      data: recentTrips.map(t => t.fuelUsage),
+      color: '#10b981'
+    }]
   };
 
-  // Add driver performance data
-  const topDrivers = [
-    { 
-      name: "John Smith",
-      avatar: "JS",
-      deliveries: 42,
-      rating: 4.9,
-      onTime: "98%"
-    },
-    {
-      name: "Maria Garcia",
-      avatar: "MG",
-      deliveries: 38,
-      rating: 4.8,
-      onTime: "96%"
-    },
-    {
-      name: "David Chen",
-      avatar: "DC",
-      deliveries: 35,
-      rating: 4.8,
-      onTime: "95%"
-    }
-  ];
-
-  const recentAlerts = [
-    {
-      type: 'warning',
-      message: 'Fuel consumption above average on Route CHI-DET',
-      time: '2h ago'
-    },
-    {
-      type: 'success',
-      message: 'All drivers completed safety training',
-      time: '4h ago'
-    },
-    {
-      type: 'error',
-      message: 'Maintenance due for Truck #1234',
-      time: '6h ago'
-    }
-  ];
+  // Top drivers from server data
+  const topDrivers = data.topDrivers;
 
   // Add responsive state management
   let windowWidth: number;
@@ -163,18 +110,18 @@
 
       <!-- Cost Analysis Grid -->
       <div class="analysis-grid">
-        <Card title="Cost Breakdown" icon={icons.analytics}>
+        <Card title="Fleet Status" icon={icons.truck}>
           <div class="cost-analysis">
             <div class="cost-chart">
-              <PieChart data={costData} />
+              <PieChart data={fleetStatusData} />
             </div>
             <div class="cost-legend">
-              {#each costData as item}
+              {#each fleetStatusData as item}
                 <div class="cost-legend-item">
                   <div class="cost-legend-color" style="background-color: {item.color}"></div>
                   <div class="cost-legend-details">
                     <span class="cost-legend-label">{item.label}</span>
-                    <span class="cost-legend-value">{item.value}%</span>
+                    <span class="cost-legend-value">{item.value}</span>
                   </div>
                 </div>
               {/each}
@@ -184,18 +131,18 @@
 
         <!-- Side Cards Grid -->
         <div class="side-cards">
-          <Card title="Top Performing Routes" icon={icons.truck}>
+          <Card title="Recent Trips" icon={icons.chart}>
             <div class="routes-table">
               <div class="table-header">
-                <span>Route</span>
-                <span class="center">Trips</span>
-                <span class="right">Revenue</span>
+                <span>Trip Number</span>
+                <span class="center">Distance</span>
+                <span class="right">Status</span>
               </div>
-              {#each topRoutes as route}
+              {#each recentTrips as trip}
                 <div class="table-row">
-                  <span class="route-name">{route.from} → {route.to}</span>
-                  <span class="trips">{route.trips}</span>
-                  <span class="revenue">{route.revenue}</span>
+                  <span class="route-name">{trip.tripNumber}</span>
+                  <span class="trips">{trip.distance} mi</span>
+                  <span class="revenue">{trip.status}</span>
                 </div>
               {/each}
             </div>
@@ -210,13 +157,9 @@
                     <div class="details">
                       <span class="name">{driver.name}</span>
                       <span class="stats">
-                        {driver.deliveries} deliveries • {driver.onTime} on-time
+                        {driver.state}
                       </span>
                     </div>
-                  </div>
-                  <div class="rating">
-                    <span class="rating-value">{driver.rating}</span>
-                    <span class="rating-label">rating</span>
                   </div>
                 </div>
               {/each}
@@ -447,91 +390,6 @@
     color: var(--text-secondary);
   }
 
-  .rating {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.125rem;
-  }
-
-  .rating-value {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #10b981;
-  }
-
-  .rating-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .alerts-list {
-    height: 275px;
-    overflow-y: auto;
-  }
-
-  .alert-item {
-    padding: 1rem 1.25rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--surface-color);
-    border-radius: 8px;
-  }
-
-  .alert-item:last-child {
-    border-bottom: none;
-  }
-
-  .alert-content {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .alert-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .alert-icon.warning {
-    background: #fef3c7;
-    color: #d97706;
-  }
-
-  .alert-icon.success {
-    background: #dcfce7;
-    color: #059669;
-  }
-
-  .alert-icon.error {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .alert-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    flex: 1;
-  }
-
-  .alert-message {
-    color: var(--text-primary);
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  .alert-time {
-    color: var(--text-secondary);
-    font-size: 0.875rem;
-  }
-
   .chart-body {
     flex: 1;
     display: flex;
@@ -654,28 +512,24 @@
 
   /* Update scrollbar styles for dark mode */
   .routes-table::-webkit-scrollbar,
-  .drivers-list::-webkit-scrollbar,
-  .alerts-list::-webkit-scrollbar {
+  .drivers-list::-webkit-scrollbar {
     width: 6px;
   }
 
   .routes-table::-webkit-scrollbar-track,
-  .drivers-list::-webkit-scrollbar-track,
-  .alerts-list::-webkit-scrollbar-track {
+  .drivers-list::-webkit-scrollbar-track {
     background: var(--surface-color);
     border-radius: 3px;
   }
 
   .routes-table::-webkit-scrollbar-thumb,
-  .drivers-list::-webkit-scrollbar-thumb,
-  .alerts-list::-webkit-scrollbar-thumb {
+  .drivers-list::-webkit-scrollbar-thumb {
     background: var(--border-color);
     border-radius: 3px;
   }
 
   .routes-table::-webkit-scrollbar-thumb:hover,
-  .drivers-list::-webkit-scrollbar-thumb:hover,
-  .alerts-list::-webkit-scrollbar-thumb:hover {
+  .drivers-list::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
   }
 
