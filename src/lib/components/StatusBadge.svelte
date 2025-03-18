@@ -1,7 +1,7 @@
 <script lang="ts">
   // Define all possible status types from across the app
   type TruckStatus = 'AVAILABLE' | 'IN_TRANSIT' | 'UNDER_MAINTENANCE' | 'RETIRED';
-  type TripStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED' | 'FAILED_DELIVERY';
+  type TripStatus = 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED' | 'FAILED_DELIVERY' | 'ON_SCHEDULE' | 'DELAYED' | 'HAZMAT';
   type DriverStatus = 'ACTIVE' | 'SUSPENDED' | 'TERMINATED' | 'ON_LEAVE';
   type IncidentType = 'TRAFFIC_ACCIDENT' | 'MECHANICAL_FAILURE' | 'WEATHER_DELAY' | 'CARGO_ISSUE' | 'OTHER';
   type FacilityType = string;
@@ -41,6 +41,9 @@
           case 'COMPLETED': return 'success';
           case 'CANCELED': return 'error';
           case 'FAILED_DELIVERY': return 'error';
+          case 'ON_SCHEDULE': return 'success';
+          case 'DELAYED': return 'warning';
+          case 'HAZMAT': return 'error';
           default: return 'neutral';
         }
       case 'driver':
