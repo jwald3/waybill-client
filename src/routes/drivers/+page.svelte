@@ -5,6 +5,7 @@
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
   import type { Driver } from '$lib/api/drivers';
+  import DriverStatusModal from '$lib/components/DriverStatusModal.svelte';
   import { 
     activateDriver, 
     suspendDriver, 
@@ -44,23 +45,9 @@
   // Status options
   const statusTypes = ['ALL', 'ACTIVE', 'SUSPENDED', 'TERMINATED'];
 
-  // Add these new interfaces
-  interface UpdateStatusModal {
-    isOpen: boolean;
-    driverId: string | null;
-    currentStatus: EmploymentStatus | null;
-    selectedStatus: EmploymentStatus | null;
-  }
-
-  // Add this state
-  let updateStatusModal: UpdateStatusModal = {
-    isOpen: false,
-    driverId: null,
-    currentStatus: null,
-    selectedStatus: null
-  };
-
-  let updateStatusError: string | null = null;
+  let isUpdateStatusModalOpen = false;
+  let currentDriverId: string | null = null;
+  let currentDriverStatus: EmploymentStatus | null = null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -166,55 +153,43 @@
       return;
     }
     
-    updateStatusModal = {
-      isOpen: true,
-      driverId: driver.id,
-      currentStatus: driver.employment_status as EmploymentStatus,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentDriverId = driver.id;
+    currentDriverStatus = driver.employment_status as EmploymentStatus;
+    isUpdateStatusModalOpen = true;
   }
 
   function closeUpdateStatus() {
-    updateStatusModal = {
-      isOpen: false,
-      driverId: null,
-      currentStatus: null,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentDriverId = null;
+    currentDriverStatus = null;
+    isUpdateStatusModalOpen = false;
   }
 
-  async function handleUpdateStatus() {
-    if (!updateStatusModal.driverId || !updateStatusModal.selectedStatus) return;
+  async function handleUpdateStatus(newStatus: EmploymentStatus) {
+    if (!currentDriverId) return;
 
     try {
-      updateStatusError = null;
       let updatedDriver: Driver;
 
-      switch (updateStatusModal.selectedStatus) {
+      switch (newStatus) {
         case 'ACTIVE':
-          updatedDriver = await activateDriver(updateStatusModal.driverId);
+          updatedDriver = await activateDriver(currentDriverId);
           break;
         case 'SUSPENDED':
-          updatedDriver = await suspendDriver(updateStatusModal.driverId);
+          updatedDriver = await suspendDriver(currentDriverId);
           break;
         case 'TERMINATED':
-          updatedDriver = await terminateDriver(updateStatusModal.driverId);
+          updatedDriver = await terminateDriver(currentDriverId);
           break;
         default:
           throw new Error('Invalid status selected');
       }
 
-      // Update the drivers array with the updated driver
       drivers = drivers.map(driver => 
         driver.id === updatedDriver.id ? updatedDriver : driver
       );
-
-      closeUpdateStatus();
     } catch (error) {
       console.error('Failed to update status:', error);
-      updateStatusError = 'Failed to update driver status. Please try again.';
+      throw error;
     }
   }
 </script>
@@ -368,50 +343,12 @@
     {/if}
   </div>
 
-  <!-- Add this modal markup just before the closing Layout tag -->
-  {#if updateStatusModal.isOpen}
-    <div class="modal-backdrop" on:click={closeUpdateStatus}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Update Driver Status</h3>
-          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if updateStatusError}
-            <div class="error-message">
-              {updateStatusError}
-            </div>
-          {/if}
-
-          <div class="form-group">
-            <label for="status-action">New Status</label>
-            <select 
-              id="status-action"
-              bind:value={updateStatusModal.selectedStatus}
-              class="form-select"
-            >
-              <option value="">Select a new status...</option>
-              {#if updateStatusModal.currentStatus}
-                {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
-                  <option value={status.value}>{status.label}</option>
-                {/each}
-              {/if}
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleUpdateStatus}
-            disabled={!updateStatusModal.selectedStatus}
-          >
-            Update Status
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <DriverStatusModal
+    isOpen={isUpdateStatusModalOpen}
+    onClose={closeUpdateStatus}
+    onSubmit={handleUpdateStatus}
+    availableStatuses={currentDriverStatus ? getAvailableStatusTransitions(currentDriverStatus) : []}
+  />
 </Layout>
 
 <style>
@@ -516,13 +453,6 @@
     align-items: center;
   }
 
-  .modal-header h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
   .modal-close {
     background: none;
     border: none;
@@ -568,13 +498,6 @@
     margin-bottom: var(--spacing-lg);
   }
 
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
-  }
-
   .form-select,
   .form-input {
     width: 100%;
@@ -595,11 +518,5 @@
   .error-message {
     text-align: center;
     padding: 2rem;
-  }
-
-  .error-message p {
-    color: var(--error-color, #dc2626);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
   }
 </style> 
