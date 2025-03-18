@@ -134,7 +134,7 @@
           <div class="empty-state">No active trips at the moment</div>
         {:else}
           {#each activeTrips as trip}
-            <div class="trip-item">
+            <a href="/trips/{trip.id}" class="trip-item">
               <div class="avatar">
                 {trip.trip_number.slice(0, 2)}
               </div>
@@ -158,7 +158,7 @@
                   <span class="eta-text">ETA: {formatTime(trip.arrival_time.scheduled)}</span>
                 </div>
               </div>
-            </div>
+            </a>
           {/each}
         {/if}
       </div>
@@ -173,7 +173,7 @@
           <div class="empty-state">No completed deliveries yet</div>
         {:else}
           {#each completedTrips as trip}
-            <div class="delivery-item">
+            <a href="/trips/{trip.id}" class="delivery-item">
               <div class="avatar">
                 {trip.trip_number.slice(0, 2)}
               </div>
@@ -184,7 +184,7 @@
                 </p>
               </div>
               <Chip variant="info">Delivered</Chip>
-            </div>
+            </a>
           {/each}
         {/if}
       </div>
@@ -357,6 +357,8 @@
     border-bottom: 1px solid var(--border-color);
     transition: all 0.2s ease;
     gap: 1rem;
+    text-decoration: none;
+    color: inherit;
   }
 
   .trip-item:last-child, .delivery-item:last-child {
@@ -366,6 +368,7 @@
   .trip-item:hover, .delivery-item:hover {
     background: color-mix(in srgb, var(--theme-color) 3%, var(--surface-color));
     transform: translateX(4px);
+    border-color: var(--theme-color);
   }
 
   .trip-info, .delivery-info {
