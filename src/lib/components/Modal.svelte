@@ -111,7 +111,6 @@
     background: rgba(0, 0, 0, 0.5);
   }
 
-  /* Remove default focus outline and add our own styling */
   .modal:focus {
     outline: none;
   }

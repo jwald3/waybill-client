@@ -447,22 +447,6 @@
     z-index: 1000;
   }
 
-  .modal-content {
-    background: var(--bg-primary);
-    border-radius: var(--radius-lg);
-    width: 90%;
-    max-width: 500px;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .modal-header {
-    padding: var(--spacing-lg);
-    border-bottom: 1px solid var(--border-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .modal-close {
     background: none;
     border: none;
@@ -481,18 +465,6 @@
   .modal-close:hover {
     background: var(--bg-secondary);
     color: var(--text-primary);
-  }
-
-  .modal-body {
-    padding: var(--spacing-lg);
-  }
-
-  .modal-footer {
-    padding: var(--spacing-lg);
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    justify-content: flex-end;
-    gap: var(--spacing-md);
   }
 
   .form-group {
