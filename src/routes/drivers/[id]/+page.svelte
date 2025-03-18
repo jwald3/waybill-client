@@ -10,6 +10,7 @@
     type EmploymentStatus, 
     getAvailableStatusTransitions 
   } from '$lib/api/drivers';
+  import DriverStatusModal from '$lib/components/DriverStatusModal.svelte';
 
   export let data;
   let driver: Driver = data.driver;
@@ -17,21 +18,8 @@
   let isNavExpanded = true;
   let error: string | null = null;
 
-  // Add these new interfaces
-  interface UpdateStatusModal {
-    isOpen: boolean;
-    currentStatus: EmploymentStatus | null;
-    selectedStatus: EmploymentStatus | null;
-  }
-
-  // Add this state
-  let updateStatusModal: UpdateStatusModal = {
-    isOpen: false,
-    currentStatus: null,
-    selectedStatus: null
-  };
-
-  let updateStatusError: string | null = null;
+  let isUpdateStatusModalOpen = false;
+  let currentDriverStatus: EmploymentStatus | null = null;
 
   function openUpdateStatus() {
     if (!['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
@@ -39,31 +27,20 @@
       return;
     }
     
-    updateStatusModal = {
-      isOpen: true,
-      currentStatus: driver.employment_status as EmploymentStatus,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentDriverStatus = driver.employment_status as EmploymentStatus;
+    isUpdateStatusModalOpen = true;
   }
 
   function closeUpdateStatus() {
-    updateStatusModal = {
-      isOpen: false,
-      currentStatus: null,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentDriverStatus = null;
+    isUpdateStatusModalOpen = false;
   }
 
-  async function handleUpdateStatus() {
-    if (!updateStatusModal.selectedStatus) return;
-
+  async function handleUpdateStatus(newStatus: EmploymentStatus) {
     try {
-      updateStatusError = null;
       let updatedDriver: Driver;
 
-      switch (updateStatusModal.selectedStatus) {
+      switch (newStatus) {
         case 'ACTIVE':
           updatedDriver = await activateDriver(driver.id);
           break;
@@ -77,12 +54,10 @@
           throw new Error('Invalid status selected');
       }
 
-      // Update the driver data
       driver = updatedDriver;
-      closeUpdateStatus();
     } catch (error) {
       console.error('Failed to update status:', error);
-      updateStatusError = 'Failed to update driver status. Please try again.';
+      throw error;
     }
   }
 
@@ -249,48 +224,12 @@
   </div>
 </Layout>
 
-<!-- Add the modal markup -->
-{#if updateStatusModal.isOpen}
-  <div class="modal-backdrop" on:click={closeUpdateStatus}>
-    <div class="modal-content" on:click|stopPropagation>
-      <div class="modal-header">
-        <h3>Update Driver Status</h3>
-        <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-      </div>
-      <div class="modal-body">
-        {#if updateStatusError}
-          <div class="error-message">
-            {updateStatusError}
-          </div>
-        {/if}
-
-        <div class="form-group">
-          <label for="status-action">New Status</label>
-          <select 
-            id="status-action"
-            bind:value={updateStatusModal.selectedStatus}
-            class="form-select"
-          >
-            <option value="">Select a new status...</option>
-            {#each getAvailableStatusTransitions(updateStatusModal.currentStatus) as status}
-              <option value={status.value}>{status.label}</option>
-            {/each}
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-        <button 
-          class="action-button primary"
-          on:click={handleUpdateStatus}
-          disabled={!updateStatusModal.selectedStatus}
-        >
-          Update Status
-        </button>
-      </div>
-    </div>
-  </div>
-{/if}
+<DriverStatusModal
+  isOpen={isUpdateStatusModalOpen}
+  onClose={closeUpdateStatus}
+  onSubmit={handleUpdateStatus}
+  availableStatuses={currentDriverStatus ? getAvailableStatusTransitions(currentDriverStatus) : []}
+/>
 
 <style>
   .page-header {
@@ -524,13 +463,6 @@
     align-items: center;
   }
 
-  .modal-header h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
   .modal-close {
     background: none;
     border: none;
@@ -565,13 +497,6 @@
 
   .form-group {
     margin-bottom: var(--spacing-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
   }
 
   .form-select {
