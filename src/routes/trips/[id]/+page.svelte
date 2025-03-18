@@ -12,6 +12,7 @@
     addTripNote,
     type AddTripNoteRequest
   } from '$lib/api/trips';
+  import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   
   let isNavExpanded = true;
   
@@ -23,19 +24,11 @@
     content: string;
   }
 
-  interface UpdateStatusModal {
-    isOpen: boolean;
-    currentStatus: TripStatus | null;
-    selectedAction: string | null;
-    datetime: string;
-  }
-
-  let updateStatusModal: UpdateStatusModal = {
-    isOpen: false,
-    currentStatus: null,
-    selectedAction: null,
-    datetime: new Date().toISOString().slice(0, 16)
-  };
+  let isUpdateStatusModalOpen = false;
+  let currentTripForUpdate: {
+    id: string;
+    status: TripStatus;
+  } | null = null;
 
   let updateStatusError: string | null = null;
 
@@ -89,60 +82,50 @@
   }
 
   function openUpdateStatus() {
-    updateStatusModal = {
-      isOpen: true,
-      currentStatus: trip.status as TripStatus,
-      selectedAction: null,
-      datetime: new Date().toISOString().slice(0, 16)
+    currentTripForUpdate = {
+      id: trip.id,
+      status: trip.status as TripStatus
     };
-    updateStatusError = null;
+    isUpdateStatusModalOpen = true;
   }
 
   function closeUpdateStatus() {
-    updateStatusModal = {
-      isOpen: false,
-      currentStatus: null,
-      selectedAction: null,
-      datetime: new Date().toISOString().slice(0, 16)
-    };
-    updateStatusError = null;
+    currentTripForUpdate = null;
+    isUpdateStatusModalOpen = false;
   }
 
-  async function handleUpdateStatus() {
-    if (!updateStatusModal.selectedAction) return;
+  async function handleUpdateStatus(action: string, datetime?: string) {
+    if (!currentTripForUpdate?.id) return;
+    if (action !== 'cancel' && !datetime) return;
+
+    const formattedDatetime = datetime ? new Date(datetime).toISOString() : undefined;
 
     try {
-      updateStatusError = null;
       let updatedTrip: Trip;
 
-      switch (updateStatusModal.selectedAction) {
+      switch (action) {
         case 'begin':
-          updatedTrip = await beginTrip(trip.id, {
-            departure_time: new Date(updateStatusModal.datetime).toISOString()
+          updatedTrip = await beginTrip(currentTripForUpdate.id, {
+            departure_time: formattedDatetime!
           });
           break;
         case 'complete':
-          updatedTrip = await finishTripSuccess(trip.id, {
-            arrival_time: new Date(updateStatusModal.datetime).toISOString()
-          });
-          break;
         case 'fail':
-          updatedTrip = await finishTripFailure(trip.id, {
-            arrival_time: new Date(updateStatusModal.datetime).toISOString()
+          updatedTrip = await (action === 'complete' ? finishTripSuccess : finishTripFailure)(currentTripForUpdate.id, {
+            arrival_time: formattedDatetime!
           });
           break;
         case 'cancel':
-          updatedTrip = await cancelTrip(trip.id);
+          updatedTrip = await cancelTrip(currentTripForUpdate.id);
           break;
         default:
           throw new Error('Invalid action');
       }
 
       trip = updatedTrip;
-      closeUpdateStatus();
     } catch (error) {
       console.error('Failed to update status:', error);
-      updateStatusError = 'Failed to update trip status. Please try again.';
+      throw error;
     }
   }
 
@@ -328,61 +311,12 @@
     {/if}
   </div>
 
-  {#if updateStatusModal.isOpen}
-    <div class="modal-backdrop" on:click={closeUpdateStatus}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Update Trip Status</h3>
-          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if updateStatusError}
-            <div class="error-message">
-              {updateStatusError}
-            </div>
-          {/if}
-
-          <div class="form-group">
-            <label for="status-action">Action</label>
-            <select 
-              id="status-action"
-              bind:value={updateStatusModal.selectedAction}
-              class="form-select"
-            >
-              <option value="">Select an action...</option>
-              {#each getAvailableActions(updateStatusModal.currentStatus) as action}
-                <option value={action.value}>{action.label}</option>
-              {/each}
-            </select>
-          </div>
-
-          {#if updateStatusModal.selectedAction && updateStatusModal.selectedAction !== 'cancel'}
-            <div class="form-group">
-              <label for="status-datetime">
-                {updateStatusModal.selectedAction === 'begin' ? 'Departure' : 'Arrival'} Time
-              </label>
-              <input
-                type="datetime-local"
-                id="status-datetime"
-                bind:value={updateStatusModal.datetime}
-                class="form-input"
-              />
-            </div>
-          {/if}
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleUpdateStatus}
-            disabled={!updateStatusModal.selectedAction}
-          >
-            Update Status
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <UpdateStatusModal
+    isOpen={isUpdateStatusModalOpen}
+    onClose={closeUpdateStatus}
+    onSubmit={handleUpdateStatus}
+    availableActions={currentTripForUpdate ? getAvailableActions(currentTripForUpdate.status) : []}
+  />
 
   {#if addNoteModal.isOpen}
     <div class="modal-backdrop" on:click={closeAddNote}>
@@ -754,13 +688,6 @@
 
   .form-group {
     margin-bottom: var(--spacing-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
   }
 
   .form-select,
