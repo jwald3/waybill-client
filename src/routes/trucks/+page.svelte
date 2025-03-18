@@ -13,6 +13,7 @@
     getAvailableStatusTransitions
   } from '$lib/api/trucks';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
+  import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
 
   export let data;
   let trucks: Truck[] = data.trucks || [];
@@ -42,23 +43,9 @@
   // Status options
   const statusTypes = ['ALL', 'IN_TRANSIT', 'MAINTENANCE', 'AVAILABLE'];
 
-  // Add these new interfaces
-  interface UpdateStatusModal {
-    isOpen: boolean;
-    truckId: string | null;
-    currentStatus: TruckStatus | null;
-    selectedStatus: TruckStatus | null;
-  }
-
-  // Add this state
-  let updateStatusModal: UpdateStatusModal = {
-    isOpen: false,
-    truckId: null,
-    currentStatus: null,
-    selectedStatus: null
-  };
-
-  let updateStatusError: string | null = null;
+  let isUpdateStatusModalOpen = false;
+  let currentTruckId: string | null = null;
+  let currentTruckStatus: TruckStatus | null = null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -163,50 +150,40 @@
       return;
     }
     
-    updateStatusModal = {
-      isOpen: true,
-      truckId: truck.id,
-      currentStatus: truck.status,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentTruckId = truck.id;
+    currentTruckStatus = truck.status;
+    isUpdateStatusModalOpen = true;
   }
 
   function closeUpdateStatus() {
-    updateStatusModal = {
-      isOpen: false,
-      truckId: null,
-      currentStatus: null,
-      selectedStatus: null
-    };
-    updateStatusError = null;
+    currentTruckId = null;
+    currentTruckStatus = null;
+    isUpdateStatusModalOpen = false;
   }
 
-  async function handleUpdateStatus() {
-    if (!updateStatusModal.truckId || !updateStatusModal.selectedStatus) return;
+  async function handleUpdateStatus(newStatus: TruckStatus) {
+    if (!currentTruckId) return;
 
     try {
-      updateStatusError = null;
       let updatedTruck: Truck;
 
-      switch (updateStatusModal.selectedStatus) {
+      switch (newStatus) {
         case 'AVAILABLE':
-          updatedTruck = await setTruckAvailable(updateStatusModal.truckId);
+          updatedTruck = await setTruckAvailable(currentTruckId);
           break;
         case 'IN_TRANSIT':
-          updatedTruck = await setTruckInTransit(updateStatusModal.truckId);
+          updatedTruck = await setTruckInTransit(currentTruckId);
           break;
         case 'UNDER_MAINTENANCE':
-          updatedTruck = await setTruckInMaintenance(updateStatusModal.truckId);
+          updatedTruck = await setTruckInMaintenance(currentTruckId);
           break;
         case 'RETIRED':
-          updatedTruck = await retireTruck(updateStatusModal.truckId);
+          updatedTruck = await retireTruck(currentTruckId);
           break;
         default:
           throw new Error('Invalid status selected');
       }
 
-      // Update the trucks array with the updated truck
       trucks = trucks.map(truck => 
         truck.id === updatedTruck.id ? updatedTruck : truck
       );
@@ -214,7 +191,7 @@
       closeUpdateStatus();
     } catch (error) {
       console.error('Failed to update status:', error);
-      updateStatusError = 'Failed to update truck status. Please try again.';
+      throw error;
     }
   }
 </script>
@@ -369,48 +346,12 @@
     {/if}
   </div>
 
-  <!-- Keep the modal outside the error condition -->
-  {#if updateStatusModal.isOpen}
-    <div class="modal-backdrop" on:click={closeUpdateStatus}>
-      <div class="modal-content" on:click|stopPropagation>
-        <div class="modal-header">
-          <h3>Update Truck Status</h3>
-          <button class="modal-close" on:click={closeUpdateStatus}>×</button>
-        </div>
-        <div class="modal-body">
-          {#if updateStatusError}
-            <div class="error-message">
-              {updateStatusError}
-            </div>
-          {/if}
-
-          <div class="form-group">
-            <label for="status-action">New Status</label>
-            <select 
-              id="status-action"
-              bind:value={updateStatusModal.selectedStatus}
-              class="form-select"
-            >
-              <option value="">Select a new status...</option>
-              {#each getAvailableStatusTransitions(updateStatusModal.currentStatus ?? 'AVAILABLE') as status}
-                <option value={status.value}>{status.label}</option>
-              {/each}
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="action-button" on:click={closeUpdateStatus}>Cancel</button>
-          <button 
-            class="action-button primary"
-            on:click={handleUpdateStatus}
-            disabled={!updateStatusModal.selectedStatus}
-          >
-            Update Status
-          </button>
-        </div>
-      </div>
-    </div>
-  {/if}
+  <TruckStatusModal
+    isOpen={isUpdateStatusModalOpen}
+    onClose={closeUpdateStatus}
+    onSubmit={handleUpdateStatus}
+    availableStatuses={currentTruckStatus ? getAvailableStatusTransitions(currentTruckStatus) : []}
+  />
 </Layout>
 
 <style>
@@ -525,13 +466,6 @@
     align-items: center;
   }
 
-  .modal-header h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--text-primary);
-    margin: 0;
-  }
-
   .modal-close {
     background: none;
     border: none;
@@ -569,21 +503,8 @@
     padding: 2rem;
   }
 
-  .error-message p {
-    color: var(--error-color, #dc2626);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-  }
-
   .form-group {
     margin-bottom: var(--spacing-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
   }
 
   .form-select {
