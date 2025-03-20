@@ -5,7 +5,6 @@
   import { goto } from '$app/navigation';
   import { getTrucks } from '$lib/api/trucks';
   import type { Truck } from '$lib/api/trucks';
-  import { API_BASE_URL } from '$lib/api/client';
   import { createMaintenanceLog } from '$lib/api/maintenance';
   import { page } from '$app/stores';
   

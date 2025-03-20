@@ -176,12 +176,12 @@
       </div>
 
       <div class="action-buttons">
-        <button class="action-button primary">
+        <a href="/maintenance/new?truck={truck.id}" class="action-button primary">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
           </svg>
           Schedule Maintenance
-        </button>
+        </a>
         {#if truck.status !== 'RETIRED'}
           <button class="action-button" on:click={openUpdateStatus}>
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
