@@ -283,7 +283,7 @@
 
               <div class="record-actions">
                 <a href="/trucks/{truck.id}" class="action-button">View Details</a>
-                <button class="action-button">Schedule Maintenance</button>
+                <a href="/maintenance/new?truck={truck.id}" class="action-button">Schedule Maintenance</a>
                 {#if truck.status !== 'RETIRED'}
                   <button class="action-button" on:click={() => openUpdateStatus(truck)}>
                     Update Status

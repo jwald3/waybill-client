@@ -7,9 +7,13 @@
   import type { Truck } from '$lib/api/trucks';
   import { API_BASE_URL } from '$lib/api/client';
   import { createMaintenanceLog } from '$lib/api/maintenance';
+  import { page } from '$app/stores';
+  
+  // Get truck_id from URL query parameter
+  $: selectedTruckId = $page.url.searchParams.get('truck') || '';
   
   let formData = {
-    truck_id: '',
+    truck_id: selectedTruckId, // Initialize with URL parameter
     date: '',
     service_type: 'ROUTINE_MAINTENANCE' as const,
     cost: 0,
@@ -36,6 +40,9 @@
       .map(word => word.charAt(0) + word.slice(1).toLowerCase())
       .join(' ');
   }
+
+  // Update formData.truck_id when URL parameter changes
+  $: formData.truck_id = selectedTruckId;
 
   async function handleSubmit() {
     try {
