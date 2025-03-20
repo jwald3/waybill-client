@@ -47,14 +47,14 @@
     {/if}
 
     <div class="form-group">
-      <label for="status-select" class="form-label">New Status</label>
+      <label for="status-select" class="form-label">Action</label>
       <select 
         id="status-select"
         bind:value={selectedStatus}
-        class="form-input"
+        class="form-select"
         disabled={isSubmitting}
       >
-        <option value={null}>Select a new status...</option>
+        <option value={null}>Select an action...</option>
         {#each availableStatuses as status}
           <option value={status.value}>{status.label}</option>
         {/each}
@@ -102,30 +102,27 @@
     font-size: var(--font-size-sm);
   }
 
-  :global(.form-input) {
+  :global(.form-select) {
     width: 100%;
-    padding: var(--spacing-sm) var(--spacing-md);
-    height: 42px;
+    padding: 8px 12px;
+    height: 40px;
     background: var(--bg-secondary);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-  }
-
-  :global(select.form-input) {
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right var(--spacing-sm) center;
-    padding-right: var(--spacing-xl);
+    background-position: right 12px center;
+    padding-right: 36px;
   }
 
-  :global(.form-input:focus) {
+  :global(.form-select:focus) {
     outline: none;
     border-color: var(--theme-color);
   }
 
-  :global(.form-input:disabled) {
+  :global(.form-select:disabled) {
     opacity: 0.7;
     cursor: not-allowed;
   }

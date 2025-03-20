@@ -100,7 +100,7 @@
 
   :global(.form-input) {
     width: 100%;
-    min-height: 120px;
+    min-height: 40px;
     resize: vertical;
   }
 
