@@ -106,6 +106,10 @@
     width: 100%;
     padding: var(--spacing-sm) var(--spacing-md);
     height: 42px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
   }
 
   :global(select.form-input) {
@@ -116,8 +120,26 @@
     padding-right: var(--spacing-xl);
   }
 
+  :global(.form-input:focus) {
+    outline: none;
+    border-color: var(--theme-color);
+  }
+
+  :global(.form-input:disabled) {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
   :global(.form-cancel),
   :global(.form-submit) {
     min-width: 100px;
+  }
+
+  :global(.form-label) {
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    display: block;
   }
 </style> 
