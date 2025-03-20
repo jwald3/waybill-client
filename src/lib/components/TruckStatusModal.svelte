@@ -39,37 +39,39 @@
 </script>
 
 <Modal {isOpen} title="Update Truck Status" {onClose}>
-  {#if error}
-    <div class="error-message">
-      <p>{error}</p>
-    </div>
-  {/if}
+  <div class="modal-content">
+    {#if error}
+      <div class="error-message">
+        <p>{error}</p>
+      </div>
+    {/if}
 
-  <div class="form-group">
-    <label for="status-select">New Status</label>
-    <select 
-      id="status-select"
-      bind:value={selectedStatus}
-      class="form-select"
-      disabled={isSubmitting}
-    >
-      <option value={null}>Select a new status...</option>
-      {#each availableStatuses as status}
-        <option value={status.value}>{status.label}</option>
-      {/each}
-    </select>
+    <div class="form-group">
+      <label for="status-select" class="form-label">New Status</label>
+      <select 
+        id="status-select"
+        bind:value={selectedStatus}
+        class="form-input"
+        disabled={isSubmitting}
+      >
+        <option value={null}>Select a new status...</option>
+        {#each availableStatuses as status}
+          <option value={status.value}>{status.label}</option>
+        {/each}
+      </select>
+    </div>
   </div>
 
-  <div slot="footer">
+  <div slot="footer" class="modal-footer">
     <button 
-      class="action-button" 
+      class="form-cancel" 
       on:click={onClose}
       disabled={isSubmitting}
     >
       Cancel
     </button>
     <button 
-      class="action-button primary"
+      class="form-submit"
       on:click={handleSubmit}
       disabled={isSubmitting || !selectedStatus}
     >
@@ -79,6 +81,17 @@
 </Modal>
 
 <style>
+  .modal-content {
+    padding: var(--spacing-lg);
+  }
+
+  .modal-footer {
+    padding: var(--spacing-md);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+  }
+
   .error-message {
     padding: 0 0 var(--spacing-md);
   }
@@ -89,34 +102,22 @@
     font-size: var(--font-size-sm);
   }
 
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-sm);
-    color: var(--text-primary);
-    font-weight: 500;
-  }
-
-  .form-select {
+  :global(.form-input) {
     width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    height: 42px;
   }
 
-  .form-select:focus {
-    outline: none;
-    border-color: var(--theme-color);
+  :global(select.form-input) {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-sm) center;
+    padding-right: var(--spacing-xl);
   }
 
-  .form-select:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
+  :global(.form-cancel),
+  :global(.form-submit) {
+    min-width: 100px;
   }
 </style> 
