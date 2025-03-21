@@ -3,14 +3,17 @@
   import { Chart, type ChartConfiguration } from 'chart.js/auto';
   import { colorMode } from '$lib/stores/theme';
 
-  export let data: {
+  export let data: Array<{
     label: string;
     value: number;
     color: string;
-  }[];
+  }>;
 
   let canvas: HTMLCanvasElement;
-  let totalValue = data.reduce((sum, item) => sum + item.value, 0);
+  let total = data.reduce((sum, item) => sum + item.value, 0);
+  let availablePercentage = total > 0 
+    ? Math.round((data.find(d => d.label === 'Available')?.value || 0) / total * 100)
+    : 0;
 
   let chart: Chart | null = null;
   
@@ -74,42 +77,38 @@
   }
 </script>
 
-<div class="chart-wrapper">
+<div class="pie-chart">
   <canvas bind:this={canvas}></canvas>
-  <div class="total-indicator">
-    <span class="total-label">Total</span>
-    <span class="total-value">{totalValue}%</span>
+  <div class="center-label">
+    <span class="percentage">{availablePercentage}%</span>
+    <span class="label">Available</span>
   </div>
 </div>
 
 <style>
-  .chart-wrapper {
+  .pie-chart {
     width: 100%;
     height: 100%;
     position: relative;
   }
 
-  .total-indicator {
+  .center-label {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
+    text-align: center;
   }
 
-  .total-label {
+  .percentage {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .label {
+    display: block;
     font-size: 0.875rem;
     color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .total-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
   }
 </style> 
