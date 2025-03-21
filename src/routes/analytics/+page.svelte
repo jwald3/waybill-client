@@ -103,7 +103,11 @@
           </div>
           <div class="chart-row">
             <div class="chart-container">
-              <PieChart data={data.charts.fleetStatus} />
+              <PieChart 
+                data={data.charts.fleetStatus} 
+                centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
+                centerLabel="Available"
+              />
             </div>
             <div class="chart-legend">
               {#each data.charts.fleetStatus as status}
@@ -143,7 +147,15 @@
       <div class="side-column">
         <Card title="Maintenance Overview" icon={icons.maintenance}>
           <div class="chart-container-small">
-            <PieChart data={data.charts.maintenanceTypes} />
+            {#if data.charts.maintenanceTypes.length > 0}
+              {@const total = data.charts.maintenanceTypes.reduce((sum, type) => sum + type.value, 0)}
+              {@const routineCount = data.charts.maintenanceTypes.find(t => t.label === 'Routine')?.value || 0}
+              <PieChart 
+                data={data.charts.maintenanceTypes}
+                centerValue={`${total > 0 ? Math.round((routineCount / total) * 100) : 0}%`}
+                centerLabel="Routine"
+              />
+            {/if}
           </div>
           <div class="maintenance-list">
             {#each data.recentData.maintenance as log}

@@ -9,6 +9,10 @@
     color: string;
   }>;
 
+  // Add props for center label customization
+  export let centerLabel: string | undefined = undefined;
+  export let centerValue: string | number | undefined = undefined;
+
   let canvas: HTMLCanvasElement;
   let total = data.reduce((sum, item) => sum + item.value, 0);
   let availablePercentage = total > 0 
@@ -79,10 +83,12 @@
 
 <div class="pie-chart">
   <canvas bind:this={canvas}></canvas>
-  <div class="center-label">
-    <span class="percentage">{availablePercentage}%</span>
-    <span class="label">Available</span>
-  </div>
+  {#if centerLabel !== undefined && centerValue !== undefined}
+    <div class="center-label">
+      <span class="percentage">{centerValue}</span>
+      <span class="label">{centerLabel}</span>
+    </div>
+  {/if}
 </div>
 
 <style>
