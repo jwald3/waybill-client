@@ -176,7 +176,7 @@
 
       <div class="details-grid">
         <Card title="Schedule Information" icon={icons.calendar}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Departure (Scheduled)</span>
@@ -197,7 +197,7 @@
         </Card>
 
         <Card title="Cargo Details" icon={icons.box}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Description</span>
@@ -220,7 +220,7 @@
         </Card>
 
         <Card title="Trip Notes" icon={icons.notes}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="notes-list">
               {#each trip.notes as note}
                 <div class="note">
@@ -235,7 +235,7 @@
         </Card>
 
         <Card title="Record Details" icon={icons.chart}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Created</span>
@@ -359,10 +359,6 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .detail-group {
-    padding: 1.5rem;
   }
 
   .detail-item {

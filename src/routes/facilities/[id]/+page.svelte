@@ -59,7 +59,7 @@
 
       <div class="details-grid">
         <Card title="Facility Information" icon={icons.facilities}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Facility Name</span>
@@ -84,7 +84,7 @@
         </Card>
 
         <Card title="Location Details" icon={icons.routes}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Street Address</span>
@@ -109,7 +109,7 @@
         </Card>
 
         <Card title="Available Services" icon={icons.maintenance}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="services-list">
               {#each facility.services_available as service}
                 <span class="service-badge">{service}</span>
@@ -119,7 +119,7 @@
         </Card>
 
         <Card title="Record Details" icon={icons.chart}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Created</span>
@@ -211,10 +211,6 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .detail-group {
-    padding: 1.5rem;
   }
 
   .detail-item {

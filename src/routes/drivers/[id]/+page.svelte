@@ -126,7 +126,7 @@
 
       <div class="details-grid">
         <Card title="Personal Information" icon={icons.drivers}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Full Name</span>
@@ -151,7 +151,7 @@
         </Card>
 
         <Card title="License Information" icon={icons.notes}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">License Number</span>
@@ -172,7 +172,7 @@
         </Card>
 
         <Card title="Contact Information" icon={icons.facilities}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Street Address</span>
@@ -290,10 +290,6 @@
     margin-bottom: 2.5rem;
   }
 
-  .detail-group {
-    padding: 1.5rem;
-  }
-  
   .detail-item {
     display: flex;
     flex-direction: column;

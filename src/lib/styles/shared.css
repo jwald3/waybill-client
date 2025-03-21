@@ -851,6 +851,10 @@
   }
 }
 
+.resource-page-detail-group {
+  padding: 1.5rem;
+}
+
 .resource-page-detail-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

@@ -104,7 +104,7 @@
 
       <div class="details-grid">
         <Card title="Vehicle Information" icon={icons.truck}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Make & Model</span>
@@ -129,7 +129,7 @@
         </Card>
 
         <Card title="Specifications" icon={icons.settings}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Trailer Type</span>
@@ -150,7 +150,7 @@
         </Card>
 
         <Card title="Usage & Maintenance" icon={icons.chart}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Current Mileage</span>
@@ -249,11 +249,7 @@
     gap: 1.5rem;
     margin-bottom: 2.5rem;
   }
-
-  .detail-group {
-    padding: 1.5rem;
-  }
-
+  
   .detail-item {
     display: flex;
     flex-direction: column;

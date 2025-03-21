@@ -47,7 +47,7 @@
 
       <div class="details-grid">
         <Card title="Driver Information" icon={icons.drivers}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Driver Name</span>
@@ -72,7 +72,7 @@
         </Card>
 
         <Card title="Vehicle Details" icon={icons.truck}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Truck Number</span>
@@ -97,7 +97,7 @@
         </Card>
 
         <Card title="Incident Details" icon={icons.incidents}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Location</span>
@@ -114,7 +114,7 @@
         </Card>
 
         <Card title="Trip Information" icon={icons.routes}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Trip Number</span>
@@ -200,10 +200,6 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .detail-group {
-    padding: 1.5rem;
   }
 
   .detail-item {

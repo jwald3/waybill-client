@@ -62,7 +62,7 @@
 
       <div class="details-grid">
         <Card title="Service Information" icon={icons.maintenance}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Service Date</span>
@@ -93,7 +93,7 @@
         </Card>
 
         <Card title="Vehicle Information" icon={icons.truck}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Vehicle</span>
@@ -118,7 +118,7 @@
         </Card>
 
         <Card title="Record Details" icon={icons.chart}>
-          <div class="detail-group">
+          <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Created</span>
@@ -215,10 +215,6 @@
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-  }
-
-  .detail-group {
-    padding: 1.5rem;
   }
 
   .detail-item {
