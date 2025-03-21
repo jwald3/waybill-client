@@ -784,3 +784,18 @@
   background-position: right 12px center;
   padding-right: 36px;
 } 
+
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: var(--theme-color);
+}
