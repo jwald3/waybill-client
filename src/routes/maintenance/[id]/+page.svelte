@@ -169,20 +169,6 @@
     margin: 0 auto;
   }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-secondary);
-    text-decoration: none;
-    margin-bottom: 1.25rem;
-    font-size: 0.9rem;
-  }
-
-  .back-link:hover {
-    color: var(--theme-color);
-  }
-
   .title-section {
     display: flex;
     align-items: flex-start;
