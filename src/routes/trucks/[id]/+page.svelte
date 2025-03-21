@@ -105,7 +105,7 @@
       <div class="details-grid">
         <Card title="Vehicle Information" icon={icons.truck}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Make & Model</span>
                 <span class="value highlight">{truck.make} {truck.model}</span>
@@ -115,7 +115,7 @@
                 <span class="value">{truck.year}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">VIN</span>
                 <span class="value mono">{truck.vin}</span>
@@ -130,7 +130,7 @@
 
         <Card title="Specifications" icon={icons.settings}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Trailer Type</span>
                 <span class="value highlight">{truck.trailer_type.replace('_', ' ')}</span>
@@ -140,7 +140,7 @@
                 <span class="value">{truck.capacity_tons} tons</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Fuel Type</span>
                 <span class="value">{truck.fuel_type}</span>
@@ -151,7 +151,7 @@
 
         <Card title="Usage & Maintenance" icon={icons.chart}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Current Mileage</span>
                 <span class="value highlight">{formatNumber(truck.mileage)} miles</span>
@@ -161,7 +161,7 @@
                 <span class="value">{formatDate(truck.last_maintenance)}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Added to Fleet</span>
                 <span class="value">{formatDate(truck.created_at)}</span>
@@ -252,17 +252,6 @@
 
   .detail-group {
     padding: 1.5rem;
-  }
-
-  .detail-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-row:last-child {
-    margin-bottom: 0;
   }
 
   .detail-item {

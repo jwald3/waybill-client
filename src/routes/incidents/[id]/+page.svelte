@@ -48,7 +48,7 @@
       <div class="details-grid">
         <Card title="Driver Information" icon={icons.drivers}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Driver Name</span>
                 <span class="value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
@@ -58,7 +58,7 @@
                 <span class="value mono">{incident.driver.license_number}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Phone</span>
                 <span class="value mono">{incident.driver.phone}</span>
@@ -73,7 +73,7 @@
 
         <Card title="Vehicle Details" icon={icons.truck}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Truck Number</span>
                 <span class="value highlight">{incident.truck.truck_number}</span>
@@ -83,7 +83,7 @@
                 <span class="value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">VIN</span>
                 <span class="value mono">{incident.truck.vin}</span>
@@ -98,13 +98,13 @@
 
         <Card title="Incident Details" icon={icons.incidents}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Location</span>
                 <span class="value">{incident.location}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Description</span>
                 <p class="value description">{incident.description}</p>
@@ -115,7 +115,7 @@
 
         <Card title="Trip Information" icon={icons.routes}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Trip Number</span>
                 <span class="value mono">{incident.trip.trip_number}</span>
@@ -125,7 +125,7 @@
                 <StatusBadge status={incident.trip.status} type="trip" />
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Scheduled Departure</span>
                 <span class="value">{formatDate(incident.trip.departure_time.scheduled)}</span>
@@ -204,17 +204,6 @@
 
   .detail-group {
     padding: 1.5rem;
-  }
-
-  .detail-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-row:last-child {
-    margin-bottom: 0;
   }
 
   .detail-item {

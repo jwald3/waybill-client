@@ -60,7 +60,7 @@
       <div class="details-grid">
         <Card title="Facility Information" icon={icons.facilities}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Facility Name</span>
                 <span class="value highlight">{facility.name}</span>
@@ -70,7 +70,7 @@
                 <span class="value">Type {facility.type}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Phone</span>
                 <span class="value mono">{facility.contact_info.phone}</span>
@@ -85,13 +85,13 @@
 
         <Card title="Location Details" icon={icons.routes}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Street Address</span>
                 <span class="value">{facility.address.street}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">City</span>
                 <span class="value">{facility.address.city}</span>
@@ -120,7 +120,7 @@
 
         <Card title="Record Details" icon={icons.chart}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Created</span>
                 <span class="value">{formatDate(facility.created_at)}</span>
@@ -215,17 +215,6 @@
 
   .detail-group {
     padding: 1.5rem;
-  }
-
-  .detail-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-row:last-child {
-    margin-bottom: 0;
   }
 
   .detail-item {

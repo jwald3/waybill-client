@@ -850,3 +850,14 @@
     gap: 1rem;
   }
 }
+
+.resource-page-detail-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.resource-page-detail-row:last-child {
+  margin-bottom: 0;
+}

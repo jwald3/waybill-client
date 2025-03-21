@@ -177,7 +177,7 @@
       <div class="details-grid">
         <Card title="Schedule Information" icon={icons.calendar}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Departure (Scheduled)</span>
                 <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
@@ -198,7 +198,7 @@
 
         <Card title="Cargo Details" icon={icons.box}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Description</span>
                 <span class="value">{trip.cargo.description}</span>
@@ -236,7 +236,7 @@
 
         <Card title="Record Details" icon={icons.chart}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Created</span>
                 <span class="value">{formatDate(trip.created_at)}</span>
@@ -363,17 +363,6 @@
 
   .detail-group {
     padding: 1.5rem;
-  }
-
-  .detail-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-row:last-child {
-    margin-bottom: 0;
   }
 
   .detail-item {

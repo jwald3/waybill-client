@@ -127,7 +127,7 @@
       <div class="details-grid">
         <Card title="Personal Information" icon={icons.drivers}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Full Name</span>
                 <span class="value highlight">{driver.first_name} {driver.last_name}</span>
@@ -137,7 +137,7 @@
                 <span class="value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Email</span>
                 <span class="value mono">{driver.email}</span>
@@ -152,7 +152,7 @@
 
         <Card title="License Information" icon={icons.notes}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">License Number</span>
                 <span class="value highlight mono">{driver.license_number}</span>
@@ -162,7 +162,7 @@
                 <span class="value">{driver.license_state}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">Expiration Date</span>
                 <span class="value">{formatDate(driver.license_expiration)}</span>
@@ -173,13 +173,13 @@
 
         <Card title="Contact Information" icon={icons.facilities}>
           <div class="detail-group">
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item full-width">
                 <span class="label">Street Address</span>
                 <span class="value">{driver.address.street}</span>
               </div>
             </div>
-            <div class="detail-row">
+            <div class="resource-page-detail-row">
               <div class="detail-item">
                 <span class="label">City</span>
                 <span class="value">{driver.address.city}</span>
@@ -293,18 +293,7 @@
   .detail-group {
     padding: 1.5rem;
   }
-
-  .detail-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 2rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .detail-row:last-child {
-    margin-bottom: 0;
-  }
-
+  
   .detail-item {
     display: flex;
     flex-direction: column;
