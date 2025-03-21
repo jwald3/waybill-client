@@ -791,6 +791,11 @@
   padding-bottom: 1.5rem;
 }
 
+.resource-page-header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;

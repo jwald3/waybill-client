@@ -35,7 +35,7 @@
       <div class="loading">Loading maintenance details...</div>
     {:else}
       <div class="page-header">
-        <div class="header-content">
+        <div class="resource-page-header-content">
           <a href="/maintenance" class="back-link">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
@@ -158,11 +158,6 @@
 </Layout>
 
 <style>
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
   .title-section {
     display: flex;
     align-items: flex-start;
