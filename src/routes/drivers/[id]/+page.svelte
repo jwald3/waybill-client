@@ -124,7 +124,7 @@
         </div>
       </div>
 
-      <div class="details-grid">
+      <div class="resource-page-details-grid">
         <Card title="Personal Information" icon={icons.drivers}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
@@ -281,13 +281,6 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
   }
 
   .detail-item {

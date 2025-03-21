@@ -865,3 +865,16 @@
 .resource-page-detail-row:last-child {
   margin-bottom: 0;
 }
+
+.resource-page-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .resource-page-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
