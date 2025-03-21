@@ -50,21 +50,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Driver Name</span>
+                <span class="resource-page-detail-label">Driver Name</span>
                 <span class="value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">License Number</span>
+                <span class="resource-page-detail-label">License Number</span>
                 <span class="value mono">{incident.driver.license_number}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Phone</span>
+                <span class="resource-page-detail-label">Phone</span>
                 <span class="value mono">{incident.driver.phone}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Email</span>
+                <span class="resource-page-detail-label">Email</span>
                 <span class="value mono">{incident.driver.email}</span>
               </div>
             </div>
@@ -75,21 +75,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Truck Number</span>
+                <span class="resource-page-detail-label">Truck Number</span>
                 <span class="value highlight">{incident.truck.truck_number}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Vehicle</span>
+                <span class="resource-page-detail-label">Vehicle</span>
                 <span class="value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">VIN</span>
+                <span class="resource-page-detail-label">VIN</span>
                 <span class="value mono">{incident.truck.vin}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">License Plate</span>
+                <span class="resource-page-detail-label">License Plate</span>
                 <span class="value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
               </div>
             </div>
@@ -100,13 +100,13 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
-                <span class="label">Location</span>
+                <span class="resource-page-detail-label">Location</span>
                 <span class="value">{incident.location}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
-                <span class="label">Description</span>
+                <span class="resource-page-detail-label">Description</span>
                 <p class="value description">{incident.description}</p>
               </div>
             </div>
@@ -117,21 +117,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Trip Number</span>
+                <span class="resource-page-detail-label">Trip Number</span>
                 <span class="value mono">{incident.trip.trip_number}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Trip Status</span>
+                <span class="resource-page-detail-label">Trip Status</span>
                 <StatusBadge status={incident.trip.status} type="trip" />
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Scheduled Departure</span>
+                <span class="resource-page-detail-label">Scheduled Departure</span>
                 <span class="value">{formatDate(incident.trip.departure_time.scheduled)}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Scheduled Arrival</span>
+                <span class="resource-page-detail-label">Scheduled Arrival</span>
                 <span class="value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
               </div>
             </div>
@@ -195,12 +195,6 @@
     color: var(--theme-color);
   }
   
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
   .value {
     font-size: 1.1rem;
     font-weight: 500;

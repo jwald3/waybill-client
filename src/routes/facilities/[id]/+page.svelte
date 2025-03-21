@@ -62,21 +62,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Facility Name</span>
+                <span class="resource-page-detail-label">Facility Name</span>
                 <span class="value highlight">{facility.name}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Facility Type</span>
+                <span class="resource-page-detail-label">Facility Type</span>
                 <span class="value">Type {facility.type}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Phone</span>
+                <span class="resource-page-detail-label">Phone</span>
                 <span class="value mono">{facility.contact_info.phone}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Email</span>
+                <span class="resource-page-detail-label">Email</span>
                 <span class="value mono">{facility.contact_info.email}</span>
               </div>
             </div>
@@ -87,21 +87,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
-                <span class="label">Street Address</span>
+                <span class="resource-page-detail-label">Street Address</span>
                 <span class="value">{facility.address.street}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">City</span>
+                <span class="resource-page-detail-label">City</span>
                 <span class="value">{facility.address.city}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">State</span>
+                <span class="resource-page-detail-label">State</span>
                 <span class="value">{facility.address.state}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">ZIP Code</span>
+                <span class="resource-page-detail-label">ZIP Code</span>
                 <span class="value mono">{facility.address.zip}</span>
               </div>
             </div>
@@ -122,11 +122,11 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Created</span>
+                <span class="resource-page-detail-label">Created</span>
                 <span class="value">{formatDate(facility.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Last Updated</span>
+                <span class="resource-page-detail-label">Last Updated</span>
                 <span class="value">{formatDate(facility.updated_at)}</span>
               </div>
             </div>
@@ -204,12 +204,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
   }
 
   .value {

@@ -129,21 +129,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Full Name</span>
+                <span class="resource-page-detail-label">Full Name</span>
                 <span class="value highlight">{driver.first_name} {driver.last_name}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Date of Birth</span>
+                <span class="resource-page-detail-label">Date of Birth</span>
                 <span class="value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Email</span>
+                <span class="resource-page-detail-label">Email</span>
                 <span class="value mono">{driver.email}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Phone</span>
+                <span class="resource-page-detail-label">Phone</span>
                 <span class="value mono">{driver.phone}</span>
               </div>
             </div>
@@ -154,17 +154,17 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">License Number</span>
+                <span class="resource-page-detail-label">License Number</span>
                 <span class="value highlight mono">{driver.license_number}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">State</span>
+                <span class="resource-page-detail-label">State</span>
                 <span class="value">{driver.license_state}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Expiration Date</span>
+                <span class="resource-page-detail-label">Expiration Date</span>
                 <span class="value">{formatDate(driver.license_expiration)}</span>
               </div>
             </div>
@@ -175,21 +175,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
-                <span class="label">Street Address</span>
+                <span class="resource-page-detail-label">Street Address</span>
                 <span class="value">{driver.address.street}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">City</span>
+                <span class="resource-page-detail-label">City</span>
                 <span class="value">{driver.address.city}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">State</span>
+                <span class="resource-page-detail-label">State</span>
                 <span class="value">{driver.address.state}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">ZIP Code</span>
+                <span class="resource-page-detail-label">ZIP Code</span>
                 <span class="value mono">{driver.address.zip}</span>
               </div>
             </div>
@@ -281,12 +281,6 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
   }
 
   .value {

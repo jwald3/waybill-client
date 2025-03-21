@@ -65,27 +65,27 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Service Date</span>
+                <span class="resource-page-detail-label">Service Date</span>
                 <span class="value highlight">{formatDate(maintenance.date)}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Service Type</span>
+                <span class="resource-page-detail-label">Service Type</span>
                 <span class="value">{formatServiceType(maintenance.service_type)}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Mechanic</span>
+                <span class="resource-page-detail-label">Mechanic</span>
                 <span class="value">{maintenance.mechanic}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Location</span>
+                <span class="resource-page-detail-label">Location</span>
                 <span class="value">{maintenance.location}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
-                <span class="label">Service Notes</span>
+                <span class="resource-page-detail-label">Service Notes</span>
                 <span class="value notes">{maintenance.notes}</span>
               </div>
             </div>
@@ -96,21 +96,21 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Vehicle</span>
+                <span class="resource-page-detail-label">Vehicle</span>
                 <span class="value highlight">{maintenance.truck.make} {maintenance.truck.model} ({maintenance.truck.year})</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">VIN</span>
+                <span class="resource-page-detail-label">VIN</span>
                 <span class="value mono">{maintenance.truck.vin}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Current Mileage</span>
+                <span class="resource-page-detail-label">Current Mileage</span>
                 <span class="value">{formatNumber(maintenance.truck.mileage)} miles</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">License Plate</span>
+                <span class="resource-page-detail-label">License Plate</span>
                 <span class="value mono">{maintenance.truck.license_plate.number} ({maintenance.truck.license_plate.state})</span>
               </div>
             </div>
@@ -121,11 +121,11 @@
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
-                <span class="label">Created</span>
+                <span class="resource-page-detail-label">Created</span>
                 <span class="value">{formatDate(maintenance.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
-                <span class="label">Last Updated</span>
+                <span class="resource-page-detail-label">Last Updated</span>
                 <span class="value">{formatDate(maintenance.updated_at)}</span>
               </div>
             </div>
@@ -208,12 +208,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    font-weight: 500;
   }
 
   .value {

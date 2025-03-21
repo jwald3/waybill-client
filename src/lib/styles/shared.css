@@ -888,3 +888,9 @@
 .resource-page-detail-item.full-width {
   grid-column: 1 / -1;
 }
+
+.resource-page-detail-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
