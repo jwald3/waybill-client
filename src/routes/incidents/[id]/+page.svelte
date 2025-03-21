@@ -30,7 +30,7 @@
             Back to Incidents
           </a>
           <div class="resource-page-title-section">
-            <div class="incident-header">
+            <div class="resource-page-header">
               <div class="title-info">
                 <h1 class="page-title">Incident Report #{incident.id}</h1>
                 <span class="incident-date">{formatDate(incident.date)}</span>
@@ -165,13 +165,6 @@
 </Layout>
 
 <style>
-  .incident-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   .title-info {
     display: flex;
     flex-direction: column;

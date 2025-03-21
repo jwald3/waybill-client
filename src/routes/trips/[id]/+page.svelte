@@ -151,7 +151,7 @@
             Back to Trip Management
           </a>
           <div class="title-section">
-            <div class="trip-header">
+            <div class="resource-page-header">
               <div class="title-info">
                 <h1 class="page-title">Trip #{trip.trip_number}</h1>
                 <span class="trip-cargo">{trip.cargo.description}</span>
@@ -291,13 +291,6 @@
 </Layout>
 
 <style>
-  .trip-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   .title-info {
     display: flex;
     flex-direction: column;
@@ -456,14 +449,6 @@
 
     .details-grid {
       grid-template-columns: 1fr;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .trip-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
     }
   }
 </style> 

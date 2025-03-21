@@ -804,6 +804,13 @@
   margin: 0 auto;
 }
 
+.resource-page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .resource-page-title-section {
   display: flex;
   align-items: center;
@@ -834,4 +841,12 @@
 
 .action-button.primary:hover {
   opacity: 0.9;
+}
+
+@media (max-width: 480px) {
+  .resource-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
 }

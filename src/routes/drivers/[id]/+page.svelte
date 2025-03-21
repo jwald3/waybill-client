@@ -104,7 +104,7 @@
             Back to Driver Management
           </a>
           <div class="resource-page-title-section">
-            <div class="driver-header">
+            <div class="resource-page-header">
               <div class="avatar">
                 {#if driver?.first_name && driver?.last_name}
                   {driver.first_name[0]}{driver.last_name[0]}
@@ -231,12 +231,6 @@
 />
 
 <style>
-  .driver-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
   .avatar {
     width: 64px;
     height: 64px;

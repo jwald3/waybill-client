@@ -43,7 +43,7 @@
             Back to Maintenance Management
           </a>
           <div class="resource-page-title-section">
-            <div class="maintenance-header">
+            <div class="resource-page-header">
               <div class="title-info">
                 <h1 class="page-title">{maintenance.truck.make} {maintenance.truck.model}</h1>
                 <span class="truck-number">#{maintenance.truck.truck_number}</span>
@@ -158,13 +158,6 @@
 </Layout>
 
 <style>
-  .maintenance-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   .title-info {
     display: flex;
     flex-direction: column;

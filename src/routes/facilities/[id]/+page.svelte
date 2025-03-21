@@ -40,7 +40,7 @@
             Back to Facility Management
           </a>
           <div class="resource-page-title-section">
-            <div class="facility-header">
+            <div class="resource-page-header">
               <div class="title-info">
                 <h1 class="page-title">{facility.name}</h1>
                 <span class="facility-number">#{facility.facility_number}</span>
@@ -154,13 +154,6 @@
 </Layout>
 
 <style>
-  .facility-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
   .title-info {
     display: flex;
     flex-direction: column;
