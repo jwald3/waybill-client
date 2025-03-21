@@ -180,14 +180,14 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Departure (Scheduled)</span>
-                <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
+                <span class="resource-page-detail-value">{formatDate(trip.departure_time.scheduled)}</span>
                 {#if trip.departure_time.actual}
                   <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
                 {/if}
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Arrival (Scheduled)</span>
-                <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
+                <span class="resource-page-detail-value">{formatDate(trip.arrival_time.scheduled)}</span>
                 {#if trip.arrival_time.actual}
                   <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
                 {/if}
@@ -201,11 +201,11 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Description</span>
-                <span class="value">{trip.cargo.description}</span>
+                <span class="resource-page-detail-value">{trip.cargo.description}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Weight</span>
-                <span class="value">{formatNumber(trip.cargo.weight)} lbs</span>
+                <span class="resource-page-detail-value">{formatNumber(trip.cargo.weight)} lbs</span>
               </div>
             </div>
             {#if trip.cargo.hazmat}
@@ -239,11 +239,11 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Created</span>
-                <span class="value">{formatDate(trip.created_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(trip.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Last Updated</span>
-                <span class="value">{formatDate(trip.updated_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(trip.updated_at)}</span>
               </div>
             </div>
           </div>
@@ -352,12 +352,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
   }
 
   .sub-value {

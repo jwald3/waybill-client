@@ -894,3 +894,31 @@
   color: var(--text-secondary);
   font-weight: 500;
 }
+
+.resource-page-detail-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.resource-page-detail-value.highlight {
+  color: var(--theme-color);
+  font-weight: 600;
+}
+
+.resource-page-detail-value.mono {
+  font-family: monospace;
+  letter-spacing: 0.5px;
+}
+
+.resource-page-detail-value.description {
+  font-size: 1rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.resource-page-detail-value.notes {
+    font-size: 1rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }

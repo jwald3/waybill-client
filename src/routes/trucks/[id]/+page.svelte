@@ -108,21 +108,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Make & Model</span>
-                <span class="value highlight">{truck.make} {truck.model}</span>
+                <span class="resource-page-detail-value highlight">{truck.make} {truck.model}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Year</span>
-                <span class="value">{truck.year}</span>
+                <span class="resource-page-detail-value">{truck.year}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">VIN</span>
-                <span class="value mono">{truck.vin}</span>
+                <span class="resource-page-detail-value mono">{truck.vin}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Plate</span>
-                <span class="value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
+                <span class="resource-page-detail-value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
               </div>
             </div>
           </div>
@@ -133,17 +133,17 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Trailer Type</span>
-                <span class="value highlight">{truck.trailer_type.replace('_', ' ')}</span>
+                <span class="resource-page-detail-value highlight">{truck.trailer_type.replace('_', ' ')}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Capacity</span>
-                <span class="value">{truck.capacity_tons} tons</span>
+                <span class="resource-page-detail-value">{truck.capacity_tons} tons</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Fuel Type</span>
-                <span class="value">{truck.fuel_type}</span>
+                <span class="resource-page-detail-value">{truck.fuel_type}</span>
               </div>
             </div>
           </div>
@@ -154,21 +154,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Current Mileage</span>
-                <span class="value highlight">{formatNumber(truck.mileage)} miles</span>
+                <span class="resource-page-detail-value highlight">{formatNumber(truck.mileage)} miles</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Last Maintenance</span>
-                <span class="value">{formatDate(truck.last_maintenance)}</span>
+                <span class="resource-page-detail-value">{formatDate(truck.last_maintenance)}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Added to Fleet</span>
-                <span class="value">{formatDate(truck.created_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(truck.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Last Updated</span>
-                <span class="value">{formatDate(truck.updated_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(truck.updated_at)}</span>
               </div>
             </div>
           </div>
@@ -241,22 +241,6 @@
   .status-badge.available {
     background: #dcfce7;
     color: #15803d;
-  }
-
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .value.highlight {
-    color: var(--theme-color);
-    font-weight: 600;
-  }
-
-  .value.mono {
-    font-family: monospace;
-    letter-spacing: 0.5px;
   }
 
   .state {

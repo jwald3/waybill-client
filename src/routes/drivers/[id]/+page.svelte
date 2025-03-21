@@ -130,21 +130,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Full Name</span>
-                <span class="value highlight">{driver.first_name} {driver.last_name}</span>
+                <span class="resource-page-detail-value highlight">{driver.first_name} {driver.last_name}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Date of Birth</span>
-                <span class="value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
+                <span class="resource-page-detail-value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Email</span>
-                <span class="value mono">{driver.email}</span>
+                <span class="resource-page-detail-value mono">{driver.email}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Phone</span>
-                <span class="value mono">{driver.phone}</span>
+                <span class="resource-page-detail-value mono">{driver.phone}</span>
               </div>
             </div>
           </div>
@@ -155,17 +155,17 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Number</span>
-                <span class="value highlight mono">{driver.license_number}</span>
+                <span class="resource-page-detail-value highlight mono">{driver.license_number}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">State</span>
-                <span class="value">{driver.license_state}</span>
+                <span class="resource-page-detail-value">{driver.license_state}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Expiration Date</span>
-                <span class="value">{formatDate(driver.license_expiration)}</span>
+                <span class="resource-page-detail-value">{formatDate(driver.license_expiration)}</span>
               </div>
             </div>
           </div>
@@ -176,21 +176,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
                 <span class="resource-page-detail-label">Street Address</span>
-                <span class="value">{driver.address.street}</span>
+                <span class="resource-page-detail-value">{driver.address.street}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">City</span>
-                <span class="value">{driver.address.city}</span>
+                <span class="resource-page-detail-value">{driver.address.city}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">State</span>
-                <span class="value">{driver.address.state}</span>
+                <span class="resource-page-detail-value">{driver.address.state}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">ZIP Code</span>
-                <span class="value mono">{driver.address.zip}</span>
+                <span class="resource-page-detail-value mono">{driver.address.zip}</span>
               </div>
             </div>
           </div>
@@ -281,22 +281,6 @@
   .status-badge.terminated {
     background: #f3f4f6;
     color: #4b5563;
-  }
-
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .value.highlight {
-    color: var(--theme-color);
-    font-weight: 600;
-  }
-
-  .value.mono {
-    font-family: monospace;
-    letter-spacing: 0.5px;
   }
 
   .sub-value {

@@ -66,27 +66,27 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Service Date</span>
-                <span class="value highlight">{formatDate(maintenance.date)}</span>
+                <span class="resource-page-detail-value highlight">{formatDate(maintenance.date)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Service Type</span>
-                <span class="value">{formatServiceType(maintenance.service_type)}</span>
+                <span class="resource-page-detail-value">{formatServiceType(maintenance.service_type)}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Mechanic</span>
-                <span class="value">{maintenance.mechanic}</span>
+                <span class="resource-page-detail-value">{maintenance.mechanic}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Location</span>
-                <span class="value">{maintenance.location}</span>
+                <span class="resource-page-detail-value">{maintenance.location}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
                 <span class="resource-page-detail-label">Service Notes</span>
-                <span class="value notes">{maintenance.notes}</span>
+                <span class="resource-page-detail-value notes">{maintenance.notes}</span>
               </div>
             </div>
           </div>
@@ -97,21 +97,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Vehicle</span>
-                <span class="value highlight">{maintenance.truck.make} {maintenance.truck.model} ({maintenance.truck.year})</span>
+                <span class="resource-page-detail-value highlight">{maintenance.truck.make} {maintenance.truck.model} ({maintenance.truck.year})</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">VIN</span>
-                <span class="value mono">{maintenance.truck.vin}</span>
+                <span class="resource-page-detail-value mono">{maintenance.truck.vin}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Current Mileage</span>
-                <span class="value">{formatNumber(maintenance.truck.mileage)} miles</span>
+                <span class="resource-page-detail-value">{formatNumber(maintenance.truck.mileage)} miles</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Plate</span>
-                <span class="value mono">{maintenance.truck.license_plate.number} ({maintenance.truck.license_plate.state})</span>
+                <span class="resource-page-detail-value mono">{maintenance.truck.license_plate.number} ({maintenance.truck.license_plate.state})</span>
               </div>
             </div>
           </div>
@@ -122,11 +122,11 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Created</span>
-                <span class="value">{formatDate(maintenance.created_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(maintenance.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Last Updated</span>
-                <span class="value">{formatDate(maintenance.updated_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(maintenance.updated_at)}</span>
               </div>
             </div>
           </div>
@@ -208,27 +208,5 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .value.highlight {
-    color: var(--theme-color);
-    font-weight: 600;
-  }
-
-  .value.mono {
-    font-family: monospace;
-    letter-spacing: 0.5px;
-  }
-
-  .value.notes {
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
   }
 </style> 

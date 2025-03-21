@@ -63,21 +63,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Facility Name</span>
-                <span class="value highlight">{facility.name}</span>
+                <span class="resource-page-detail-value highlight">{facility.name}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Facility Type</span>
-                <span class="value">Type {facility.type}</span>
+                <span class="resource-page-detail-value">Type {facility.type}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Phone</span>
-                <span class="value mono">{facility.contact_info.phone}</span>
+                <span class="resource-page-detail-value mono">{facility.contact_info.phone}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Email</span>
-                <span class="value mono">{facility.contact_info.email}</span>
+                <span class="resource-page-detail-value mono">{facility.contact_info.email}</span>
               </div>
             </div>
           </div>
@@ -88,21 +88,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
                 <span class="resource-page-detail-label">Street Address</span>
-                <span class="value">{facility.address.street}</span>
+                <span class="resource-page-detail-value">{facility.address.street}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">City</span>
-                <span class="value">{facility.address.city}</span>
+                <span class="resource-page-detail-value">{facility.address.city}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">State</span>
-                <span class="value">{facility.address.state}</span>
+                <span class="resource-page-detail-value">{facility.address.state}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">ZIP Code</span>
-                <span class="value mono">{facility.address.zip}</span>
+                <span class="resource-page-detail-value mono">{facility.address.zip}</span>
               </div>
             </div>
           </div>
@@ -123,11 +123,11 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Created</span>
-                <span class="value">{formatDate(facility.created_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(facility.created_at)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Last Updated</span>
-                <span class="value">{formatDate(facility.updated_at)}</span>
+                <span class="resource-page-detail-value">{formatDate(facility.updated_at)}</span>
               </div>
             </div>
           </div>
@@ -204,22 +204,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .value.highlight {
-    color: var(--theme-color);
-    font-weight: 600;
-  }
-
-  .value.mono {
-    font-family: monospace;
-    letter-spacing: 0.5px;
   }
 
   .services-list {

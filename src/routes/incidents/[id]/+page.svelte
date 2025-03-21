@@ -51,21 +51,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Driver Name</span>
-                <span class="value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
+                <span class="resource-page-detail-value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Number</span>
-                <span class="value mono">{incident.driver.license_number}</span>
+                <span class="resource-page-detail-value mono">{incident.driver.license_number}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Phone</span>
-                <span class="value mono">{incident.driver.phone}</span>
+                <span class="resource-page-detail-value mono">{incident.driver.phone}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Email</span>
-                <span class="value mono">{incident.driver.email}</span>
+                <span class="resource-page-detail-value mono">{incident.driver.email}</span>
               </div>
             </div>
           </div>
@@ -76,21 +76,21 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Truck Number</span>
-                <span class="value highlight">{incident.truck.truck_number}</span>
+                <span class="resource-page-detail-value highlight">{incident.truck.truck_number}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Vehicle</span>
-                <span class="value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
+                <span class="resource-page-detail-value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">VIN</span>
-                <span class="value mono">{incident.truck.vin}</span>
+                <span class="resource-page-detail-value mono">{incident.truck.vin}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Plate</span>
-                <span class="value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
+                <span class="resource-page-detail-value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
               </div>
             </div>
           </div>
@@ -101,13 +101,13 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
                 <span class="resource-page-detail-label">Location</span>
-                <span class="value">{incident.location}</span>
+                <span class="resource-page-detail-value">{incident.location}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item full-width">
                 <span class="resource-page-detail-label">Description</span>
-                <p class="value description">{incident.description}</p>
+                <p class="resource-page-detail-value description">{incident.description}</p>
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Trip Number</span>
-                <span class="value mono">{incident.trip.trip_number}</span>
+                <span class="resource-page-detail-value mono">{incident.trip.trip_number}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Trip Status</span>
@@ -128,11 +128,11 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Scheduled Departure</span>
-                <span class="value">{formatDate(incident.trip.departure_time.scheduled)}</span>
+                <span class="resource-page-detail-value">{formatDate(incident.trip.departure_time.scheduled)}</span>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Scheduled Arrival</span>
-                <span class="value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
+                <span class="resource-page-detail-value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
               </div>
             </div>
           </div>
@@ -193,27 +193,5 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-  
-  .value {
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .value.highlight {
-    color: var(--theme-color);
-    font-weight: 600;
-  }
-
-  .value.mono {
-    font-family: monospace;
-    letter-spacing: 0.5px;
-  }
-
-  .value.description {
-    font-size: 1rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
   }
 </style> 
