@@ -153,7 +153,7 @@
           </a>
           <div class="title-section">
             <div class="resource-page-header">
-              <div class="title-info">
+              <div class="resource-page-title-info">
                 <h1 class="page-title">Trip #{trip.trip_number}</h1>
                 <span class="trip-cargo">{trip.cargo.description}</span>
               </div>
@@ -290,12 +290,6 @@
 </Layout>
 
 <style>
-  .title-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
   .trip-cargo {
     color: var(--text-secondary);
     font-size: 1rem;

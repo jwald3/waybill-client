@@ -44,7 +44,7 @@
           </a>
           <div class="resource-page-title-section">
             <div class="resource-page-header">
-              <div class="title-info">
+              <div class="resource-page-title-info">
                 <h1 class="page-title">{maintenance.truck.make} {maintenance.truck.model}</h1>
                 <span class="truck-number">#{maintenance.truck.truck_number}</span>
               </div>
@@ -158,12 +158,6 @@
 </Layout>
 
 <style>
-  .title-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
   .truck-number {
     color: var(--text-secondary);
     font-size: 1rem;

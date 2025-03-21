@@ -31,7 +31,7 @@
           </a>
           <div class="resource-page-title-section">
             <div class="resource-page-header">
-              <div class="title-info">
+              <div class="resource-page-title-info">
                 <h1 class="page-title">Incident Report #{incident.id}</h1>
                 <span class="incident-date">{formatDate(incident.date)}</span>
               </div>
@@ -165,12 +165,6 @@
 </Layout>
 
 <style>
-  .title-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
   .incident-date {
     color: var(--text-secondary);
     font-size: 1rem;
