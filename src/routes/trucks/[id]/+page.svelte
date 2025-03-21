@@ -90,7 +90,7 @@
             </svg>
             Back to Fleet Management
           </a>
-          <div class="title-section">
+          <div class="resource-page-title-section">
             <h1 class="page-title">{truck.make} {truck.model}</h1>
             <div class="truck-meta">
               <span class="truck-number">#{truck.truck_number}</span>
@@ -209,14 +209,6 @@
 />
 
 <style>
-  .title-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
   .truck-meta {
     display: flex;
     align-items: center;

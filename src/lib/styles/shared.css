@@ -804,6 +804,14 @@
   margin: 0 auto;
 }
 
+.resource-page-title-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 .back-link {
   display: inline-flex;
   align-items: center;

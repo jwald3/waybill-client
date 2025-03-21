@@ -29,7 +29,7 @@
             </svg>
             Back to Incidents
           </a>
-          <div class="title-section">
+          <div class="resource-page-title-section">
             <div class="incident-header">
               <div class="title-info">
                 <h1 class="page-title">Incident Report #{incident.id}</h1>
@@ -165,14 +165,6 @@
 </Layout>
 
 <style>
-  .title-section {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
   .incident-header {
     display: flex;
     align-items: center;

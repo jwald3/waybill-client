@@ -39,7 +39,7 @@
             </svg>
             Back to Facility Management
           </a>
-          <div class="title-section">
+          <div class="resource-page-title-section">
             <div class="facility-header">
               <div class="title-info">
                 <h1 class="page-title">{facility.name}</h1>
@@ -154,14 +154,6 @@
 </Layout>
 
 <style>
-  .title-section {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
   .facility-header {
     display: flex;
     align-items: center;

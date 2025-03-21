@@ -103,7 +103,7 @@
             </svg>
             Back to Driver Management
           </a>
-          <div class="title-section">
+          <div class="resource-page-title-section">
             <div class="driver-header">
               <div class="avatar">
                 {#if driver?.first_name && driver?.last_name}
@@ -231,14 +231,6 @@
 />
 
 <style>
-  .title-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
   .driver-header {
     display: flex;
     align-items: center;
@@ -356,7 +348,7 @@
     font-size: 0.9rem;
     font-weight: normal;
   }
-  
+
   .error-message {
     color: #dc2626;
     background: #fee2e2;

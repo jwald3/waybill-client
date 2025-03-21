@@ -291,14 +291,6 @@
 </Layout>
 
 <style>
-  .title-section {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
   .trip-header {
     display: flex;
     align-items: center;
