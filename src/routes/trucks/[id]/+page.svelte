@@ -305,40 +305,4 @@
     color: var(--text-secondary);
     font-size: 0.9rem;
   }
-
-  .action-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
-    border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
-    color: var(--theme-color);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .action-button:hover {
-    background: var(--theme-color);
-    color: white;
-  }
-
-  .action-button.primary {
-    background: var(--theme-color);
-    color: white;
-    border-color: var(--theme-color);
-  }
-
-  .action-button.primary:hover {
-    opacity: 0.9;
-  }
 </style> 

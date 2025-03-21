@@ -341,12 +341,20 @@
   transition: all 0.2s ease;
   cursor: pointer;
   width: 100%;
+  display: inline-flex;
   text-align: center;
 }
 
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .action-button:hover {
-  background: var(--theme-color);
-  color: white;
+  border-color: var(--theme-color);
+  color: var(--theme-color);
+  background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
 }
 
 .new-form-checkbox-label {
@@ -808,4 +816,14 @@
 
 .back-link:hover {
   color: var(--theme-color);
+}
+
+.action-button.primary {
+  background: var(--theme-color);
+  color: white;
+  border-color: var(--theme-color);
+}
+
+.action-button.primary:hover {
+  opacity: 0.9;
 }

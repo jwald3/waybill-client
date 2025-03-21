@@ -269,40 +269,4 @@
     line-height: 1.5;
     white-space: pre-wrap;
   }
-
-  .action-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-all);
-  }
-
-  .action-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
-  }
-
-  .action-button.primary {
-    background: var(--theme-color);
-    color: white;
-    border-color: var(--theme-color);
-  }
-
-  .action-button.primary:hover {
-    opacity: 0.9;
-  }
 </style> 

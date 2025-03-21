@@ -356,44 +356,7 @@
     font-size: 0.9rem;
     font-weight: normal;
   }
-
-  .action-buttons {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    background: white;
-    color: var(--text-primary);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .action-button:hover {
-    border-color: var(--theme-color);
-    color: var(--theme-color);
-  }
-
-  .action-button.primary {
-    background: var(--theme-color);
-    color: white;
-    border-color: var(--theme-color);
-  }
-
-  .action-button.primary:hover {
-    background: var(--theme-color-dark);
-    border-color: var(--theme-color-dark);
-    color: white;
-  }
-
+  
   .error-message {
     color: #dc2626;
     background: #fee2e2;
