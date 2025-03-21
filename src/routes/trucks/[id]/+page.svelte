@@ -209,17 +209,11 @@
 />
 
 <style>
-  .page-header {
-    margin-bottom: 2.5rem;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 1.5rem;
-  }
-
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   .title-section {
     display: flex;
     align-items: center;
