@@ -3,6 +3,7 @@
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
   import type { Facility } from '$lib/api/facilities';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;
   
@@ -45,9 +46,7 @@
                 <h1 class="page-title">{facility.name}</h1>
                 <span class="facility-number">#{facility.facility_number}</span>
               </div>
-              <span class="type-badge type-{facility.type.toLowerCase()}">
-                TYPE {facility.type}
-              </span>
+              <StatusBadge status={facility.type} type="facility" />
             </div>
             <div class="capacity-display">
               <span class="capacity-label">Parking Capacity</span>
@@ -164,28 +163,6 @@
     color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 500;
-  }
-
-  .type-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .type-badge.type-a {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .type-badge.type-b {
-    background: #dbeafe;
-    color: #1d4ed8;
-  }
-
-  .type-badge.type-c {
-    background: #fef9c3;
-    color: #854d0e;
   }
 
   .capacity-display {

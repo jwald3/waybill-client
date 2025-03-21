@@ -12,6 +12,7 @@
     getAvailableStatusTransitions
   } from '$lib/api/trucks';
   import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;
   
@@ -94,9 +95,7 @@
             <h1 class="page-title">{truck.make} {truck.model}</h1>
             <div class="truck-meta">
               <span class="truck-number">#{truck.truck_number}</span>
-              <span class="status-badge {truck.status.toLowerCase()}">
-                {truck.status.replace('_', ' ')}
-              </span>
+              <StatusBadge status={truck.status} type="truck" />
             </div>
           </div>
         </div>
@@ -219,28 +218,6 @@
     font-size: 1.1rem;
     color: var(--text-secondary);
     font-weight: 500;
-  }
-
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .status-badge.in_transit {
-    background: #dbeafe;
-    color: #1d4ed8;
-  }
-
-  .status-badge.maintenance {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-badge.available {
-    background: #dcfce7;
-    color: #15803d;
   }
 
   .state {

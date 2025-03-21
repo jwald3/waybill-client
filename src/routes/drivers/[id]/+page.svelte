@@ -11,6 +11,7 @@
     getAvailableStatusTransitions 
   } from '$lib/api/drivers';
   import DriverStatusModal from '$lib/components/DriverStatusModal.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
 
   export let data;
   let driver: Driver = data.driver;
@@ -117,9 +118,7 @@
                 <span class="driver-id">#{driver?.license_number ?? ''}</span>
               </div>
             </div>
-            <span class="status-badge {driver?.employment_status?.toLowerCase() ?? ''}">
-              {driver?.employment_status ? formatStatusLabel(driver.employment_status) : ''}
-            </span>
+            <StatusBadge status={driver.employment_status} type="driver" />
           </div>
         </div>
       </div>
@@ -256,102 +255,15 @@
     font-weight: 500;
   }
 
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  .status-badge.active {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .status-badge.suspended {
-    background: #fee2e2;
-    color: #dc2626;
-  }
-
-  .status-badge.on_leave {
-    background: #fef9c3;
-    color: #854d0e;
-  }
-
-  .status-badge.terminated {
-    background: #f3f4f6;
-    color: #4b5563;
-  }
-
   .sub-value {
     color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: normal;
   }
 
-  .error-message {
-    color: #dc2626;
-    background: #fee2e2;
-    padding: 1rem;
-    border-radius: 8px;
-    margin: 1rem 0;
-  }
-
   .loading {
     text-align: center;
     padding: 2rem;
     color: var(--text-secondary);
-  }
-
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0;
-    width: 2rem;
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-md);
-  }
-
-  .modal-close:hover {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-  }
-
-  .form-group {
-    margin-bottom: var(--spacing-lg);
-  }
-
-  .form-select {
-    width: 100%;
-    padding: var(--spacing-md);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-size: var(--font-size-md);
-  }
-
-  .form-select:focus {
-    outline: none;
-    border-color: var(--theme-color);
   }
 </style> 

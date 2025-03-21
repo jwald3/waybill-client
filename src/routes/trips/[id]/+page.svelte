@@ -13,6 +13,7 @@
   } from '$lib/api/trips';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
+  import StatusBadge from '$lib/components/StatusBadge.svelte';
   
   let isNavExpanded = true;
   
@@ -156,9 +157,7 @@
                 <h1 class="page-title">Trip #{trip.trip_number}</h1>
                 <span class="trip-cargo">{trip.cargo.description}</span>
               </div>
-              <span class="status-badge {trip.status.toLowerCase()}">
-                {formatStatusLabel(trip.status)}
-              </span>
+              <StatusBadge status={trip.status} type="trip" />
             </div>
             <div class="trip-metrics">
               <div class="metric">
@@ -301,34 +300,6 @@
     color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 500;
-  }
-
-  .status-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
-
-  .status-badge.scheduled {
-    background: #dbeafe;
-    color: #1d4ed8;
-  }
-
-  .status-badge.in_progress {
-    background: #dcfce7;
-    color: #15803d;
-  }
-
-  .status-badge.completed {
-    background: #f3f4f6;
-    color: #4b5563;
-  }
-
-  .status-badge.canceled {
-    background: #fee2e2;
-    color: #dc2626;
   }
 
   .trip-metrics {
