@@ -178,14 +178,14 @@
         <Card title="Schedule Information" icon={icons.calendar}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Departure (Scheduled)</span>
                 <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
                 {#if trip.departure_time.actual}
                   <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
                 {/if}
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Arrival (Scheduled)</span>
                 <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
                 {#if trip.arrival_time.actual}
@@ -199,11 +199,11 @@
         <Card title="Cargo Details" icon={icons.box}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Description</span>
                 <span class="value">{trip.cargo.description}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Weight</span>
                 <span class="value">{formatNumber(trip.cargo.weight)} lbs</span>
               </div>
@@ -237,11 +237,11 @@
         <Card title="Record Details" icon={icons.chart}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Created</span>
                 <span class="value">{formatDate(trip.created_at)}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Last Updated</span>
                 <span class="value">{formatDate(trip.updated_at)}</span>
               </div>
@@ -352,12 +352,6 @@
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--theme-color);
-  }
-
-  .detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
   }
 
   .label {

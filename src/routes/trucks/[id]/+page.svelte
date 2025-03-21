@@ -106,21 +106,21 @@
         <Card title="Vehicle Information" icon={icons.truck}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Make & Model</span>
                 <span class="value highlight">{truck.make} {truck.model}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Year</span>
                 <span class="value">{truck.year}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">VIN</span>
                 <span class="value mono">{truck.vin}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">License Plate</span>
                 <span class="value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
               </div>
@@ -131,17 +131,17 @@
         <Card title="Specifications" icon={icons.settings}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Trailer Type</span>
                 <span class="value highlight">{truck.trailer_type.replace('_', ' ')}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Capacity</span>
                 <span class="value">{truck.capacity_tons} tons</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Fuel Type</span>
                 <span class="value">{truck.fuel_type}</span>
               </div>
@@ -152,21 +152,21 @@
         <Card title="Usage & Maintenance" icon={icons.chart}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Current Mileage</span>
                 <span class="value highlight">{formatNumber(truck.mileage)} miles</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Last Maintenance</span>
                 <span class="value">{formatDate(truck.last_maintenance)}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Added to Fleet</span>
                 <span class="value">{formatDate(truck.created_at)}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Last Updated</span>
                 <span class="value">{formatDate(truck.updated_at)}</span>
               </div>
@@ -241,12 +241,6 @@
   .status-badge.available {
     background: #dcfce7;
     color: #15803d;
-  }
-
-  .detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
   }
 
   .label {

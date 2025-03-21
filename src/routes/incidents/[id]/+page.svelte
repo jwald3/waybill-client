@@ -49,21 +49,21 @@
         <Card title="Driver Information" icon={icons.drivers}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Driver Name</span>
                 <span class="value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">License Number</span>
                 <span class="value mono">{incident.driver.license_number}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Phone</span>
                 <span class="value mono">{incident.driver.phone}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Email</span>
                 <span class="value mono">{incident.driver.email}</span>
               </div>
@@ -74,21 +74,21 @@
         <Card title="Vehicle Details" icon={icons.truck}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Truck Number</span>
                 <span class="value highlight">{incident.truck.truck_number}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Vehicle</span>
                 <span class="value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">VIN</span>
                 <span class="value mono">{incident.truck.vin}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">License Plate</span>
                 <span class="value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
               </div>
@@ -99,13 +99,13 @@
         <Card title="Incident Details" icon={icons.incidents}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item full-width">
+              <div class="resource-page-detail-item full-width">
                 <span class="label">Location</span>
                 <span class="value">{incident.location}</span>
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item full-width">
+              <div class="resource-page-detail-item full-width">
                 <span class="label">Description</span>
                 <p class="value description">{incident.description}</p>
               </div>
@@ -116,21 +116,21 @@
         <Card title="Trip Information" icon={icons.routes}>
           <div class="resource-page-detail-group">
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Trip Number</span>
                 <span class="value mono">{incident.trip.trip_number}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Trip Status</span>
                 <StatusBadge status={incident.trip.status} type="trip" />
               </div>
             </div>
             <div class="resource-page-detail-row">
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Scheduled Departure</span>
                 <span class="value">{formatDate(incident.trip.departure_time.scheduled)}</span>
               </div>
-              <div class="detail-item">
+              <div class="resource-page-detail-item">
                 <span class="label">Scheduled Arrival</span>
                 <span class="value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
               </div>
@@ -195,16 +195,6 @@
     color: var(--theme-color);
   }
   
-  .detail-item {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .detail-item.full-width {
-    grid-column: 1 / -1;
-  }
-
   .label {
     font-size: 0.875rem;
     color: var(--text-secondary);
