@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Truck, TruckStatus } from '$lib/api/trucks';
+  import type { Truck } from '$lib/api/trucks';
   import StatusBadge from './StatusBadge.svelte';
 
   export let truck: Truck;
