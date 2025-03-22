@@ -13,7 +13,6 @@
     type EmploymentStatus, 
     getAvailableStatusTransitions 
   } from '$lib/api/drivers';
-  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import DriverCard from '$lib/components/DriverCard.svelte';
 
   export let data;
@@ -51,23 +50,11 @@
   let currentDriverId: string | null = null;
   let currentDriverStatus: EmploymentStatus | null = null;
 
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  }
-
   function formatStatusLabel(status: string): string {
     if (status === 'ALL') return 'All Statuses';
     return status.split('_')
       .map(word => word.charAt(0) + word.slice(1).toLowerCase())
       .join(' ');
-  }
-
-  function formatStatusBadge(status: string): string {
-    return status.replace('_', ' ');
   }
 
   // Filtered and sorted records

@@ -183,7 +183,7 @@
           Showing {filteredRecords.length} of {maintenanceLogs.length} records
         </div>
 
-        <div class="record-list">
+        <div class="records-list">
           {#each paginatedRecords as record}
             <MaintenanceCard {record} />
           {/each}
