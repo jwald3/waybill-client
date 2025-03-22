@@ -140,12 +140,6 @@
           </svg>
           Edit Record
         </button>
-        <button class="action-button">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-          View Invoice
-        </button>
         <a href={`/trucks/${maintenance.truck.id}`} class="action-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M18 18.5v-1c0-.8-.7-1.5-1.5-1.5H13v6h1.5v-2h1.1l.9 2H18l-.9-2.1c.5-.3.9-.8.9-1.4zm-3 0v-1h1.5v1H15zm-5.5-1H7c-.8 0-1.5.7-1.5 1.5v3c0 .8.7 1.5 1.5 1.5h2.5c.8 0 1.5-.7 1.5-1.5v-3c0-.8-.7-1.5-1.5-1.5zm0 4.5H7v-3h2.5v3zm11-9.5h-1.8l1.8-2v2zm.2-5H15v3h-2V5H4v14h6v2h8v-2h2v-2h2V7.5c0-.8-.7-1.5-1.5-1.5zM18 15h-2v2h2v-2z"/>
