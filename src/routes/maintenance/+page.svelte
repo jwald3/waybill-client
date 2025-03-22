@@ -3,9 +3,9 @@
   import Card from '$lib/components/Card.svelte';
   import ListControls from '$lib/components/ListControls.svelte';
   import { icons } from '$lib/icons';
-  import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
-  import StatusBadge from '$lib/components/StatusBadge.svelte';
+  import { formatLargeNumber } from '$lib/utils/format';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
+  import MaintenanceCard from '$lib/components/MaintenanceCard.svelte';
   
   let isNavExpanded = true;
 
@@ -185,48 +185,7 @@
 
         <div class="record-list">
           {#each paginatedRecords as record}
-            <div class="record-item">
-              <div class="record-header">
-                <div class="record-title">
-                  <h3>{record.truck.make} {record.truck.model} ({record.truck.truck_number})</h3>
-                  <div class="record-info">
-                    <StatusBadge
-                      status={record.service_type}
-                      type="maintenance"
-                    />
-                  </div>
-                </div>
-                <div class="cost">
-                  {formatCurrency(record.cost)}
-                </div>
-              </div>
-
-              <div class="record-details">
-                <div class="detail">
-                  <span class="label">Date:</span>
-                  <span class="value">{formatDate(record.date)}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Mechanic:</span>
-                  <span class="value">{record.mechanic}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Mileage:</span>
-                  <span class="value">{record.truck.mileage.toLocaleString()} miles</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Location:</span>
-                  <span class="value">{record.location}</span>
-                </div>
-              </div>
-
-              <p class="description">{record.notes}</p>
-
-              <div class="record-actions">
-                <a href="/maintenance/{record.id}" class="action-button">View Full Details</a>
-                <button class="action-button">Update Record</button>
-              </div>
-            </div>
+            <MaintenanceCard {record} />
           {/each}
         </div>
 
@@ -290,19 +249,6 @@
 </Layout>
 
 <style>
-  .description {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
-  }
-
-  .cost {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--theme-color);
-  }
-
   @media (max-width: 768px) {
     .stat-content {
       padding: 0.875rem 1rem;
