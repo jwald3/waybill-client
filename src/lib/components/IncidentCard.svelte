@@ -20,5 +20,17 @@
         <p class="resource-page-detail-value description">{incident.description}</p>
       </div>
     </div>
+    <div class="record-actions">
+      <a href="/incidents/{incident.id}" class="action-button">View Details</a>
+    </div>
   </div>
-</Card> 
+</Card>
+
+<style>
+  .record-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+</style> 

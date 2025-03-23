@@ -7,6 +7,7 @@
   import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
+  import IncidentCard from '$lib/components/IncidentCard.svelte';
   
   let isNavExpanded = true;
 
@@ -181,33 +182,7 @@
 
         <div class="records-list">
           {#each paginatedRecords as incident}
-            <a 
-              href="/incidents/{incident.id}" 
-              class="record-item"
-            >
-              <div class="record-header">
-                <div class="record-title">
-                  <h3 class="themed-text">Incident #{incident.id}</h3>
-                  <span class="incident-date">{formatDate(incident.date)}</span>
-                </div>
-                <StatusBadge status={incident.type} type="incident" />
-              </div>
-              <div class="record-details">
-                <div class="detail">
-                  <span class="label">Driver</span>
-                  <span class="value">{incident.driver.first_name} {incident.driver.last_name}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Location</span>
-                  <span class="value">{incident.location}</span>
-                </div>
-                <div class="detail">
-                  <span class="label">Damage Estimate</span>
-                  <span class="value themed-text">{formatCurrency(incident.damage_estimate)}</span>
-                </div>
-              </div>
-              <p class="incident-description">{incident.description}</p>
-            </a>
+              <IncidentCard {incident} />
           {/each}
         </div>
 
@@ -260,32 +235,4 @@
 </Layout>
 
 <style>
-  .incident-date {
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
-  }
-
-  .incident-description {
-    color: var(--text-secondary);
-    font-size: var(--font-size-md);
-    line-height: 1.5;
-  }
-
-  .record-item {
-    display: block;
-    padding: 1.5rem;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background: var(--background-elevated);
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-  }
-
-  .record-item:hover {
-    border-color: var(--theme-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    transform: translateY(-1px);
-  }
 </style> 
