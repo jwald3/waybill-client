@@ -97,7 +97,22 @@
           </div>
         </Card>
 
-        <IncidentCard {incident} />
+        <Card title="Incident Details" icon={icons.incidents}>
+          <div class="resource-page-detail-group">
+            <div class="resource-page-detail-row">
+              <div class="resource-page-detail-item full-width">
+                <span class="resource-page-detail-label">Location</span>
+                <span class="resource-page-detail-value">{incident.location}</span>
+              </div>
+            </div>
+            <div class="resource-page-detail-row">
+              <div class="resource-page-detail-item full-width">
+                <span class="resource-page-detail-label">Description</span>
+                <p class="resource-page-detail-value description">{incident.description}</p>
+              </div>
+            </div>
+          </div>
+        </Card>
 
         <Card title="Trip Information" icon={icons.routes}>
           <div class="resource-page-detail-group">
