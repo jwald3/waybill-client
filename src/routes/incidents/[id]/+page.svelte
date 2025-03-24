@@ -265,6 +265,13 @@
     background: rgb(79, 82, 231);
   }
 
+  @media (max-width: 1400px) {
+    .id-number {
+      font-size: var(--font-size-2xl);
+      word-break: break-all;
+    }
+  }
+
   @media (max-width: 1200px) {
     .header-top {
       gap: var(--spacing-md);
@@ -272,6 +279,10 @@
 
     .incident-meta {
       gap: var(--spacing-md);
+    }
+
+    .incident-id h1 {
+      font-size: var(--font-size-lg);
     }
   }
 
