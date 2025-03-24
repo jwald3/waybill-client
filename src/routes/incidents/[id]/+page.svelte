@@ -30,19 +30,29 @@
       </a>
 
       <div class="incident-header">
-        <div class="incident-id">
-          <h1>Incident Report</h1>
-          <div class="id-number">#{incident.id}</div>
+        <div class="header-top">
+          <div class="incident-id">
+            <h1>Incident Report</h1>
+            <div class="id-number">#{incident.id}</div>
+          </div>
+          
+          <button class="edit-control">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit Report
+          </button>
         </div>
 
         <div class="incident-meta">
           <StatusBadge status={incident.type} type="incident" />
-          <div class="meta-divider" />
+          <div class="meta-divider"></div>
           <div class="date-reported">
             <span class="label">DATE REPORTED</span>
             <span class="value">{formatDate(incident.date)}</span>
           </div>
-          <div class="meta-divider" />
+          <div class="meta-divider"></div>
           <div class="damage-estimate">
             <span class="label">ESTIMATED DAMAGE</span>
             <span class="value highlight">{formatCurrency(incident.damage_estimate)}</span>
@@ -145,12 +155,6 @@
       </div>
 
       <div class="action-buttons">
-        <button class="action-button primary">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-          </svg>
-          Edit Report
-        </button>
         <button class="action-button">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/>
@@ -169,6 +173,13 @@
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     margin: var(--spacing-lg) 0 var(--spacing-2xl);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
   }
 
   .incident-id {
@@ -229,9 +240,39 @@
     font-weight: 600;
   }
 
+  .edit-control {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: rgb(99, 102, 241);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .edit-control:hover {
+    background: rgb(79, 82, 231);
+  }
+
   @media (max-width: 768px) {
     .incident-header {
       padding: var(--spacing-lg);
+    }
+
+    .header-top {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .edit-control {
+      width: auto;
+      margin-left: auto;
     }
 
     .incident-meta {
