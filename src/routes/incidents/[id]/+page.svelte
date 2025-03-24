@@ -173,6 +173,8 @@
     border-radius: var(--radius-lg);
     padding: var(--spacing-xl);
     margin: var(--spacing-lg) 0 var(--spacing-2xl);
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .header-top {
@@ -180,10 +182,13 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
   }
 
   .incident-id {
-    margin-bottom: var(--spacing-lg);
+    flex: 1;
+    min-width: 280px;
   }
 
   .incident-id h1 {
@@ -260,21 +265,24 @@
     background: rgb(79, 82, 231);
   }
 
+  @media (max-width: 1200px) {
+    .header-top {
+      gap: var(--spacing-md);
+    }
+
+    .incident-meta {
+      gap: var(--spacing-md);
+    }
+  }
+
   @media (max-width: 768px) {
     .incident-header {
       padding: var(--spacing-lg);
+      margin: var(--spacing-md) 0 var(--spacing-xl);
     }
 
     .header-top {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: var(--spacing-md);
-      margin-bottom: var(--spacing-xl);
-    }
-
-    .incident-id {
-      margin-bottom: 0;
+      margin-bottom: var(--spacing-lg);
     }
 
     .incident-id h1 {
@@ -286,35 +294,17 @@
     }
 
     .edit-control {
-      height: fit-content;
       padding: var(--spacing-sm) var(--spacing-md);
     }
 
-    .edit-control svg {
-      width: 16px;
-      height: 16px;
-    }
-
     .incident-meta {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: var(--spacing-lg) var(--spacing-xl);
-      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-lg);
     }
 
     .meta-divider {
-      display: none;
-    }
-
-    .incident-meta :global(.status-badge) {
-      grid-column: 1 / -1;
-      width: fit-content;
-    }
-
-    .date-reported,
-    .damage-estimate {
-      width: auto;
-      min-width: 160px;
+      height: 20px;
     }
 
     .value {
@@ -328,7 +318,13 @@
 
   @media (max-width: 480px) {
     .header-top {
-      grid-template-columns: 1fr;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--spacing-md);
+    }
+
+    .incident-id {
+      margin-bottom: 0;
     }
 
     .edit-control {
@@ -337,8 +333,13 @@
     }
 
     .incident-meta {
-      grid-template-columns: 1fr;
+      flex-direction: column;
+      align-items: flex-start;
       gap: var(--spacing-md);
+    }
+
+    .meta-divider {
+      display: none;
     }
 
     .date-reported,
