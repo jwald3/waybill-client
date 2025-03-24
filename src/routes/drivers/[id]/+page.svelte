@@ -96,29 +96,40 @@
     {#if !driver}
       <div class="loading">Loading driver details...</div>
     {:else}
-      <div class="page-header">
-        <div class="resource-page-header-content">
-          <a href="/drivers" class="back-link">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      <a href="/drivers" class="back-link">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Driver Management
+      </a>
+
+      <div class="incident-header">
+        <div class="header-top">
+          <div class="incident-id">
+            <h1>Driver Profile</h1>
+            <div class="id-number">#{driver.license_number}</div>
+          </div>
+          
+          <button class="edit-control">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
             </svg>
-            Back to Driver Management
-          </a>
-          <div class="resource-page-title-section">
-            <div class="resource-page-header">
-              <div class="avatar">
-                {#if driver?.first_name && driver?.last_name}
-                  {driver.first_name[0]}{driver.last_name[0]}
-                {/if}
-              </div>
-              <div class="driver-info">
-                <h1 class="page-title">
-                  {driver?.first_name ?? ''} {driver?.last_name ?? ''}
-                </h1>
-                <span class="driver-id">#{driver?.license_number ?? ''}</span>
-              </div>
-            </div>
-            <StatusBadge status={driver.employment_status} type="driver" />
+            Edit Details
+          </button>
+        </div>
+
+        <div class="incident-meta">
+          <StatusBadge status={driver.employment_status} type="driver" />
+          <div class="meta-divider"></div>
+          <div class="date-reported">
+            <span class="label">DATE OF BIRTH</span>
+            <span class="value">{formatDate(driver.dob)} ({calculateAge(driver.dob)} years)</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="damage-estimate">
+            <span class="label">LICENSE EXPIRES</span>
+            <span class="value highlight">{formatDate(driver.license_expiration)}</span>
           </div>
         </div>
       </div>
@@ -224,29 +235,102 @@
 />
 
 <style>
-  .avatar {
-    width: 64px;
-    height: 64px;
-    background: var(--theme-gradient);
-    color: white;
-    border-radius: 16px;
+  .incident-header {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0 var(--spacing-2xl);
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+  }
+
+  .incident-id {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .incident-id h1 {
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .id-number {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    letter-spacing: -0.5px;
+  }
+
+  .incident-meta {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1.5rem;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
   }
 
-  .driver-info {
+  .meta-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-color);
+  }
+
+  .date-reported,
+  .damage-estimate {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--spacing-xs);
   }
 
-  .driver-id {
+  .label {
+    font-size: var(--font-size-xs);
     color: var(--text-secondary);
-    font-size: 1rem;
     font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .value {
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .value.highlight {
+    color: var(--theme-color);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+  }
+
+  .edit-control {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: rgb(99, 102, 241);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .edit-control:hover {
+    background: rgb(79, 82, 231);
   }
 
   .sub-value {
