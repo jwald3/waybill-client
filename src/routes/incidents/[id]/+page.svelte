@@ -22,26 +22,30 @@
     {#if !incident}
       <div class="loading">Loading incident details...</div>
     {:else}
-      <div class="page-header">
-        <div class="resource-page-header-content">
-          <a href="/incidents" class="back-link">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-            </svg>
-            Back to Incidents
-          </a>
-          <div class="resource-page-title-section">
-            <div class="resource-page-header">
-              <div class="resource-page-title-info">
-                <h1 class="page-title">Incident Report #{incident.id}</h1>
-                <span class="incident-date">{formatDate(incident.date)}</span>
-              </div>
-              <StatusBadge status={incident.type} type="incident" />
-            </div>
-            <div class="damage-display">
-              <span class="damage-label">Estimated Damage</span>
-              <span class="damage-value">{formatCurrency(incident.damage_estimate)}</span>
-            </div>
+      <a href="/incidents" class="back-link">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Incidents
+      </a>
+
+      <div class="incident-header">
+        <div class="incident-id">
+          <h1>Incident Report</h1>
+          <div class="id-number">#{incident.id}</div>
+        </div>
+
+        <div class="incident-meta">
+          <StatusBadge status={incident.type} type="incident" />
+          <div class="meta-divider" />
+          <div class="date-reported">
+            <span class="label">DATE REPORTED</span>
+            <span class="value">{formatDate(incident.date)}</span>
+          </div>
+          <div class="meta-divider" />
+          <div class="damage-estimate">
+            <span class="label">ESTIMATED DAMAGE</span>
+            <span class="value highlight">{formatCurrency(incident.damage_estimate)}</span>
           </div>
         </div>
       </div>
@@ -159,27 +163,93 @@
 </Layout>
 
 <style>
-  .incident-date {
+  .incident-header {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0 var(--spacing-2xl);
+  }
+
+  .incident-id {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .incident-id h1 {
+    font-size: var(--font-size-xl);
     color: var(--text-secondary);
-    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .id-number {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    letter-spacing: -0.5px;
+  }
+
+  .incident-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+
+  .meta-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-color);
+  }
+
+  .date-reported,
+  .damage-estimate {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .value {
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
     font-weight: 500;
   }
 
-  .damage-display {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-  }
-
-  .damage-label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .damage-value {
-    font-size: 1.5rem;
-    font-weight: 600;
+  .value.highlight {
     color: var(--theme-color);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .incident-header {
+      padding: var(--spacing-lg);
+    }
+
+    .incident-meta {
+      gap: var(--spacing-md);
+    }
+
+    .meta-divider {
+      display: none;
+    }
+
+    .incident-meta {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .date-reported,
+    .damage-estimate {
+      width: 100%;
+    }
   }
 </style> 
