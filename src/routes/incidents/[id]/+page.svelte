@@ -36,13 +36,21 @@
             <div class="id-number">#{incident.id}</div>
           </div>
           
-          <button class="edit-control">
-            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-            </svg>
-            Edit Report
-          </button>
+          <div class="header-controls">
+            <button class="edit-control">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/>
+              </svg>
+              Schedule Repair
+            </button>
+            <button class="edit-control">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Edit Report
+            </button>
+          </div>
         </div>
 
         <div class="incident-meta">
@@ -152,15 +160,6 @@
             </div>
           </div>
         </Card>
-      </div>
-
-      <div class="action-buttons">
-        <button class="action-button">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/>
-          </svg>
-          Schedule Repair
-        </button>
       </div>
     {/if}
   </div>
@@ -356,6 +355,50 @@
     .date-reported,
     .damage-estimate {
       width: 100%;
+    }
+  }
+
+  .header-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .action-button.primary {
+    background: rgb(99, 102, 241);
+    color: white;
+    border: none;
+  }
+
+  .action-button.primary:hover {
+    background: rgb(79, 82, 231);
+  }
+
+  @media (max-width: 480px) {
+    .header-controls {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .header-controls button {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style> 
