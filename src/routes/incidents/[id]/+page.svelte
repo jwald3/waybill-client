@@ -266,26 +266,79 @@
     }
 
     .header-top {
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
       gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .incident-id {
+      margin-bottom: 0;
+    }
+
+    .incident-id h1 {
+      font-size: var(--font-size-lg);
+    }
+
+    .id-number {
+      font-size: var(--font-size-2xl);
     }
 
     .edit-control {
-      width: auto;
-      margin-left: auto;
+      height: fit-content;
+      padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .edit-control svg {
+      width: 16px;
+      height: 16px;
     }
 
     .incident-meta {
-      gap: var(--spacing-md);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--spacing-lg) var(--spacing-xl);
+      width: 100%;
     }
 
     .meta-divider {
       display: none;
     }
 
+    .incident-meta :global(.status-badge) {
+      grid-column: 1 / -1;
+      width: fit-content;
+    }
+
+    .date-reported,
+    .damage-estimate {
+      width: auto;
+      min-width: 160px;
+    }
+
+    .value {
+      font-size: var(--font-size-md);
+    }
+
+    .value.highlight {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header-top {
+      grid-template-columns: 1fr;
+    }
+
+    .edit-control {
+      width: 100%;
+      justify-content: center;
+    }
+
     .incident-meta {
-      flex-direction: column;
-      align-items: flex-start;
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
     }
 
     .date-reported,
