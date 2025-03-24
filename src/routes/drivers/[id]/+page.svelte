@@ -79,12 +79,6 @@
     }
     return age;
   }
-
-  function formatStatusLabel(status: string): string {
-    return status.split('_')
-      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-      .join(' ');
-  }
 </script>
 
 <svelte:head>
@@ -107,7 +101,7 @@
         <div class="header-top">
           <div class="incident-id">
             <h1>Driver Profile</h1>
-            <div class="id-number">#{driver.license_number}</div>
+            <div class="id-number">{driver.first_name} {driver.last_name}</div>
           </div>
           
           <button class="edit-control">
