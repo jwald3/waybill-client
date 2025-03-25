@@ -56,7 +56,7 @@
               </svg>
               Edit Record
             </button>
-            <a href={`/trucks/${maintenance.truck.id}`} class="action-button">
+            <a href={`/trucks/${maintenance.truck.id}`} class="action-button primary">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                 <path d="M18 18.5v-1c0-.8-.7-1.5-1.5-1.5H13v6h1.5v-2h1.1l.9 2H18l-.9-2.1c.5-.3.9-.8.9-1.4zm-3 0v-1h1.5v1H15zm-5.5-1H7c-.8 0-1.5.7-1.5 1.5v3c0 .8.7 1.5 1.5 1.5h2.5c.8 0 1.5-.7 1.5-1.5v-3c0-.8-.7-1.5-1.5-1.5zm0 4.5H7v-3h2.5v3zm11-9.5h-1.8l1.8-2v2zm.2-5H15v3h-2V5H4v14h6v2h8v-2h2v-2h2V7.5c0-.8-.7-1.5-1.5-1.5zM18 15h-2v2h2v-2z"/>
               </svg>
@@ -159,17 +159,6 @@
 </Layout>
 
 <style>
-  /* Remove old styles for these elements */
-  .truck-number,
-  .resource-page-header,
-  .resource-page-header-content,
-  .resource-page-title-section,
-  .resource-page-title-info,
-  .cost-display,
-  .cost-label,
-  .cost-value {
-    /* These styles will be removed */
-  }
 
   /* Add new header styles */
   .incident-header {
@@ -255,6 +244,31 @@
     align-items: center;
   }
 
+  
+
+  /* Keep existing service badge styles */
+  .service-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .service-badge.routine_maintenance {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+
+  .service-badge.repair {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  .service-badge.emergency {
+    background: #fee2e2;
+    color: #dc2626;
+  }
+
   .edit-control {
     display: inline-flex;
     align-items: center;
@@ -289,31 +303,20 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    text-decoration: none;
   }
 
-  /* Keep existing service badge styles */
-  .service-badge {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
+  .action-button.primary {
+    background: rgb(99, 102, 241);
+    color: white;
+    border: none;
   }
 
-  .service-badge.routine_maintenance {
-    background: #dbeafe;
-    color: #1d4ed8;
+  .action-button.primary:hover {
+    background: rgb(79, 82, 231);
   }
 
-  .service-badge.repair {
-    background: #fef3c7;
-    color: #d97706;
-  }
 
-  .service-badge.emergency {
-    background: #fee2e2;
-    color: #dc2626;
-  }
+
 
   @media (max-width: 480px) {
     .header-controls {
