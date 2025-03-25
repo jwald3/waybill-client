@@ -2,7 +2,6 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
-  import IncidentCard from '$lib/components/IncidentCard.svelte';
   import { icons } from '$lib/icons';
   import { formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
@@ -74,7 +73,9 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Driver Name</span>
-                <span class="resource-page-detail-value highlight">{incident.driver.first_name} {incident.driver.last_name}</span>
+                <a href="/drivers/{incident.driver.id}" class="resource-page-detail-value highlight link">
+                  {incident.driver.first_name} {incident.driver.last_name}
+                </a>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">License Number</span>
@@ -99,7 +100,9 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Truck Number</span>
-                <span class="resource-page-detail-value highlight">{incident.truck.truck_number}</span>
+                <a href="/trucks/{incident.truck.id}" class="resource-page-detail-value highlight link">
+                  {incident.truck.truck_number}
+                </a>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Vehicle</span>
@@ -141,7 +144,9 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Trip Number</span>
-                <span class="resource-page-detail-value mono">{incident.trip.trip_number}</span>
+                <a href="/trips/{incident.trip.id}" class="resource-page-detail-value mono link">
+                  {incident.trip.trip_number}
+                </a>
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Trip Status</span>
@@ -374,5 +379,15 @@
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .link:hover {
+    color: var(--theme-color-dark);
+    text-decoration: underline;
   }
 </style> 
