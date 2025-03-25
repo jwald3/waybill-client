@@ -9,7 +9,7 @@
   import { API_BASE_URL } from '$lib/api/client';
   import type { Trip } from '$lib/api/trips';
   
-  let formData: Omit<Trip, 'id' | 'created_at' | 'updated_at' | 'notes'> = {
+  let formData: Omit<Trip, 'id' | 'created_at' | 'updated_at' | 'notes' | 'driver' | 'truck' | 'start_facility' | 'end_facility'> = {
     trip_number: '',
     driver_id: '',
     truck_id: '',

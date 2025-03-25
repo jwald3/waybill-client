@@ -9,9 +9,37 @@ export interface Trip {
   id: string;
   trip_number: string;
   driver_id: string;
+  driver: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    employee_number: string;
+  };
   truck_id: string;
+  truck: {
+    id: string;
+    unit_number: string;
+    make: string;
+    model: string;
+  };
   start_facility_id: string;
+  start_facility: {
+    id: string;
+    name: string;
+    address: {
+      city: string;
+      state: string;
+    };
+  };
   end_facility_id: string;
+  end_facility: {
+    id: string;
+    name: string;
+    address: {
+      city: string;
+      state: string;
+    };
+  };
   departure_time: {
     scheduled: string;
     actual?: string;

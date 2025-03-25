@@ -160,7 +160,7 @@
                 Update Status
               </button>
             {/if}
-            <button class="edit-control" on:click={openAddNote}>
+            <button class="action-button primary" on:click={openAddNote}>
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -202,6 +202,56 @@
                 {#if trip.arrival_time.actual}
                   <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
                 {/if}
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <Card title="Trip Resources" icon={icons.truck}>
+          <div class="resource-page-detail-group">
+            <div class="resource-page-detail-row">
+              <div class="resource-page-detail-item">
+                <span class="resource-page-detail-label">Driver</span>
+                <a 
+                  href="/drivers/{trip.driver_id}" 
+                  class="resource-page-detail-value link"
+                >
+                  {trip.driver.first_name} {trip.driver.last_name}
+                </a>
+                <span class="sub-value">Employee #{trip.driver.id}</span>
+              </div>
+              <div class="resource-page-detail-item">
+                <span class="resource-page-detail-label">Truck</span>
+                <a 
+                  href="/trucks/{trip.truck_id}" 
+                  class="resource-page-detail-value link"
+                >
+                  Unit #{trip.truck.id}
+                </a>
+                <span class="sub-value">{trip.truck.make} {trip.truck.model}</span>
+              </div>
+            </div>
+
+            <div class="resource-page-detail-row">
+              <div class="resource-page-detail-item">
+                <span class="resource-page-detail-label">Origin Facility</span>
+                <a 
+                  href="/facilities/{trip.start_facility_id}" 
+                  class="resource-page-detail-value link"
+                >
+                  {trip.start_facility.name}
+                </a>
+                <span class="sub-value">{trip.start_facility.address.city}, {trip.start_facility.address.state}</span>
+              </div>
+              <div class="resource-page-detail-item">
+                <span class="resource-page-detail-label">Destination Facility</span>
+                <a 
+                  href="/facilities/{trip.end_facility_id}" 
+                  class="resource-page-detail-value link"
+                >
+                  {trip.end_facility.name}
+                </a>
+                <span class="sub-value">{trip.end_facility.address.city}, {trip.end_facility.address.state}</span>
               </div>
             </div>
           </div>
@@ -370,6 +420,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
   }
 
   .action-button.primary {
@@ -436,23 +487,12 @@
     line-height: 1.5;
   }
 
-  .edit-control {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: rgb(99, 102, 241);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  .link {
+    color: rgb(99, 102, 241);
+    text-decoration: none;
   }
 
-  .edit-control:hover {
-    background: rgb(79, 82, 231);
+  .link:hover {
+    text-decoration: underline;
   }
 </style> 
