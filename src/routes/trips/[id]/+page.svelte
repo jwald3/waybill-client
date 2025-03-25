@@ -212,46 +212,62 @@
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Driver</span>
-                <a 
-                  href="/drivers/{trip.driver_id}" 
-                  class="resource-page-detail-value link"
-                >
-                  {trip.driver.first_name} {trip.driver.last_name}
-                </a>
-                <span class="sub-value">Employee #{trip.driver.id}</span>
+                {#if trip.driver}
+                  <a 
+                    href="/drivers/{trip.driver_id}" 
+                    class="resource-page-detail-value link"
+                  >
+                    {trip.driver.first_name} {trip.driver.last_name}
+                  </a>
+                  <span class="sub-value">Employee #{trip.driver.id}</span>
+                {:else}
+                  <span class="resource-page-detail-value">No driver assigned</span>
+                {/if}
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Truck</span>
-                <a 
-                  href="/trucks/{trip.truck_id}" 
-                  class="resource-page-detail-value link"
-                >
-                  Unit #{trip.truck.id}
-                </a>
-                <span class="sub-value">{trip.truck.make} {trip.truck.model}</span>
+                {#if trip.truck}
+                  <a 
+                    href="/trucks/{trip.truck_id}" 
+                    class="resource-page-detail-value link"
+                  >
+                    Unit #{trip.truck.id}
+                  </a>
+                  <span class="sub-value">{trip.truck.make} {trip.truck.model}</span>
+                {:else}
+                  <span class="resource-page-detail-value">No truck assigned</span>
+                {/if}
               </div>
             </div>
 
             <div class="resource-page-detail-row">
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Origin Facility</span>
-                <a 
-                  href="/facilities/{trip.start_facility_id}" 
-                  class="resource-page-detail-value link"
-                >
-                  {trip.start_facility.name}
-                </a>
-                <span class="sub-value">{trip.start_facility.address.city}, {trip.start_facility.address.state}</span>
+                {#if trip.start_facility}
+                  <a 
+                    href="/facilities/{trip.start_facility_id}" 
+                    class="resource-page-detail-value link"
+                  >
+                    {trip.start_facility.name}
+                  </a>
+                  <span class="sub-value">{trip.start_facility.address.city}, {trip.start_facility.address.state}</span>
+                {:else}
+                  <span class="resource-page-detail-value">No origin facility specified</span>
+                {/if}
               </div>
               <div class="resource-page-detail-item">
                 <span class="resource-page-detail-label">Destination Facility</span>
-                <a 
-                  href="/facilities/{trip.end_facility_id}" 
-                  class="resource-page-detail-value link"
-                >
-                  {trip.end_facility.name}
-                </a>
-                <span class="sub-value">{trip.end_facility.address.city}, {trip.end_facility.address.state}</span>
+                {#if trip.end_facility}
+                  <a 
+                    href="/facilities/{trip.end_facility_id}" 
+                    class="resource-page-detail-value link"
+                  >
+                    {trip.end_facility.name}
+                  </a>
+                  <span class="sub-value">{trip.end_facility.address.city}, {trip.end_facility.address.state}</span>
+                {:else}
+                  <span class="resource-page-detail-value">No destination facility specified</span>
+                {/if}
               </div>
             </div>
           </div>
