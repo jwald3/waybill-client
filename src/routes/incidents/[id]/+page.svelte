@@ -364,32 +364,6 @@
     align-items: center;
   }
 
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: white;
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .action-button.primary {
-    background: rgb(99, 102, 241);
-    color: white;
-    border: none;
-  }
-
-  .action-button.primary:hover {
-    background: rgb(79, 82, 231);
-  }
-
   @media (max-width: 480px) {
     .header-controls {
       flex-direction: column;
