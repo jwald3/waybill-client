@@ -137,32 +137,49 @@
     {#if !trip}
       <div class="loading">Loading trip details...</div>
     {:else}
-      <div class="page-header">
-        <div class="resource-page-header-content">
-          <a href="/trips" class="back-link">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-            </svg>
-            Back to Trip Management
-          </a>
-          <div class="title-section">
-            <div class="resource-page-header">
-              <div class="resource-page-title-info">
-                <h1 class="page-title">Trip #{trip.trip_number}</h1>
-                <span class="trip-cargo">{trip.cargo.description}</span>
-              </div>
-              <StatusBadge status={trip.status} type="trip" />
-            </div>
-            <div class="trip-metrics">
-              <div class="metric">
-                <span class="metric-label">Distance</span>
-                <span class="metric-value">{formatNumber(trip.distance_miles)} mi</span>
-              </div>
-              <div class="metric">
-                <span class="metric-label">Fuel Usage</span>
-                <span class="metric-value">{formatNumber(trip.fuel_usage_gallons)} gal</span>
-              </div>
-            </div>
+      <a href="/trips" class="back-link">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Trip Management
+      </a>
+
+      <div class="incident-header">
+        <div class="header-top">
+          <div class="incident-id">
+            <h1>Trip Details</h1>
+            <div class="id-number">#{trip.trip_number}</div>
+          </div>
+          
+          <div class="header-controls">
+            {#if ['SCHEDULED', 'IN_TRANSIT'].includes(trip.status)}
+              <button class="action-button primary" on:click={openUpdateStatus}>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+                Update Status
+              </button>
+            {/if}
+            <button class="action-button" on:click={openAddNote}>
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+              </svg>
+              Add Note
+            </button>
+          </div>
+        </div>
+
+        <div class="incident-meta">
+          <StatusBadge status={trip.status} type="trip" />
+          <div class="meta-divider"></div>
+          <div class="date-reported">
+            <span class="label">DEPARTURE</span>
+            <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="damage-estimate">
+            <span class="label">ARRIVAL</span>
+            <span class="value">{formatDate(trip.arrival_time.scheduled)}</span>
           </div>
         </div>
       </div>
@@ -242,23 +259,6 @@
           </div>
         </Card>
       </div>
-
-      <div class="action-buttons">
-        {#if ['SCHEDULED', 'IN_TRANSIT'].includes(trip.status)}
-          <button class="action-button primary" on:click={openUpdateStatus}>
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-              <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-            </svg>
-            Update Status
-          </button>
-        {/if}
-        <button class="action-button" on:click={openAddNote}>
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-            <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-          </svg>
-          Add Note
-        </button>
-      </div>
     {/if}
   </div>
 
@@ -277,6 +277,128 @@
 </Layout>
 
 <style>
+  .incident-header {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0 var(--spacing-2xl);
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+  }
+
+  .incident-id {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .incident-id h1 {
+    font-size: var(--font-size-xl);
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .id-number {
+    font-size: var(--font-size-3xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    letter-spacing: -0.5px;
+  }
+
+  .incident-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+
+  .meta-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-color);
+  }
+
+  .date-reported,
+  .damage-estimate {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .label {
+    font-size: var(--font-size-xs);
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .value {
+    font-size: var(--font-size-md);
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .value.highlight {
+    color: var(--theme-color);
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+
+  .action-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: white;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .action-button.primary {
+    background: rgb(99, 102, 241);
+    color: white;
+    border: none;
+  }
+
+  .action-button.primary:hover {
+    background: rgb(79, 82, 231);
+  }
+
+  @media (max-width: 480px) {
+    .header-controls {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .header-controls button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
   .trip-cargo {
     color: var(--text-secondary);
     font-size: 1rem;
