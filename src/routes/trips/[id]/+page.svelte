@@ -42,12 +42,6 @@
     return new Intl.NumberFormat('en-US').format(Math.round(num));
   }
 
-  function formatStatusLabel(status: string): string {
-    return status.split('_')
-      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-      .join(' ');
-  }
-
   function getAvailableActions(status: TripStatus): Array<{ value: string, label: string }> {
     switch (status) {
       case 'SCHEDULED':
