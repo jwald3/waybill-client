@@ -97,9 +97,9 @@
         Back to Driver Management
       </a>
 
-      <div class="incident-header">
+      <div class="driver-header">
         <div class="header-top">
-          <div class="incident-id">
+          <div class="driver-id">
             <h1>Driver Profile</h1>
             <div class="id-number">{driver.first_name} {driver.last_name}</div>
           </div>
@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="incident-meta">
+        <div class="driver-meta">
           <StatusBadge status={driver.employment_status} type="driver" />
           <div class="meta-divider"></div>
           <div class="date-reported">
@@ -222,7 +222,7 @@
 />
 
 <style>
-  .incident-header {
+  .driver-header {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
@@ -241,12 +241,12 @@
     gap: var(--spacing-lg);
   }
 
-  .incident-id {
+  .driver-id {
     flex: 1;
     min-width: 280px;
   }
 
-  .incident-id h1 {
+  .driver-id h1 {
     font-size: var(--font-size-xl);
     color: var(--text-secondary);
     font-weight: 500;
@@ -257,11 +257,10 @@
     font-size: var(--font-size-3xl);
     font-weight: 700;
     color: var(--text-primary);
-    font-family: var(--font-mono);
     letter-spacing: -0.5px;
   }
 
-  .incident-meta {
+  .driver-meta {
     display: flex;
     align-items: center;
     gap: var(--spacing-lg);
