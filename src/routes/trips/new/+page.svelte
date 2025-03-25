@@ -7,8 +7,9 @@
   import { getDrivers } from '$lib/api/drivers';
   import { getFacilities } from '$lib/api/facilities';
   import { API_BASE_URL } from '$lib/api/client';
+  import type { Trip } from '$lib/api/trips';
   
-  let formData = {
+  let formData: Omit<Trip, 'id' | 'created_at' | 'updated_at' | 'notes'> = {
     trip_number: '',
     driver_id: '',
     truck_id: '',
@@ -72,6 +73,12 @@
         }
       };
 
+      // Add validation to ensure required IDs are present
+      if (!formattedData.driver_id || !formattedData.truck_id || 
+          !formattedData.start_facility_id || !formattedData.end_facility_id) {
+        throw new Error('Please select all required fields');
+      }
+
       const response = await fetch(`${API_BASE_URL}/trips`, {
         method: 'POST',
         headers: {
@@ -81,12 +88,14 @@
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create trip');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to create trip');
       }
 
       goto('/trips');
     } catch (error) {
       console.error('Error creating trip:', error);
+      // You might want to add some user feedback here
     }
   }
 

@@ -8,6 +8,10 @@ export interface TripNote {
 export interface Trip {
   id: string;
   trip_number: string;
+  driver_id: string;
+  truck_id: string;
+  start_facility_id: string;
+  end_facility_id: string;
   departure_time: {
     scheduled: string;
     actual?: string;
