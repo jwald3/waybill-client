@@ -261,31 +261,7 @@
       justify-content: center;
     }
   }
-
-  .facility-number {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
-  .capacity-display {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-  }
-
-  .capacity-label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .capacity-value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--theme-color);
-  }
-
+  
   .services-list {
     display: flex;
     flex-wrap: wrap;
