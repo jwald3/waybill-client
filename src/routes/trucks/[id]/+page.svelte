@@ -221,18 +221,6 @@
 />
 
 <style>
-  .truck-meta {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .truck-number {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-  }
-
   .state {
     color: var(--text-secondary);
     font-size: 0.9rem;
