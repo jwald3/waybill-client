@@ -349,12 +349,6 @@
     font-weight: 500;
   }
 
-  .value.highlight {
-    color: var(--theme-color);
-    font-size: var(--font-size-xl);
-    font-weight: 600;
-  }
-
   .header-controls {
     display: flex;
     gap: var(--spacing-md);
@@ -399,35 +393,6 @@
     }
   }
 
-  .trip-cargo {
-    color: var(--text-secondary);
-    font-size: 1rem;
-    font-weight: 500;
-  }
-
-  .trip-metrics {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .metric {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-  }
-
-  .metric-label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-  }
-
-  .metric-value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--theme-color);
-  }
-
   .sub-value {
     font-size: 0.875rem;
     color: var(--text-secondary);
@@ -468,17 +433,5 @@
     margin: 0;
     color: var(--text-primary);
     line-height: 1.5;
-  }
-
-  @media (max-width: 768px) {
-    .trip-metrics {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-    }
-
-    .metric {
-      align-items: flex-start;
-    }
   }
 </style> 
