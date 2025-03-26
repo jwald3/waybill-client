@@ -26,6 +26,7 @@
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-header">
+      <div class="auth-brand">Waybill</div>
       <h1 class="auth-title">Create Account</h1>
       <p class="auth-subtitle">Get started with your account</p>
     </div>
