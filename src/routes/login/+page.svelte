@@ -14,7 +14,7 @@
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await goto('/dashboard');
+      await goto('/');
     } catch (e) {
       error = 'Invalid email or password';
     } finally {
