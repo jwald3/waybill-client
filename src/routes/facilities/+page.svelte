@@ -4,7 +4,6 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
-  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import type { Facility } from '$lib/api/facilities';
   import FacilityCard from '$lib/components/FacilityCard.svelte';
   

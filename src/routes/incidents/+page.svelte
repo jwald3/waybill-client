@@ -4,9 +4,8 @@
   import ListControls from '$lib/components/ListControls.svelte';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import { icons } from '$lib/icons';
-  import { formatLargeNumber, formatCurrency, formatDate } from '$lib/utils/format';
+  import { formatLargeNumber } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
-  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import IncidentCard from '$lib/components/IncidentCard.svelte';
   
   let isNavExpanded = true;

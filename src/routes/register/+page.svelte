@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { register } from '$lib/api/auth';
   

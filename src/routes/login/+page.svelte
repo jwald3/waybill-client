@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
   import { login } from '$lib/api/auth';
   import { isAuthenticated } from '$lib/stores/auth';
@@ -9,7 +8,7 @@
   let email = '';
   let password = '';
   
-  async function handleSubmit(event: SubmitEvent) {
+  async function handleSubmit() {
     loading = true;
     error = null;
     

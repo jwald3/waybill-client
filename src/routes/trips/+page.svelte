@@ -8,7 +8,6 @@
   import { addTripNote, beginTrip, finishTripSuccess, finishTripFailure, cancelTrip, type TripStatus } from '$lib/api/trips';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
-  import StatusBadge from '$lib/components/StatusBadge.svelte';
   import TripCard from '$lib/components/TripCard.svelte';
   
   let isNavExpanded = true;

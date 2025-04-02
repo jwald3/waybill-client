@@ -6,7 +6,6 @@
   import { getTrips } from '$lib/api/trips';
   import { getTrucks } from '$lib/api/trucks';
   import { getDrivers } from '$lib/api/drivers';
-  import { API_BASE_URL, mutateApi } from '$lib/api/client';
   import { createIncident, type CreateIncidentPayload } from '$lib/api/incidents';
   
   let formData: CreateIncidentPayload = {

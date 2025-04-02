@@ -2,7 +2,7 @@
   import Layout from '$lib/components/Layout.svelte';
   import Card from '$lib/components/Card.svelte';
   import { icons } from '$lib/icons';
-  import { theme, type Theme, colorMode, getThemeVariables } from '$lib/stores/theme';
+  import { theme, type Theme, colorMode } from '$lib/stores/theme';
   
   let isNavExpanded = true;
   
