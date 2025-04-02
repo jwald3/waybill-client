@@ -185,8 +185,9 @@
               </div>
             {/if}
           </div>
-          <div class="maintenance-list">
-            {#if !isEmpty(data.recentData.maintenance)}
+          <!-- Only show maintenance list if we have data -->
+          {#if !isEmpty(data.recentData.maintenance)}
+            <div class="maintenance-list">
               {#each data.recentData.maintenance as log}
                 <a href="/maintenance/{log.id}" class="maintenance-item">
                   <div class="item-row">
@@ -198,12 +199,8 @@
                   </div>
                 </a>
               {/each}
-            {:else}
-              <div class="empty-state small">
-                <p>No recent maintenance logs</p>
-              </div>
-            {/if}
-          </div>
+            </div>
+          {/if}
         </Card>
 
         <Card title="Recent Incidents" icon={icons.incidents}>
@@ -268,7 +265,11 @@
   }
 
   .chart-container-small {
-    height: 180px;
+    height: 200px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .chart-legend {
@@ -411,19 +412,19 @@
     background: var(--bg-secondary);
     border-radius: var(--radius-sm);
     min-height: 150px;
-  }
-
-  .empty-state.small {
-    min-height: 100px;
-    padding: var(--spacing-md);
+    width: 100%;
+    height: 100%;
   }
 
   .empty-state .icon {
-    width: 2rem;
-    height: 2rem;
-    margin-bottom: var(--spacing-sm);
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-bottom: var(--spacing-md);
     opacity: 0.5;
-    color: currentColor;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .empty-state .icon :global(svg) {
@@ -434,5 +435,7 @@
   .empty-state p {
     margin: 0;
     font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    max-width: 200px;
   }
 </style> 
