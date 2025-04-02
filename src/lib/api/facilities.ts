@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 
 export interface Address {
   street: string;
@@ -80,32 +80,8 @@ export async function createFacility(
   facility: CreateFacilityPayload, 
   fetchFn: typeof fetch = fetch
 ): Promise<Facility> {
-  const url = `${API_BASE_URL}/facilities`;
-  
   try {
-    const response = await fetchFn(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(facility)
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    return responseData.data || responseData;
+    return await mutateApi<Facility>('/facilities', 'POST', facility, fetchFn);
   } catch (err) {
     console.error('Error creating facility:', err);
     throw err;
