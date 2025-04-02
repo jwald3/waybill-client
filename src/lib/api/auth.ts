@@ -48,4 +48,27 @@ export async function register(credentials: AuthCredentials): Promise<AuthRespon
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Registration failed' };
   }
+}
+
+export async function logout(): Promise<void> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+
+    // Clear local storage regardless of server response
+    localStorage.removeItem('auth_token');
+  } catch (error) {
+    // Still clear local storage even if the API call fails
+    localStorage.removeItem('auth_token');
+    console.error('Logout error:', error);
+  }
 } 

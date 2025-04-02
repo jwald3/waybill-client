@@ -4,8 +4,16 @@
   import { sidebarExpanded } from '$lib/stores/sidebar';
   import ThemeToggle from './ThemeToggle.svelte';
   import { isAuthenticated } from '$lib/stores/auth';
+  import { logout } from '$lib/api/auth';
+  import { goto } from '$app/navigation';
   
   let isMoreMenuOpen = false;
+
+  async function handleLogout() {
+    await logout();
+    isAuthenticated.logout();
+    goto('/login');
+  }
 </script>
 
 <nav class:expanded={$sidebarExpanded}>
@@ -189,7 +197,7 @@
             {#if $isAuthenticated}
               <button 
                 class="nav-link" 
-                on:click={() => isAuthenticated.logout()}
+                on:click={handleLogout}
                 aria-label={$sidebarExpanded ? undefined : "Logout"}
               >
                 <span class="nav-icon">
@@ -224,7 +232,7 @@
       {#if $isAuthenticated}
         <button 
           class="nav-link" 
-          on:click={() => isAuthenticated.logout()}
+          on:click={handleLogout}
           aria-label={$sidebarExpanded ? undefined : "Logout"}
         >
           <span class="nav-icon">
