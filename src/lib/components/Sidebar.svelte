@@ -26,164 +26,198 @@
     {/if}
   </div>
 
-  <div class="nav-links">
-    <!-- Primary navigation items -->
-    <a 
-      href="/" 
-      class="nav-link primary-nav" 
-      class:active={$page.url.pathname === "/"}
-      aria-label={$sidebarExpanded ? undefined : "Dashboard"}
-    >
-      <span class="nav-icon">{@html icons.dashboard}</span>
-      {#if $sidebarExpanded}<span>Dashboard</span>{/if}
-    </a>
-    <a 
-      href="/trips" 
-      class="nav-link primary-nav" 
-      class:active={$page.url.pathname === "/trips"}
-      aria-label={$sidebarExpanded ? undefined : "Trips"}
-    >
-      <span class="nav-icon">{@html icons.trips}</span>
-      {#if $sidebarExpanded}<span>Trips</span>{/if}
-    </a>
-    <a 
-      href="/drivers" 
-      class="nav-link primary-nav" 
-      class:active={$page.url.pathname === "/drivers"}
-      aria-label={$sidebarExpanded ? undefined : "Drivers"}
-    >
-      <span class="nav-icon">{@html icons.drivers}</span>
-      {#if $sidebarExpanded}<span>Drivers</span>{/if}
-    </a>
-    <a 
-      href="/trucks" 
-      class="nav-link primary-nav" 
-      class:active={$page.url.pathname === "/trucks"}
-      aria-label={$sidebarExpanded ? undefined : "Trucks"}
-    >
-      <span class="nav-icon">{@html icons.truck}</span>
-      {#if $sidebarExpanded}<span>Trucks</span>{/if}
-    </a>
-    
-    <!-- Desktop secondary navigation -->
-    <div class="desktop-secondary-nav">
+  <div class="sidebar-content">
+    <div class="nav-links">
+      <!-- Primary navigation items -->
       <a 
-        href="/maintenance" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/maintenance"}
-        aria-label={$sidebarExpanded ? undefined : "Maintenance"}
+        href="/" 
+        class="nav-link primary-nav" 
+        class:active={$page.url.pathname === "/"}
+        aria-label={$sidebarExpanded ? undefined : "Dashboard"}
       >
-        <span class="nav-icon">{@html icons.maintenance}</span>
-        {#if $sidebarExpanded}<span>Maintenance</span>{/if}
+        <span class="nav-icon">{@html icons.dashboard}</span>
+        {#if $sidebarExpanded}<span>Dashboard</span>{/if}
       </a>
       <a 
-        href="/analytics" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/analytics"}
-        aria-label={$sidebarExpanded ? undefined : "Analytics"}
+        href="/trips" 
+        class="nav-link primary-nav" 
+        class:active={$page.url.pathname === "/trips"}
+        aria-label={$sidebarExpanded ? undefined : "Trips"}
       >
-        <span class="nav-icon">{@html icons.analytics}</span>
-        {#if $sidebarExpanded}<span>Analytics</span>{/if}
+        <span class="nav-icon">{@html icons.trips}</span>
+        {#if $sidebarExpanded}<span>Trips</span>{/if}
       </a>
       <a 
-        href="/settings" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/settings"}
-        aria-label={$sidebarExpanded ? undefined : "Settings"}
+        href="/drivers" 
+        class="nav-link primary-nav" 
+        class:active={$page.url.pathname === "/drivers"}
+        aria-label={$sidebarExpanded ? undefined : "Drivers"}
       >
-        <span class="nav-icon">{@html icons.settings}</span>
-        {#if $sidebarExpanded}<span>Settings</span>{/if}
+        <span class="nav-icon">{@html icons.drivers}</span>
+        {#if $sidebarExpanded}<span>Drivers</span>{/if}
       </a>
       <a 
-        href="/facilities" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/facilities"}
-        aria-label={$sidebarExpanded ? undefined : "Facilities"}
+        href="/trucks" 
+        class="nav-link primary-nav" 
+        class:active={$page.url.pathname === "/trucks"}
+        aria-label={$sidebarExpanded ? undefined : "Trucks"}
       >
-        <span class="nav-icon">{@html icons.facilities}</span>
-        {#if $sidebarExpanded}<span>Facilities</span>{/if}
+        <span class="nav-icon">{@html icons.truck}</span>
+        {#if $sidebarExpanded}<span>Trucks</span>{/if}
       </a>
-      <a 
-        href="/incidents" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/incidents"}
-        aria-label={$sidebarExpanded ? undefined : "Incidents"}
-      >
-        <span class="nav-icon">{@html icons.incidents}</span>
-        {#if $sidebarExpanded}<span>Incidents</span>{/if}
-      </a>
+      
+      <!-- Desktop secondary navigation -->
+      <div class="desktop-secondary-nav">
+        <a 
+          href="/maintenance" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/maintenance"}
+          aria-label={$sidebarExpanded ? undefined : "Maintenance"}
+        >
+          <span class="nav-icon">{@html icons.maintenance}</span>
+          {#if $sidebarExpanded}<span>Maintenance</span>{/if}
+        </a>
+        <a 
+          href="/analytics" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/analytics"}
+          aria-label={$sidebarExpanded ? undefined : "Analytics"}
+        >
+          <span class="nav-icon">{@html icons.analytics}</span>
+          {#if $sidebarExpanded}<span>Analytics</span>{/if}
+        </a>
+        <a 
+          href="/settings" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/settings"}
+          aria-label={$sidebarExpanded ? undefined : "Settings"}
+        >
+          <span class="nav-icon">{@html icons.settings}</span>
+          {#if $sidebarExpanded}<span>Settings</span>{/if}
+        </a>
+        <a 
+          href="/facilities" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/facilities"}
+          aria-label={$sidebarExpanded ? undefined : "Facilities"}
+        >
+          <span class="nav-icon">{@html icons.facilities}</span>
+          {#if $sidebarExpanded}<span>Facilities</span>{/if}
+        </a>
+        <a 
+          href="/incidents" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/incidents"}
+          aria-label={$sidebarExpanded ? undefined : "Incidents"}
+        >
+          <span class="nav-icon">{@html icons.incidents}</span>
+          {#if $sidebarExpanded}<span>Incidents</span>{/if}
+        </a>
+      </div>
+      
+      <!-- Mobile more menu button and secondary nav -->
+      <div class="mobile-nav">
+        <button 
+          class="nav-link primary-nav more-menu-button" 
+          on:click={() => isMoreMenuOpen = !isMoreMenuOpen}
+          aria-label="More menu"
+          aria-expanded={isMoreMenuOpen}
+          aria-controls="secondary-nav-menu"
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </span>
+          {#if $sidebarExpanded}<span>More</span>{/if}
+        </button>
+
+        <div 
+          id="secondary-nav-menu"
+          class="secondary-nav" 
+          class:show={isMoreMenuOpen}
+        >
+          <div class="more-menu">
+            <a 
+              href="/maintenance" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/maintenance"}
+              aria-label={$sidebarExpanded ? undefined : "Maintenance"}
+            >
+              <span class="nav-icon">{@html icons.maintenance}</span>
+              <span>Maintenance</span>
+            </a>
+            <a 
+              href="/analytics" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/analytics"}
+              aria-label={$sidebarExpanded ? undefined : "Analytics"}
+            >
+              <span class="nav-icon">{@html icons.analytics}</span>
+              <span>Analytics</span>
+            </a>
+            <a 
+              href="/settings" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/settings"}
+              aria-label={$sidebarExpanded ? undefined : "Settings"}
+            >
+              <span class="nav-icon">{@html icons.settings}</span>
+              <span>Settings</span>
+            </a>
+            <a 
+              href="/facilities" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/facilities"}
+              aria-label={$sidebarExpanded ? undefined : "Facilities"}
+            >
+              <span class="nav-icon">{@html icons.facilities}</span>
+              <span>Facilities</span>
+            </a>
+            <a 
+              href="/incidents" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/incidents"}
+              aria-label={$sidebarExpanded ? undefined : "Incidents"}
+            >
+              <span class="nav-icon">{@html icons.incidents}</span>
+              <span>Incidents</span>
+            </a>
+
+            <!-- Add login link to more menu -->
+            <a 
+              href="/login" 
+              class="nav-link" 
+              class:active={$page.url.pathname === "/login"}
+              aria-label={$sidebarExpanded ? undefined : "Login"}
+            >
+              <span class="nav-icon">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+              </span>
+              <span>Login / Register</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <!-- Mobile more menu button and secondary nav -->
-    <div class="mobile-nav">
-      <button 
-        class="nav-link primary-nav more-menu-button" 
-        on:click={() => isMoreMenuOpen = !isMoreMenuOpen}
-        aria-label="More menu"
-        aria-expanded={isMoreMenuOpen}
-        aria-controls="secondary-nav-menu"
+
+    <!-- Login/Register link -->
+    <div class="auth-nav">
+      <a 
+        href="/login" 
+        class="nav-link" 
+        class:active={$page.url.pathname === "/login"}
+        aria-label={$sidebarExpanded ? undefined : "Login"}
       >
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
           </svg>
         </span>
-        {#if $sidebarExpanded}<span>More</span>{/if}
-      </button>
-
-      <div 
-        id="secondary-nav-menu"
-        class="secondary-nav" 
-        class:show={isMoreMenuOpen}
-      >
-        <div class="more-menu">
-          <a 
-            href="/maintenance" 
-            class="nav-link" 
-            class:active={$page.url.pathname === "/maintenance"}
-            aria-label={$sidebarExpanded ? undefined : "Maintenance"}
-          >
-            <span class="nav-icon">{@html icons.maintenance}</span>
-            <span>Maintenance</span>
-          </a>
-          <a 
-            href="/analytics" 
-            class="nav-link" 
-            class:active={$page.url.pathname === "/analytics"}
-            aria-label={$sidebarExpanded ? undefined : "Analytics"}
-          >
-            <span class="nav-icon">{@html icons.analytics}</span>
-            <span>Analytics</span>
-          </a>
-          <a 
-            href="/settings" 
-            class="nav-link" 
-            class:active={$page.url.pathname === "/settings"}
-            aria-label={$sidebarExpanded ? undefined : "Settings"}
-          >
-            <span class="nav-icon">{@html icons.settings}</span>
-            <span>Settings</span>
-          </a>
-          <a 
-            href="/facilities" 
-            class="nav-link" 
-            class:active={$page.url.pathname === "/facilities"}
-            aria-label={$sidebarExpanded ? undefined : "Facilities"}
-          >
-            <span class="nav-icon">{@html icons.facilities}</span>
-            <span>Facilities</span>
-          </a>
-          <a 
-            href="/incidents" 
-            class="nav-link" 
-            class:active={$page.url.pathname === "/incidents"}
-            aria-label={$sidebarExpanded ? undefined : "Incidents"}
-          >
-            <span class="nav-icon">{@html icons.incidents}</span>
-            <span>Incidents</span>
-          </a>
-        </div>
-      </div>
+        {#if $sidebarExpanded}<span>Login / Register</span>{/if}
+      </a>
     </div>
   </div>
 </nav>
@@ -199,6 +233,8 @@
     border-right: 1px solid var(--border-color);
     transition: width 0.3s ease;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
   }
 
   nav.expanded {
@@ -234,6 +270,14 @@
   .toggle-nav:hover {
     background: var(--surface-color);
     color: var(--text-primary);
+  }
+
+  .sidebar-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
   }
 
   .nav-links {
@@ -305,6 +349,11 @@
 
   .mobile-nav {
     display: none;
+  }
+
+  .auth-nav {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
   }
 
   @media (max-width: 768px) {
@@ -406,6 +455,14 @@
 
     .more-menu .nav-icon {
       margin: 0;
+    }
+
+    .sidebar-content {
+      flex-direction: row;
+    }
+
+    .auth-nav {
+      display: none;
     }
   }
 </style> 
