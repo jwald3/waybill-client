@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 
 export interface Address {
   street: string;
@@ -80,21 +80,16 @@ export interface CreateDriverPayload {
   address: Address;
 }
 
-export async function createDriver(driver: CreateDriverPayload): Promise<Driver> {
-  const response = await fetch(`${API_BASE_URL}/drivers`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(driver)
-  });
-
-  if (!response.ok) {
-    throw new Error(`API request failed: ${response.statusText}`);
+export async function createDriver(
+  driver: CreateDriverPayload, 
+  fetchFn: typeof fetch = fetch
+): Promise<Driver> {
+  try {
+    return await mutateApi<Driver>('/drivers', 'POST', driver, fetchFn);
+  } catch (err) {
+    console.error('Error creating driver:', err);
+    throw err;
   }
-
-  const result: DriverResponse = await response.json();
-  return result.data;
 }
 
 export type EmploymentStatus = 'ACTIVE' | 'SUSPENDED' | 'TERMINATED';
@@ -107,54 +102,33 @@ export async function activateDriver(
   driverId: string,
   fetchFn: typeof fetch = fetch
 ): Promise<Driver> {
-  const response = await fetchFn(`${API_BASE_URL}/drivers/${driverId}/employment-status/activate`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to activate driver: ${response.statusText}`);
+  try {
+    return await mutateApi<Driver>(`/drivers/${driverId}/employment-status/activate`, 'PATCH', undefined, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to activate driver: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export async function suspendDriver(
   driverId: string,
   fetchFn: typeof fetch = fetch
 ): Promise<Driver> {
-  const response = await fetchFn(`${API_BASE_URL}/drivers/${driverId}/employment-status/suspend`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to suspend driver: ${response.statusText}`);
+  try {
+    return await mutateApi<Driver>(`/drivers/${driverId}/employment-status/suspend`, 'PATCH', undefined, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to suspend driver: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export async function terminateDriver(
   driverId: string,
   fetchFn: typeof fetch = fetch
 ): Promise<Driver> {
-  const response = await fetchFn(`${API_BASE_URL}/drivers/${driverId}/employment-status/terminate`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to terminate driver: ${response.statusText}`);
+  try {
+    return await mutateApi<Driver>(`/drivers/${driverId}/employment-status/terminate`, 'PATCH', undefined, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to terminate driver: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export function getAvailableStatusTransitions(currentStatus: EmploymentStatus): Array<{value: EmploymentStatus, label: string}> {
