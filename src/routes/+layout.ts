@@ -9,11 +9,12 @@ export const load: LayoutLoad = async ({ url }) => {
   
   if (browser) {
     isAuthenticated.initialize();
-    
-    if (!localStorage.getItem('auth_token') && !isPublicPath) {
+    const token = localStorage.getItem('auth_token');
+    if (!token && !isPublicPath) {
       throw redirect(307, '/login');
     }
+    return { token };
   }
   
-  return {};
+  return { token: null };
 }; 

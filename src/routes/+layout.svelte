@@ -2,7 +2,16 @@
 	import '../app.css';
 	import { theme } from '$lib/stores/theme';
 	import ThemeProvider from '$lib/components/ThemeProvider.svelte';
-	let { children } = $props();
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	
+	let { data, children } = $props();
+	
+	onMount(() => {
+		if (!data.token && !window.location.pathname.includes('/login')) {
+			goto('/login');
+		}
+	});
 </script>
 
 <ThemeProvider>
