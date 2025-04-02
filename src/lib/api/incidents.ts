@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 import type { Trip } from './trips';
 import type { Truck } from './trucks';
 import type { Driver } from './drivers';
@@ -46,5 +46,28 @@ export async function getIncident(id: string, fetchFn: typeof fetch = fetch): Pr
   } catch (err) {
     console.error('Error fetching incident:', err);
     throw new Error(err instanceof Error ? err.message : 'Failed to load incident');
+  }
+}
+
+export interface CreateIncidentPayload {
+  trip_id: string;
+  truck_id: string;
+  driver_id: string;
+  type: 'TRAFFIC_ACCIDENT' | 'MECHANICAL_FAILURE' | 'WEATHER_DELAY' | 'CARGO_ISSUE' | 'OTHER';
+  description: string;
+  date: string;
+  location: string;
+  damage_estimate: number;
+}
+
+export async function createIncident(
+  incident: CreateIncidentPayload, 
+  fetchFn: typeof fetch = fetch
+): Promise<IncidentReport> {
+  try {
+    return await mutateApi<IncidentReport>('/incident-reports', 'POST', incident, fetchFn);
+  } catch (err) {
+    console.error('Error creating incident:', err);
+    throw err;
   }
 } 

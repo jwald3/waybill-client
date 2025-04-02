@@ -6,9 +6,10 @@
   import { getTrips } from '$lib/api/trips';
   import { getTrucks } from '$lib/api/trucks';
   import { getDrivers } from '$lib/api/drivers';
-  import { API_BASE_URL } from '$lib/api/client';
+  import { API_BASE_URL, mutateApi } from '$lib/api/client';
+  import { createIncident, type CreateIncidentPayload } from '$lib/api/incidents';
   
-  let formData = {
+  let formData: CreateIncidentPayload = {
     trip_id: '',
     truck_id: '',
     driver_id: '',
@@ -52,18 +53,7 @@
 
   async function handleSubmit() {
     try {
-      const response = await fetch(`${API_BASE_URL}/incident-reports`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create incident report');
-      }
-
+      await createIncident(formData);
       goto('/incidents');
     } catch (error) {
       console.error('Error creating incident report:', error);
