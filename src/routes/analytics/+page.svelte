@@ -66,6 +66,9 @@
   // Adjust chart heights based on screen size
   $: chartHeight = isMobile ? 300 : isTablet ? 400 : 500;
   $: pieChartHeight = isMobile ? 250 : 300;
+
+  // Helper function to check if data sections are empty
+  const isEmpty = (arr: any[]) => !arr || arr.length === 0;
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -103,11 +106,20 @@
           </div>
           <div class="chart-row">
             <div class="chart-container">
-              <PieChart 
-                data={data.charts.fleetStatus} 
-                centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
-                centerLabel="Available"
-              />
+              {#if !isEmpty(data.charts.fleetStatus)}
+                <PieChart 
+                  data={data.charts.fleetStatus} 
+                  centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
+                  centerLabel="Available"
+                />
+              {:else}
+                <div class="empty-state">
+                  <div class="icon">
+                    {@html icons.truck}
+                  </div>
+                  <p>No fleet status data available</p>
+                </div>
+              {/if}
             </div>
             <div class="chart-legend">
               {#each data.charts.fleetStatus as status}
@@ -123,23 +135,32 @@
 
         <Card title="Recent Trips" icon={icons.routes}>
           <div class="trips-list">
-            {#each data.recentData.trips as trip}
-              <a href="/trips/{trip.id}" class="trip-item">
-                <div class="trip-header">
-                  <div class="trip-id">
-                    <StatusBadge status={trip.status} type="trip" />
-                    <span class="trip-number">{trip.tripNumber}</span>
+            {#if !isEmpty(data.recentData.trips)}
+              {#each data.recentData.trips as trip}
+                <a href="/trips/{trip.id}" class="trip-item">
+                  <div class="trip-header">
+                    <div class="trip-id">
+                      <StatusBadge status={trip.status} type="trip" />
+                      <span class="trip-number">{trip.tripNumber}</span>
+                    </div>
+                    <div class="trip-stats">
+                      <span>{trip.distance} mi</span>
+                      <span class="separator">•</span>
+                      <span>{trip.fuelUsage} gal</span>
+                      <span class="separator">•</span>
+                      <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
+                    </div>
                   </div>
-                  <div class="trip-stats">
-                    <span>{trip.distance} mi</span>
-                    <span class="separator">•</span>
-                    <span>{trip.fuelUsage} gal</span>
-                    <span class="separator">•</span>
-                    <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
-                  </div>
+                </a>
+              {/each}
+            {:else}
+              <div class="empty-state">
+                <div class="icon">
+                  {@html icons.routes}
                 </div>
-              </a>
-            {/each}
+                <p>No recent trips to display</p>
+              </div>
+            {/if}
           </div>
         </Card>
       </div>
@@ -147,7 +168,7 @@
       <div class="side-column">
         <Card title="Maintenance Overview" icon={icons.maintenance}>
           <div class="chart-container-small">
-            {#if data.charts.maintenanceTypes.length > 0}
+            {#if !isEmpty(data.charts.maintenanceTypes)}
               {@const total = data.charts.maintenanceTypes.reduce((sum, type) => sum + type.value, 0)}
               {@const routineCount = data.charts.maintenanceTypes.find(t => t.label === 'Routine')?.value || 0}
               <PieChart 
@@ -155,37 +176,59 @@
                 centerValue={`${total > 0 ? Math.round((routineCount / total) * 100) : 0}%`}
                 centerLabel="Routine"
               />
+            {:else}
+              <div class="empty-state">
+                <div class="icon">
+                  {@html icons.maintenance}
+                </div>
+                <p>No maintenance data available</p>
+              </div>
             {/if}
           </div>
           <div class="maintenance-list">
-            {#each data.recentData.maintenance as log}
-              <a href="/maintenance/{log.id}" class="maintenance-item">
-                <div class="item-row">
-                  <StatusBadge status={log.type} type="maintenance" />
-                  <span class="cost">${log.cost}</span>
-                </div>
-                <div class="item-row secondary">
-                  <span>{new Date(log.date).toLocaleDateString()}</span>
-                </div>
-              </a>
-            {/each}
+            {#if !isEmpty(data.recentData.maintenance)}
+              {#each data.recentData.maintenance as log}
+                <a href="/maintenance/{log.id}" class="maintenance-item">
+                  <div class="item-row">
+                    <StatusBadge status={log.type} type="maintenance" />
+                    <span class="cost">${log.cost}</span>
+                  </div>
+                  <div class="item-row secondary">
+                    <span>{new Date(log.date).toLocaleDateString()}</span>
+                  </div>
+                </a>
+              {/each}
+            {:else}
+              <div class="empty-state small">
+                <p>No recent maintenance logs</p>
+              </div>
+            {/if}
           </div>
         </Card>
 
         <Card title="Recent Incidents" icon={icons.incidents}>
           <div class="incidents-list">
-            {#each data.recentData.incidents as incident}
-              <a href="/incidents/{incident.id}" class="incident-item">
-                <div class="item-row">
-                  <StatusBadge status={incident.type} type="incident" />
-                  <span class="cost">${incident.damageEstimate}</span>
+            {#if !isEmpty(data.recentData.incidents)}
+              {#each data.recentData.incidents as incident}
+                <a href="/incidents/{incident.id}" class="incident-item">
+                  <div class="item-row">
+                    <StatusBadge status={incident.type} type="incident" />
+                    <span class="cost">${incident.damageEstimate}</span>
+                  </div>
+                  <p class="incident-desc">{incident.description}</p>
+                  <div class="item-row secondary">
+                    <span>{new Date(incident.date).toLocaleDateString()}</span>
+                  </div>
+                </a>
+              {/each}
+            {:else}
+              <div class="empty-state">
+                <div class="icon">
+                  {@html icons.incidents}
                 </div>
-                <p class="incident-desc">{incident.description}</p>
-                <div class="item-row secondary">
-                  <span>{new Date(incident.date).toLocaleDateString()}</span>
-                </div>
-              </a>
-            {/each}
+                <p>No recent incidents reported</p>
+              </div>
+            {/if}
           </div>
         </Card>
       </div>
@@ -355,5 +398,41 @@
       flex-direction: column;
       align-items: flex-start;
     }
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    color: var(--text-secondary);
+    text-align: center;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    min-height: 150px;
+  }
+
+  .empty-state.small {
+    min-height: 100px;
+    padding: var(--spacing-md);
+  }
+
+  .empty-state .icon {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.5;
+    color: currentColor;
+  }
+
+  .empty-state .icon :global(svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .empty-state p {
+    margin: 0;
+    font-size: var(--font-size-sm);
   }
 </style> 
