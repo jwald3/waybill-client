@@ -6,7 +6,7 @@
   import { getTrucks } from '$lib/api/trucks';
   import { getDrivers } from '$lib/api/drivers';
   import { getFacilities } from '$lib/api/facilities';
-  import { API_BASE_URL } from '$lib/api/client';
+  import { mutateApi } from '$lib/api/client';
   import type { Trip } from '$lib/api/trips';
   
   let formData: Omit<Trip, 'id' | 'created_at' | 'updated_at' | 'notes' | 'driver' | 'truck' | 'start_facility' | 'end_facility'> = {
@@ -79,19 +79,8 @@
         throw new Error('Please select all required fields');
       }
 
-      const response = await fetch(`${API_BASE_URL}/trips`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formattedData)
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create trip');
-      }
-
+      // Replace direct fetch with mutateApi
+      await mutateApi('/trips', 'POST', formattedData);
       goto('/trips');
     } catch (error) {
       console.error('Error creating trip:', error);

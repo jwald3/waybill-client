@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 
 export interface LicensePlate {
   number: string;
@@ -77,34 +77,9 @@ export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promi
 }
 
 export async function createTruck(truck: CreateTruckPayload, fetchFn: typeof fetch = fetch): Promise<Truck> {
-  const url = `${API_BASE_URL}/trucks`;
-  
   try {
-    const response = await fetchFn(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(truck)
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    
-    // Handle both response formats - either wrapped in data property or direct truck object
-    return responseData.data || responseData;
+    const response = await mutateApi<Truck>('/trucks', 'POST', truck, fetchFn);
+    return response;
   } catch (err) {
     console.error('Error creating truck:', err);
     throw err;

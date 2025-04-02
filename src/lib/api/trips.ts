@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 
 export interface TripNote {
   note_timestamp: string;
@@ -122,32 +122,8 @@ export async function addTripNote(
   note: AddTripNoteRequest, 
   fetchFn: typeof fetch = fetch
 ): Promise<Trip> {
-  const url = `${API_BASE_URL}/trips/${tripId}/notes`;
-  
   try {
-    const response = await fetchFn(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(note)
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    return responseData.data;
+    return await mutateApi<Trip>(`/trips/${tripId}/notes`, 'POST', note, fetchFn);
   } catch (err) {
     console.error('Error adding trip note:', err);
     throw err;
@@ -159,21 +135,11 @@ export async function beginTrip(
   data: BeginTripRequest,
   fetchFn: typeof fetch = fetch
 ): Promise<Trip> {
-  const url = `${API_BASE_URL}/trips/${tripId}/begin`;
-  
-  const response = await fetchFn(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to begin trip: ${response.statusText}`);
+  try {
+    return await mutateApi<Trip>(`/trips/${tripId}/begin`, 'PATCH', data, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to begin trip: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export async function finishTripSuccess(
@@ -181,21 +147,11 @@ export async function finishTripSuccess(
   data: FinishTripRequest,
   fetchFn: typeof fetch = fetch
 ): Promise<Trip> {
-  const url = `${API_BASE_URL}/trips/${tripId}/finish/success`;
-  
-  const response = await fetchFn(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to complete trip: ${response.statusText}`);
+  try {
+    return await mutateApi<Trip>(`/trips/${tripId}/finish/success`, 'PATCH', data, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to complete trip: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export async function finishTripFailure(
@@ -203,39 +159,20 @@ export async function finishTripFailure(
   data: FinishTripRequest,
   fetchFn: typeof fetch = fetch
 ): Promise<Trip> {
-  const url = `${API_BASE_URL}/trips/${tripId}/finish/failure`;
-  
-  const response = await fetchFn(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to mark trip as failed: ${response.statusText}`);
+  try {
+    return await mutateApi<Trip>(`/trips/${tripId}/finish/failure`, 'PATCH', data, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to mark trip as failed: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 }
 
 export async function cancelTrip(
   tripId: string,
   fetchFn: typeof fetch = fetch
 ): Promise<Trip> {
-  const url = `${API_BASE_URL}/trips/${tripId}/cancel`;
-  
-  const response = await fetchFn(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to cancel trip: ${response.statusText}`);
+  try {
+    return await mutateApi<Trip>(`/trips/${tripId}/cancel`, 'PATCH', undefined, fetchFn);
+  } catch (err) {
+    throw new Error(`Failed to cancel trip: ${err}`);
   }
-
-  return response.json().then(res => res.data);
 } 
