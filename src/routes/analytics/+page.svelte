@@ -104,7 +104,7 @@
               <span class="value">{data.metrics.delivery.activeTrips}</span>
             </div>
           </div>
-          <div class="chart-row">
+          <div class="chart-row" class:has-data={!isEmpty(data.charts.fleetStatus)}>
             <div class="chart-container">
               {#if !isEmpty(data.charts.fleetStatus)}
                 <PieChart 
@@ -112,6 +112,15 @@
                   centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
                   centerLabel="Available"
                 />
+                <div class="chart-legend">
+                  {#each data.charts.fleetStatus as status}
+                    <div class="legend-item">
+                      <span class="legend-color" style="background-color: {status.color}"></span>
+                      <span class="legend-label">{status.label}</span>
+                      <span class="legend-value">{status.value}</span>
+                    </div>
+                  {/each}
+                </div>
               {:else}
                 <div class="empty-state">
                   <div class="icon">
@@ -120,15 +129,6 @@
                   <p>No fleet status data available</p>
                 </div>
               {/if}
-            </div>
-            <div class="chart-legend">
-              {#each data.charts.fleetStatus as status}
-                <div class="legend-item">
-                  <span class="legend-color" style="background-color: {status.color}"></span>
-                  <span class="legend-label">{status.label}</span>
-                  <span class="legend-value">{status.value}</span>
-                </div>
-              {/each}
             </div>
           </div>
         </Card>
@@ -254,6 +254,12 @@
   }
 
   .chart-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chart-row.has-data {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: var(--spacing-md);
@@ -262,14 +268,36 @@
 
   .chart-container {
     height: 250px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .chart-container .empty-state {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    height: auto;
+    min-height: unset;
+    max-width: 300px;
   }
 
   .chart-container-small {
     height: 200px;
-    width: 100%;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .chart-container-small .empty-state {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    height: auto;
+    min-height: unset;
   }
 
   .chart-legend {
@@ -411,7 +439,6 @@
     text-align: center;
     background: var(--bg-secondary);
     border-radius: var(--radius-sm);
-    min-height: 150px;
     width: 100%;
     height: 100%;
   }
@@ -436,6 +463,6 @@
     margin: 0;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
-    max-width: 200px;
+    white-space: nowrap;
   }
 </style> 
