@@ -1,25 +1,35 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
+  import { register } from '$lib/api/auth';
   
   let loading = false;
   let error: string | null = null;
+  let email = '';
+  let password = '';
+  let confirmPassword = '';
   
   async function handleSubmit(event: SubmitEvent) {
     loading = true;
     error = null;
     
-    // TODO: Implement actual registration logic here
-    // This is a placeholder for demonstration
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      await goto('/');
-    } catch (e) {
-      error = 'Registration failed. Please try again.';
-    } finally {
+    if (password !== confirmPassword) {
+      error = 'Passwords do not match';
       loading = false;
+      return;
     }
+    
+    const response = await register({ email, password });
+    
+    if (response.error) {
+      error = response.error;
+    } else if (response.token) {
+      // Store the token somewhere (localStorage, cookie, etc)
+      localStorage.setItem('auth_token', response.token);
+      await goto('/');
+    }
+    
+    loading = false;
   }
 </script>
 
@@ -54,7 +64,8 @@
         <input 
           type="email" 
           id="email" 
-          class="auth-input" 
+          class="auth-input"
+          bind:value={email}
           required 
           autocomplete="email"
         />
@@ -65,7 +76,8 @@
         <input 
           type="password" 
           id="password" 
-          class="auth-input" 
+          class="auth-input"
+          bind:value={password}
           required 
           autocomplete="new-password"
           minlength="8"
@@ -77,7 +89,8 @@
         <input 
           type="password" 
           id="confirmPassword" 
-          class="auth-input" 
+          class="auth-input"
+          bind:value={confirmPassword}
           required 
           autocomplete="new-password"
           minlength="8"

@@ -1,25 +1,28 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { goto } from '$app/navigation';
+  import { login } from '$lib/api/auth';
+  import { isAuthenticated } from '$lib/stores/auth';
   
   let loading = false;
   let error: string | null = null;
+  let email = '';
+  let password = '';
   
   async function handleSubmit(event: SubmitEvent) {
     loading = true;
     error = null;
     
-    // TODO: Implement actual login logic here
-    // This is a placeholder for demonstration
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+    const response = await login({ email, password });
+    
+    if (response.error) {
+      error = response.error;
+    } else if (response.token) {
+      isAuthenticated.login(response.token);
       await goto('/');
-    } catch (e) {
-      error = 'Invalid email or password';
-    } finally {
-      loading = false;
     }
+    
+    loading = false;
   }
 </script>
 
@@ -43,7 +46,8 @@
         <input 
           type="email" 
           id="email" 
-          class="auth-input" 
+          class="auth-input"
+          bind:value={email}
           required 
           autocomplete="email"
         />
@@ -54,7 +58,8 @@
         <input 
           type="password" 
           id="password" 
-          class="auth-input" 
+          class="auth-input"
+          bind:value={password}
           required 
           autocomplete="current-password"
         />

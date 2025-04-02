@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { sidebarExpanded } from '$lib/stores/sidebar';
   import ThemeToggle from './ThemeToggle.svelte';
+  import { isAuthenticated } from '$lib/stores/auth';
   
   let isMoreMenuOpen = false;
 </script>
@@ -185,19 +186,34 @@
             </a>
 
             <!-- Add login link to more menu -->
-            <a 
-              href="/login" 
-              class="nav-link" 
-              class:active={$page.url.pathname === "/login"}
-              aria-label={$sidebarExpanded ? undefined : "Login"}
-            >
-              <span class="nav-icon">
-                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                </svg>
-              </span>
-              <span>Login / Register</span>
-            </a>
+            {#if $isAuthenticated}
+              <button 
+                class="nav-link" 
+                on:click={() => isAuthenticated.logout()}
+                aria-label={$sidebarExpanded ? undefined : "Logout"}
+              >
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                  </svg>
+                </span>
+                {#if $sidebarExpanded}<span>Logout</span>{/if}
+              </button>
+            {:else}
+              <a 
+                href="/login" 
+                class="nav-link" 
+                class:active={$page.url.pathname === "/login"}
+                aria-label={$sidebarExpanded ? undefined : "Login"}
+              >
+                <span class="nav-icon">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                  </svg>
+                </span>
+                {#if $sidebarExpanded}<span>Login / Register</span>{/if}
+              </a>
+            {/if}
           </div>
         </div>
       </div>
@@ -205,19 +221,34 @@
 
     <!-- Login/Register link -->
     <div class="auth-nav">
-      <a 
-        href="/login" 
-        class="nav-link" 
-        class:active={$page.url.pathname === "/login"}
-        aria-label={$sidebarExpanded ? undefined : "Login"}
-      >
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-          </svg>
-        </span>
-        {#if $sidebarExpanded}<span>Login / Register</span>{/if}
-      </a>
+      {#if $isAuthenticated}
+        <button 
+          class="nav-link" 
+          on:click={() => isAuthenticated.logout()}
+          aria-label={$sidebarExpanded ? undefined : "Logout"}
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+          </span>
+          {#if $sidebarExpanded}<span>Logout</span>{/if}
+        </button>
+      {:else}
+        <a 
+          href="/login" 
+          class="nav-link" 
+          class:active={$page.url.pathname === "/login"}
+          aria-label={$sidebarExpanded ? undefined : "Login"}
+        >
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </span>
+          {#if $sidebarExpanded}<span>Login / Register</span>{/if}
+        </a>
+      {/if}
     </div>
   </div>
 </nav>
