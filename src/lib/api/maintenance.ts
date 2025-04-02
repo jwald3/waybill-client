@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL } from './client';
+import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
 import type { Truck } from './trucks';
 
 export interface MaintenanceLog {
@@ -69,33 +69,8 @@ export async function createMaintenanceLog(
   payload: CreateMaintenanceLogPayload, 
   fetchFn: typeof fetch = fetch
 ): Promise<MaintenanceLog> {
-  const url = `${API_BASE_URL}/maintenance-logs`;
-  
   try {
-    const response = await fetchFn(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
-      credentials: 'include'
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    return responseData.data || responseData;
+    return await mutateApi<MaintenanceLog>('/maintenance-logs', 'POST', payload, fetchFn);
   } catch (err) {
     console.error('Error creating maintenance log:', err);
     throw err;
