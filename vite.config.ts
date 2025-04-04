@@ -7,7 +7,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'http://localhost:8000',
+				target: 'http://45.79.191.179:8000',
 				changeOrigin: true,
 				secure: false,
 			},
@@ -17,7 +17,7 @@ export default defineConfig({
 	define: {
 		// You can specify different API URLs for development vs production
 		'import.meta.env.VITE_API_URL': JSON.stringify(process.env.NODE_ENV === 'production' 
-		  ? 'https://getwaybill.com/api/v1' 
-		  : 'http://localhost:8000/api/v1')
+		  ? 'http://45.79.191.179:8000/api/v1' 
+		  : 'http://45.79.191.179:8000/api/v1')
 	  }
 });
