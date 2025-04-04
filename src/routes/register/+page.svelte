@@ -106,12 +106,12 @@
       
       <div class="auth-divider">or</div>
       
-      <!-- <div class="social-auth-buttons">
+      <div class="social-auth-buttons">
         <button type="button" class="social-auth-button">
           <img src="" alt="" width="20" height="20" />
           Continue with Google
         </button>
-      </div> -->
+      </div>
     </form>
     
     <div class="auth-footer">
