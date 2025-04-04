@@ -12,5 +12,12 @@ export default defineConfig({
 				secure: false,
 			},
 		},
-	}
+	},
+
+	define: {
+		// You can specify different API URLs for development vs production
+		'import.meta.env.VITE_API_URL': JSON.stringify(process.env.NODE_ENV === 'production' 
+		  ? 'https://getwaybill.com/api/v1' 
+		  : 'http://localhost:8000/api/v1')
+	  }
 });

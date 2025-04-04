@@ -41,10 +41,16 @@ export async function register(credentials: AuthCredentials): Promise<AuthRespon
     });
 
     if (!response.ok) {
-      throw new Error('Registration failed');
+      const errorText = await response.text();
+      throw new Error(errorText || 'Registration failed');
     }
 
-    return await response.json();
+    // If registration is successful (201), proceed to login
+    if (response.status === 201) {
+      return login(credentials);
+    }
+
+    throw new Error('Unexpected response from server');
   } catch (error) {
     return { error: error instanceof Error ? error.message : 'Registration failed' };
   }

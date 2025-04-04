@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { register } from '$lib/api/auth';
+  import { isAuthenticated } from '$lib/stores/auth';
   
   let loading = false;
   let error: string | null = null;
@@ -23,8 +24,7 @@
     if (response.error) {
       error = response.error;
     } else if (response.token) {
-      // Store the token somewhere (localStorage, cookie, etc)
-      localStorage.setItem('auth_token', response.token);
+      isAuthenticated.login(response.token);
       await goto('/');
     }
     
@@ -108,7 +108,7 @@
       
       <div class="social-auth-buttons">
         <button type="button" class="social-auth-button">
-          <img src="/google-icon.svg" alt="" width="20" height="20" />
+          <img src="" alt="" width="20" height="20" />
           Continue with Google
         </button>
       </div>
