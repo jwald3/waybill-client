@@ -1,4 +1,6 @@
-export const API_BASE_URL = typeof window !== 'undefined' ? '/api/v1' : 'http://localhost:8000/api/v1';
+export const API_BASE_URL = typeof window !== 'undefined' 
+  ? '/api/v1'  // Client-side requests through proxy
+  : 'http://localhost:8000/api/v1';  // Direct server-side requests
 
 export interface ApiResponse<T> {
   items: T[];
@@ -28,22 +30,28 @@ export async function fetchApi<T>(
     ...options.headers
   };
 
-  const response = await fetchFn(url, {
-    ...options,
-    headers
-  });
+  try {
+    const response = await fetchFn(url, {
+      ...options,
+      headers
+    });
 
-  if (response.status === 401 && typeof window !== 'undefined') {
-    localStorage.removeItem('auth_token');
-    window.location.href = '/login';
-    throw new Error('Authentication required');
+    if (response.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('auth_token');
+      window.location.href = '/login';
+      throw new Error('Authentication required');
+    }
+
+    if (!response.ok) {
+      console.error(`API call failed for ${url}:`, response.status, response.statusText);
+      throw new Error(`API call failed: ${response.statusText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`API call failed: ${response.statusText}`);
-  }
-
-  return response.json();
 }
 
 // Helper for POST/PUT/DELETE requests
