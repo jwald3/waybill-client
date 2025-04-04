@@ -1,4 +1,6 @@
-export const API_BASE_URL = typeof window !== 'undefined' ? '/api/v1' : 'http://45.79.191.179:8000/api/v1';
+export const API_BASE_URL = typeof window !== 'undefined' 
+  ? '/api/v1'  // Use relative path for client-side requests (will be proxied)
+  : import.meta.env.VITE_API_URL + '/api/v1';  // Use full URL for server-side requests
 
 export interface ApiResponse<T> {
   items: T[];
