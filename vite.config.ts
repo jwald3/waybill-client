@@ -1,24 +1,26 @@
+import tailwindcss from '@tailwindcss/vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit()],
+	plugins: [sveltekit(), tailwindcss()],
 	server: {
 		proxy: {
 			'/api': {
-				target: process.env.VITE_API_URL || 'http://localhost:8000',
+				target: 'http://localhost:8000',
 				changeOrigin: true,
-				secure: false // Allow self-signed certs if needed
-			}
-		}
+				secure: false,
+				rewrite: (path) => path.replace(/^\/api/, '')
+			},
+		},
 	},
 
 	define: {
 		// You can specify different API URLs for development vs production
-		'import.meta.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 
-			(process.env.NODE_ENV === 'production' 
-				? 'https://getwaybill.com/api/v1' 
-				: 'http://localhost:8000/api/v1')
-		)
+		'import.meta.env.VITE_API_URL': JSON.stringify(process.env.NODE_ENV === 'production' 
+		  ? 'https://getwaybill.com/api/v1' 
+		  : 'http://localhost:8000/api/v1')
+
+
 	}
 });
