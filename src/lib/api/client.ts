@@ -1,6 +1,4 @@
-export const API_BASE_URL = typeof window !== 'undefined' 
-  ? '/api/v1'  // Client-side requests through proxy
-  : 'http://localhost:8000/api/v1';  // Direct server-side requests
+export const API_BASE_URL = '/api/v1';  // Remove the conditional, always use the proxy path
 
 export interface ApiResponse<T> {
   items: T[];
@@ -9,10 +7,22 @@ export interface ApiResponse<T> {
   offset: number;
 }
 
-function getAuthToken(): string | null {
+export interface SingleItemResponse<T> {
+  data: T;
+}
+
+function getAuthToken(fetchFn?: typeof fetch): string | null {
+  // If we're passed a fetch function, we're likely in server-side code
+  // The token should be handled by the custom fetch wrapper in the page load
+  if (fetchFn) {
+    return null;
+  }
+  
+  // Otherwise we're client-side, use localStorage
   if (typeof window !== 'undefined') {
     return localStorage.getItem('auth_token');
   }
+  
   return null;
 }
 
@@ -103,4 +113,35 @@ export async function getIncidents(fetchFn: typeof fetch = fetch) {
 
 export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch) {
   return fetchApi('/maintenance', fetchFn);
+}
+
+export async function fetchSingleItem<T>(
+  endpoint: string,
+  fetchFn: typeof fetch = fetch,
+  options: RequestInit = {}
+): Promise<T> {
+  const url = `${API_BASE_URL}${endpoint}`;
+  const token = getAuthToken(fetchFn);
+  
+  try {
+    const response = await fetchFn(url, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }),
+        ...options.headers
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API call failed: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const data: SingleItemResponse<T> = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error(`Error fetching ${url}:`, error);
+    throw error;
+  }
 } 

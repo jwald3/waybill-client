@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
+import { fetchApi, type ApiResponse, fetchSingleItem, mutateApi } from './client';
 
 export interface Address {
   street: string;
@@ -32,38 +32,17 @@ export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResp
 }
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
-  const url = `${API_BASE_URL}/drivers/${id}`;
-  
   try {
-    const response = await fetchFn(url, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    
-    if (!responseData.data) {
-      console.error('Unexpected response format:', responseData);
-      throw new Error('Invalid response format from API');
-    }
-    
-    return responseData.data;
+    console.log('[getDriver] Making request for driver:', id);
+    const response = await fetchSingleItem<Driver>(`/drivers/${id}`, fetchFn);
+    console.log('[getDriver] Response:', response);
+    return response;
   } catch (err) {
-    console.error('Error fetching driver:', err);
+    console.error('[getDriver] Error details:', {
+      error: err,
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined
+    });
     throw err;
   }
 }
