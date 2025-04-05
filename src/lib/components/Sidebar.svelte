@@ -16,7 +16,7 @@
   }
 </script>
 
-<nav class:expanded={$sidebarExpanded}>
+<nav class:expanded={$sidebarExpanded} class="sidebar">
   <div class="nav-header">
     <button 
       class="toggle-nav" 
@@ -231,6 +231,40 @@
 </nav>
 
 <style>
+  .sidebar {
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: var(--sidebar-width-collapsed);
+    transition: width 0.2s ease;
+    overflow: hidden;
+  }
+
+  /* Add mobile-specific styling */
+  @media (max-width: 768px) {
+    .sidebar {
+      background: var(--bg-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-top: 1px solid var(--border-color);
+      border-right: none;
+      top: auto;
+      bottom: 0;
+      width: 100%;
+      height: var(--sidebar-width-collapsed);
+    }
+
+    .sidebar.expanded {
+      height: auto;
+      max-height: 80vh; /* Limit expanded height on mobile */
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+  }
+
   nav {
     position: fixed;
     top: 0;
@@ -455,6 +489,24 @@
       background: var(--bg-primary);
       border-top: 1px solid var(--border-color);
       box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Add backdrop for more menu */
+    .secondary-nav.show::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+
+    .more-menu {
+      background: var(--bg-primary);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
     }
   }
 </style> 
