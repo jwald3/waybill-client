@@ -32,11 +32,16 @@
 
   async function handleSubmit() {
     try {
+      console.log('Submitting driver data:', formData);
+      const token = localStorage.getItem('auth_token');
+      console.log('Current auth token:', token ? 'present' : 'missing');
+      
       await createDriver(formData);
       goto('/drivers');
     } catch (error) {
       console.error('Error creating driver:', error);
-      // You might want to add error handling UI here
+      // Add user-visible error handling here
+      alert('Failed to create driver. Please check your login status and try again.');
     }
   }
 

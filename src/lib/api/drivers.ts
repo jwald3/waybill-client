@@ -33,9 +33,8 @@ export async function getDrivers(fetchFn: typeof fetch = fetch): Promise<ApiResp
 
 export async function getDriver(id: string, fetchFn: typeof fetch = fetch): Promise<Driver> {
   try {
-    console.log('[getDriver] Making request for driver:', id);
     const response = await fetchSingleItem<Driver>(`/drivers/${id}`, fetchFn);
-    console.log('[getDriver] Response:', response);
+
     return response;
   } catch (err) {
     console.error('[getDriver] Error details:', {
@@ -64,7 +63,10 @@ export async function createDriver(
   fetchFn: typeof fetch = fetch
 ): Promise<Driver> {
   try {
-    return await mutateApi<Driver>('/drivers', 'POST', driver, fetchFn);
+    console.log('Creating driver with payload:', driver);
+    const result = await mutateApi<Driver>('/drivers', 'POST', driver, fetchFn);
+    console.log('Driver creation response:', result);
+    return result;
   } catch (err) {
     console.error('Error creating driver:', err);
     throw err;

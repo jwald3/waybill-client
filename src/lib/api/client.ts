@@ -1,4 +1,5 @@
-export const API_BASE_URL = '/api/v1';  // Remove the conditional, always use the proxy path
+// export const API_BASE_URL = '/api/v1'; 
+export const API_BASE_URL = 'http://localhost:8000/api/v1';  // Remove the conditional, always use the proxy path
 
 export interface ApiResponse<T> {
   items: T[];
@@ -11,18 +12,13 @@ export interface SingleItemResponse<T> {
   data: T;
 }
 
-function getAuthToken(fetchFn?: typeof fetch): string | null {
-  // If we're passed a fetch function, we're likely in server-side code
-  // The token should be handled by the custom fetch wrapper in the page load
-  if (fetchFn) {
-    return null;
-  }
-  
-  // Otherwise we're client-side, use localStorage
+function getAuthToken(): string | null {
+  // If we're client-side, use localStorage
   if (typeof window !== 'undefined') {
     return localStorage.getItem('auth_token');
   }
   
+  // If we're server-side, return null to let hooks.server.ts handle auth
   return null;
 }
 
@@ -79,23 +75,31 @@ export async function mutateApi<T>(
     ...(token && { 'Authorization': `Bearer ${token}` })
   };
 
-  const response = await fetchFn(url, {
-    method,
-    headers,
-    body: data ? JSON.stringify(data) : undefined
-  });
+  try {
+    const response = await fetchFn(url, {
+      method,
+      headers,
+      body: data ? JSON.stringify(data) : undefined
+    });
 
-  if (response.status === 401 && typeof window !== 'undefined') {
-    localStorage.removeItem('auth_token');
-    window.location.href = '/login';
-    throw new Error('Authentication required');
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        window.location.href = '/login';
+      }
+      throw new Error('Authentication required');
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`API call failed: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(`Error in mutateApi for ${url}:`, error);
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error(`API call failed: ${response.statusText}`);
-  }
-
-  return response.json();
 }
 
 // Specific API functions for analytics data
@@ -121,7 +125,7 @@ export async function fetchSingleItem<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const token = getAuthToken(fetchFn);
+  const token = getAuthToken();
   
   try {
     const response = await fetchFn(url, {
