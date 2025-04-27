@@ -103,21 +103,21 @@ export async function mutateApi<T>(
 }
 
 // Specific API functions for analytics data
-export async function getTrips(fetchFn: typeof fetch = fetch) {
-  return fetchApi('/trips', fetchFn);
-}
+// export async function getTrips(fetchFn: typeof fetch = fetch) {
+//   return fetchApi('/trips', fetchFn);
+// }
 
-export async function getTrucks(fetchFn: typeof fetch = fetch) {
-  return fetchApi('/trucks', fetchFn);
-}
+// export async function getTrucks(fetchFn: typeof fetch = fetch) {
+//   return fetchApi('/trucks', fetchFn);
+// }
 
-export async function getIncidents(fetchFn: typeof fetch = fetch) {
-  return fetchApi('/incidents', fetchFn);
-}
+// export async function getIncidents(fetchFn: typeof fetch = fetch) {
+//   return fetchApi('/incidents', fetchFn);
+// }
 
-export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch) {
-  return fetchApi('/maintenance', fetchFn);
-}
+// export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch) {
+//   return fetchApi('/maintenance', fetchFn);
+// }
 
 export async function fetchSingleItem<T>(
   endpoint: string,
