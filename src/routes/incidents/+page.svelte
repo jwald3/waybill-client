@@ -8,7 +8,8 @@
   import type { IncidentReport } from '$lib/api/incidents';
   import IncidentCard from '$lib/components/IncidentCard.svelte';
   import type { PageData } from './$types';
-
+  import Pagination from '$lib/components/Pagination.svelte';
+  
   export let data: PageData;
 
   let isNavExpanded = true;
@@ -187,49 +188,13 @@
           {/each}
         </div>
 
-        <div class="pagination">
-          <div class="pagination-controls">
-            <button 
-              class="page-button" 
-              disabled={currentPage === 1}
-              on:click={() => goToPage(1)}
-            >
-              First
-            </button>
-            <button 
-              class="page-button" 
-              disabled={currentPage === 1}
-              on:click={() => goToPage(currentPage - 1)}
-            >
-              Previous
-            </button>
-            
-            {#each Array(totalPages) as _, i}
-              <button 
-                class="page-button" 
-                class:active={currentPage === i + 1}
-                on:click={() => goToPage(i + 1)}
-              >
-                {i + 1}
-              </button>
-            {/each}
-            
-            <button 
-              class="page-button" 
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(currentPage + 1)}
-            >
-              Next
-            </button>
-            <button 
-              class="page-button" 
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(totalPages)}
-            >
-              Last
-            </button>
-          </div>
-        </div>
+        <Pagination
+          {currentPage}
+          {totalPages}
+          totalItems={filteredRecords.length}
+          itemsPerPage={recordsPerPage}
+          onPageChange={goToPage}
+        />
       </Card>
     {/if}
   </div>

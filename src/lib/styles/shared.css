@@ -142,61 +142,6 @@
   color: var(--theme-color);
 }
 
-.pagination {
-  padding: var(--spacing-lg);
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-md);
-}
-
-.pagination-controls {
-  display: flex;
-  gap: var(--spacing-sm);
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.page-button {
-  padding: var(--spacing-sm) var(--spacing-md);
-  min-width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-  transition: var(--transition-all);
-}
-
-.page-button:hover {
-  border-color: var(--theme-color);
-  color: var(--theme-color);
-}
-
-.page-button:hover:not(:disabled) {
-  border-color: var(--theme-color);
-  color: var(--theme-color);
-}
-
-.page-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.page-button.active {
-  background: var(--theme-color);
-  border-color: var(--theme-color);
-  color: white;
-}
-
 /* Dark Mode Adjustments */
 [data-color-mode="dark"] {
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -280,12 +225,6 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-}
-
-.page-ellipsis {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  padding: 0 0.5rem;
 }
 
 .search-icon {
@@ -463,21 +402,6 @@
 
   .results-summary {
     padding: 1rem;
-  }
-
-  .pagination {
-    padding: var(--spacing-md);
-  }
-
-  .pagination-controls {
-    gap: var(--spacing-xs);
-  }
-
-  .page-button {
-    padding: 0.4rem 0.6rem;
-    min-width: 2.2rem;
-    height: 2.2rem;
-    font-size: 0.85rem;
   }
 
   .card {

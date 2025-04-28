@@ -88,26 +88,26 @@
   .controls-wrapper {
     background: var(--bg-secondary);
     border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
     border: 1px solid var(--border-color);
   }
 
   .controls-main {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-xl);
   }
 
   .search-and-filter {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
     flex-wrap: wrap;
   }
 
   .search-box {
     flex: 2;
-    min-width: 240px;
+    min-width: 300px;
     position: relative;
   }
 
@@ -118,19 +118,19 @@
     top: 50%;
     transform: translateY(-50%);
     color: var(--text-secondary);
-    opacity: 0.7;
+    opacity: 0.6;
     z-index: 1;
   }
 
   .search-input {
     width: 100%;
-    height: 42px;
+    height: 44px;
     padding: 0 var(--spacing-md) 0 2.75rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     transition: var(--transition-all);
   }
 
@@ -146,25 +146,25 @@
 
   .filter-box {
     flex: 1;
-    min-width: 180px;
+    min-width: 200px;
     position: relative;
   }
 
   .filter-select {
     width: 100%;
-    height: 42px;
-    padding: 0 2.5rem 0 2.75rem;
-    border-radius: var(--radius-md);
+    height: 44px;
+    padding: 0 2.75rem 0 2.75rem;
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
     color: var(--text-primary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     appearance: none;
     cursor: pointer;
     transition: var(--transition-all);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right var(--spacing-sm) center;
+    background-position: right var(--spacing-md) center;
     background-size: 16px;
   }
 
@@ -180,37 +180,42 @@
 
   .controls-actions {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
     flex-wrap: wrap;
     justify-content: space-between;
+    align-items: center;
   }
 
   .sort-buttons {
     display: flex;
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
     flex-wrap: wrap;
   }
 
   .sort-button {
-    height: 42px;
-    padding: 0 var(--spacing-lg);
-    border-radius: var(--radius-md);
+    height: 44px;
+    padding: 0 var(--spacing-xl);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
     background: var(--bg-primary);
     color: var(--text-secondary);
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-md);
     font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    transition: var(--transition-all);
+    gap: var(--spacing-sm);
+    transition: all 0.2s ease;
     white-space: nowrap;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
   .sort-button:hover {
-    border-color: color-mix(in srgb, var(--theme-color) 30%, var(--border-color));
-    background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-primary));
+    border-color: var(--theme-color);
+    background: color-mix(in srgb, var(--theme-color) 2%, var(--bg-primary));
+    color: var(--theme-color);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
 
   .sort-button.active {
@@ -218,42 +223,60 @@
     border-color: var(--theme-color);
     color: var(--theme-color);
     font-weight: 600;
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--theme-color) 20%, transparent);
+  }
+
+  .sort-icon {
+    opacity: 0.8;
+    font-size: 0.85em;
+    margin-left: var(--spacing-xs);
   }
 
   .add-button {
-    height: 42px;
+    height: 44px;
     padding: 0 var(--spacing-xl);
     background: var(--theme-color);
     color: white;
     border: none;
-    border-radius: var(--radius-md);
-    font-weight: 500;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-md);
+    font-weight: 600;
     cursor: pointer;
     text-decoration: none;
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
-    transition: var(--transition-all);
+    transition: all 0.2s ease;
     white-space: nowrap;
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--theme-color) 25%, transparent),
+                0 1px 2px color-mix(in srgb, var(--theme-color) 15%, transparent);
   }
 
   .add-button:hover {
-    opacity: 0.9;
     transform: translateY(-1px);
+    background: color-mix(in srgb, white 5%, var(--theme-color));
+    box-shadow: 0 4px 8px color-mix(in srgb, var(--theme-color) 30%, transparent),
+                0 2px 4px color-mix(in srgb, var(--theme-color) 20%, transparent);
+  }
+
+  .add-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px color-mix(in srgb, var(--theme-color) 25%, transparent);
   }
 
   @media (max-width: 768px) {
     .controls-wrapper {
-      padding: var(--spacing-md);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
     }
 
     .controls-main {
-      gap: var(--spacing-md);
+      gap: var(--spacing-lg);
     }
 
     .search-and-filter {
       flex-direction: column;
-      gap: var(--spacing-sm);
+      gap: var(--spacing-md);
     }
 
     .search-box,
@@ -263,24 +286,29 @@
     }
 
     .controls-actions {
-      flex-direction: column;
-      gap: var(--spacing-sm);
+      flex-direction: column-reverse;
+      gap: var(--spacing-md);
     }
 
     .sort-buttons {
       order: 1;
       width: 100%;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    }
-
-    .add-button {
-      order: 0;
-      justify-content: center;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--spacing-md);
     }
 
     .sort-button {
       justify-content: center;
+      width: 100%;
+      padding: 0 var(--spacing-md);
+    }
+
+    .add-button {
+      order: 0;
+      width: 100%;
+      justify-content: center;
+      margin-bottom: var(--spacing-sm);
     }
   }
 </style> 

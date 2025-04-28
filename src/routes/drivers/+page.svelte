@@ -15,6 +15,7 @@
   } from '$lib/api/drivers';
   import DriverCard from '$lib/components/DriverCard.svelte';
   import type { PageData } from './$types';
+  import Pagination from '$lib/components/Pagination.svelte';
 
   export let data: PageData;
   
@@ -236,60 +237,13 @@
           {/each}
         </div>
 
-        <div class="pagination">
-          <div class="pagination-info">
-            Showing {(currentPage - 1) * recordsPerPage + 1} to {Math.min(currentPage * recordsPerPage, filteredRecords.length)} of {filteredRecords.length} drivers
-          </div>
-          <div class="pagination-controls">
-            <button 
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(1)}
-              title="First page"
-            >
-              ««
-            </button>
-            <button 
-              class="page-button"
-              disabled={currentPage === 1}
-              on:click={() => goToPage(currentPage - 1)}
-              title="Previous page"
-            >
-              «
-            </button>
-            
-            {#each Array.from({ length: totalPages }, (_, i) => i + 1) as page}
-              {#if page === 1 || page === totalPages || (page >= currentPage - 2 && page <= currentPage + 2)}
-                <button 
-                  class="page-button"
-                  class:active={page === currentPage}
-                  on:click={() => goToPage(page)}
-                >
-                  {page}
-                </button>
-              {:else if page === currentPage - 3 || page === currentPage + 3}
-                <span class="page-ellipsis">...</span>
-              {/if}
-            {/each}
-
-            <button 
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(currentPage + 1)}
-              title="Next page"
-            >
-              »
-            </button>
-            <button 
-              class="page-button"
-              disabled={currentPage === totalPages}
-              on:click={() => goToPage(totalPages)}
-              title="Last page"
-            >
-              »»
-            </button>
-          </div>
-        </div>
+        <Pagination
+          {currentPage}
+          {totalPages}
+          totalItems={filteredRecords.length}
+          itemsPerPage={recordsPerPage}
+          onPageChange={goToPage}
+        />
       </Card>
     {/if}
   </div>
