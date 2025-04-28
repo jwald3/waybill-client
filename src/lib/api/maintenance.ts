@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
+import { fetchApi, type ApiResponse, fetchSingleItem, mutateApi } from './client';
 import type { Truck } from './trucks';
 
 export interface MaintenanceLog {
@@ -25,38 +25,16 @@ export interface CreateMaintenanceLogPayload {
 }
 
 export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetch): Promise<MaintenanceLog> {
-  const url = `${API_BASE_URL}/maintenance-logs/${id}`;
-  
   try {
-    const response = await fetchFn(url, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await fetchSingleItem<MaintenanceLog>(`/maintenance-logs/${id}`, fetchFn);
 
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    
-    if (!responseData.data) {
-      console.error('Unexpected response format:', responseData);
-      throw new Error('Invalid response format from API');
-    }
-    
-    return responseData.data;
+    return response;
   } catch (err) {
-    console.error('Error fetching maintenance log:', err);
+    console.error('[getDriver] Error details:', {
+      error: err,
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined
+    });
     throw err;
   }
 }

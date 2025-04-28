@@ -13,13 +13,13 @@ export interface SingleItemResponse<T> {
 }
 
 function getAuthToken(): string | null {
-  // If we're client-side, use localStorage
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('auth_token');
+  // If we're server-side, return null immediately
+  if (typeof window === 'undefined') {
+    return null;
   }
   
-  // If we're server-side, return null to let hooks.server.ts handle auth
-  return null;
+  // Only try to access localStorage if we're client-side
+  return localStorage.getItem('auth_token');
 }
 
 export async function fetchApi<T>(

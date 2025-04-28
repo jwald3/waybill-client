@@ -76,7 +76,19 @@ interface FinishTripRequest {
 }
 
 export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
-  return fetchApi<Trip>('/trips', fetchFn);
+  try {
+    console.log('Fetching trips...');
+    const response = await fetchApi<Trip>('/trips', fetchFn);
+    console.log('Trips response:', response);
+    return response;
+  } catch (err) {
+    console.error('[getTrips] Error details:', {
+      error: err,
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined
+    });
+    throw err;
+  }
 }
 
 export async function getTrip(id: string, fetchFn: typeof fetch = fetch): Promise<Trip> {

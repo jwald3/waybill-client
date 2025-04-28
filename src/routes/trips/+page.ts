@@ -15,4 +15,6 @@ export const load = (async ({ fetch }) => {
       error: 'Failed to load trips. Please try again later.'
     };
   }
-}) satisfies PageLoad; 
+}) satisfies PageLoad;
+
+export const ssr = false;  // Disable server-side rendering for this route 

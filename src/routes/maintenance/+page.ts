@@ -1,18 +1,18 @@
 import type { PageLoad } from './$types';
-import { getMaintenanceLogs } from '$lib/api/maintenance';
+import { getMaintenanceLogs, type MaintenanceLog } from '$lib/api/maintenance';
 
 export const load = (async ({ fetch }) => {
   try {
-    const maintenanceResponse = await getMaintenanceLogs(fetch);
+    const response = await getMaintenanceLogs(fetch);
     return {
-      maintenanceLogs: maintenanceResponse.items,
+      maintenanceLogs: response.items,
       error: null
     };
   } catch (error) {
     console.error('Failed to load maintenance logs:', error);
     return {
-      maintenanceLogs: [],
-      error: 'Failed to load maintenance logs. Please try again later.'
+      maintenanceLogs: [] as MaintenanceLog[],
+      error: 'Failed to load maintenance logs: ' + error
     };
   }
 }) satisfies PageLoad; 

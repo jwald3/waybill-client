@@ -6,11 +6,12 @@
   import { formatLargeNumber } from '$lib/utils/format';
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import MaintenanceCard from '$lib/components/MaintenanceCard.svelte';
-  
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
   let isNavExpanded = true;
 
-  // Get the data from the load function
-  export let data;
   let maintenanceLogs = data.maintenanceLogs;
   let error = data.error;
 

@@ -14,12 +14,13 @@
     getAvailableStatusTransitions 
   } from '$lib/api/drivers';
   import DriverCard from '$lib/components/DriverCard.svelte';
+  import type { PageData } from './$types';
 
-  export let data;
+  export let data: PageData;
   
   let isNavExpanded = true;
 
-  let drivers: Driver[] = data.drivers;
+  let drivers: Driver[] = data.drivers || [];
   let error = data.error;
 
   // Stats calculation - make reactive based on drivers data

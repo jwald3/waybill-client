@@ -15,13 +15,15 @@
   import LoadErrorMessage from '$lib/components/LoadErrorMessage.svelte';
   import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
   import TruckCard from '$lib/components/TruckCard.svelte';
+  import type { PageData } from './$types';
 
-  export let data;
-  let trucks: Truck[] = data.trucks || [];
-  let error = data.error;
+  export let data: PageData;
 
   let isNavExpanded = true;
 
+  let trucks: Truck[] = data.trucks || [];
+  let error = data.error;
+  
   // Stats calculation - make reactive based on trucks data
   $: stats = {
     totalTrucks: trucks.length,

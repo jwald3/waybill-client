@@ -7,10 +7,12 @@
   import { formatLargeNumber } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
   import IncidentCard from '$lib/components/IncidentCard.svelte';
-  
+  import type { PageData } from './$types';
+
+  export let data: PageData;
+
   let isNavExpanded = true;
 
-  export let data;
   let incidents: IncidentReport[] = data.incidents || [];
   let error = data.error;
 

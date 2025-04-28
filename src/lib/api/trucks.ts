@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
+import { fetchApi, type ApiResponse, fetchSingleItem, mutateApi, API_BASE_URL } from './client';
 
 export interface LicensePlate {
   number: string;
@@ -40,38 +40,15 @@ export interface CreateTruckPayload {
 export type TruckStatus = 'AVAILABLE' | 'IN_TRANSIT' | 'UNDER_MAINTENANCE' | 'RETIRED';
 
 export async function getTruck(id: string, fetchFn: typeof fetch = fetch): Promise<Truck> {
-  const url = `${API_BASE_URL}/trucks/${id}`;
-  
   try {
-    const response = await fetchFn(url, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      console.error('API Error:', {
-        status: response.status,
-        statusText: response.statusText,
-        url: response.url
-      });
-      
-      const errorText = await response.text();
-      console.error('Error response body:', errorText);
-      
-      throw new Error(`API call failed: ${response.status} ${response.statusText}`);
-    }
-
-    const responseData = await response.json();
-    
-    if (!responseData.data) {
-      console.error('Unexpected response format:', responseData);
-      throw new Error('Invalid response format from API');
-    }
-    
-    return responseData.data;
+    const response = await fetchSingleItem<Truck>(`/trucks/${id}`, fetchFn);
+    return response;
   } catch (err) {
-    console.error('Error fetching truck:', err);
+    console.error('[getTruck] Error details:', {
+      error: err,
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined
+    });
     throw err;
   }
 }

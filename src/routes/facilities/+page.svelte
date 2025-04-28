@@ -7,9 +7,10 @@
   import type { Facility } from '$lib/api/facilities';
   import FacilityCard from '$lib/components/FacilityCard.svelte';
   
-  let isNavExpanded = true;
-
   export let data;
+
+  let isNavExpanded = true;
+  
   let facilities: Facility[] = data.facilities;
   let error = data.error;
 

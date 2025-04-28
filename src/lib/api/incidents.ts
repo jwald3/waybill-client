@@ -1,4 +1,4 @@
-import { fetchApi, type ApiResponse, API_BASE_URL, mutateApi } from './client';
+import { fetchApi, type ApiResponse, mutateApi, fetchSingleItem } from './client';
 import type { Trip } from './trips';
 import type { Truck } from './trucks';
 import type { Driver } from './drivers';
@@ -17,9 +17,6 @@ export interface IncidentReport {
   updated_at: string;
 }
 
-interface SingleIncidentResponse {
-  data: IncidentReport;
-}
 
 export async function getIncidents(fetchFn: typeof fetch = fetch): Promise<ApiResponse<IncidentReport>> {
   return fetchApi<IncidentReport>('/incident-reports', fetchFn);
@@ -27,25 +24,16 @@ export async function getIncidents(fetchFn: typeof fetch = fetch): Promise<ApiRe
 
 export async function getIncident(id: string, fetchFn: typeof fetch = fetch): Promise<IncidentReport> {
   try {
-    const response = await fetchFn(`${API_BASE_URL}/incident-reports/${id}`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await fetchSingleItem<IncidentReport>(`/incident-reports/${id}`, fetchFn);
 
-    if (!response.ok) {
-      throw new Error(`API call failed: ${response.statusText}`);
-    }
-
-    const data: SingleIncidentResponse = await response.json();
-    if (!data?.data) {
-      throw new Error('Incident not found');
-    }
-
-    return data.data;
+    return response;
   } catch (err) {
-    console.error('Error fetching incident:', err);
-    throw new Error(err instanceof Error ? err.message : 'Failed to load incident');
+      console.error('[getIncident] Error details:', {
+      error: err,
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined
+    });
+    throw err;
   }
 }
 

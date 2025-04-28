@@ -1,18 +1,18 @@
 import type { PageLoad } from './$types';
-import { getTrucks } from '$lib/api/trucks';
+import { getTrucks, type Truck } from '$lib/api/trucks';
 
-export const load = (async ({ fetch }) => {
+export const load: PageLoad = (async ({ fetch }) => {
   try {
-    const trucksResponse = await getTrucks(fetch);
+    const response = await getTrucks(fetch);
     return {
-      trucks: trucksResponse.items,
+      trucks: response.items,
       error: null
     };
   } catch (error) {
     console.error('Failed to load trucks:', error);
     return {
-      trucks: [],
-      error: 'Failed to load trucks. Please try again later.'
+      trucks: [] as Truck[],
+      error: 'Failed to load trucks: ' + error
     };
   }
 }) satisfies PageLoad;
