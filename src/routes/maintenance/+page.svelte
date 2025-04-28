@@ -186,9 +186,24 @@
         </div>
 
         <div class="records-list">
-          {#each paginatedRecords as record}
-            <MaintenanceCard {record} />
-          {/each}
+          {#if paginatedRecords.length === 0}
+            <div class="no-records">
+              {#if searchQuery || selectedServiceType !== 'ALL'}
+                <p>No maintenance records match your search criteria</p>
+                <button class="clear-filters" on:click={() => {
+                  searchQuery = '';
+                  selectedServiceType = 'ALL';
+                }}>Clear filters</button>
+              {:else}
+                <p>No maintenance records have been added yet</p>
+                <a href="/maintenance/new" class="add-record-link">Add your first maintenance record</a>
+              {/if}
+            </div>
+          {:else}
+            {#each paginatedRecords as record}
+              <MaintenanceCard {record} />
+            {/each}
+          {/if}
         </div>
 
         <Pagination
@@ -223,5 +238,46 @@
     .stat-number {
       font-size: 1.625rem;
     }
+  }
+
+  .no-records {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+    background: var(--surface-2);
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .no-records p {
+    color: var(--text-2);
+    margin-bottom: 1rem;
+  }
+
+  .clear-filters {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .clear-filters:hover {
+    background: var(--primary-dark);
+  }
+
+  .add-record-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .add-record-link:hover {
+    text-decoration: underline;
   }
 </style> 
