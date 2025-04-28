@@ -52,9 +52,9 @@
       return actual <= scheduled;
     });
 
-  $: onTimePercentage = trips.length > 0 
-    ? Math.round((onTimeDeliveries.length / trips.filter(t => t.status === 'COMPLETED').length) * 100) 
-    : 0;
+  $: onTimePercentage = completedTrips.length > 0 
+    ? Math.round((onTimeDeliveries.length / completedTrips.length) * 100)
+    : '-'; // Return '-' instead of 0 when there are no completed trips
 
   // Helper function to format date/time
   function formatTime(isoString: string): string {
@@ -120,7 +120,7 @@
           </span>
           <h2>Delivery Performance</h2>
         </div>
-        <p class="number">{onTimePercentage}%</p>
+        <p class="number">{onTimePercentage === '-' ? onTimePercentage : `${onTimePercentage}%`}</p>
         <p class="subtitle">On-time delivery rate</p>
       </div>
     </div>
