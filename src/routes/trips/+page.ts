@@ -1,20 +1,42 @@
-import type { PageLoad } from './$types';
 import { getTrips } from '$lib/api/trips';
+import type { PageLoad } from './$types';
+import type { Trip } from '$lib/api/trips';
+import { browser } from '$app/environment';
 
-export const load = (async ({ fetch }) => {
-  try {
-    const tripsResponse = await getTrips(fetch);
+// Force client-side rendering
+export const ssr = false;
+export const csr = true;
+
+export const load: PageLoad = async ({ fetch }) => {
+  // Only fetch data on the client side
+  if (!browser) {
     return {
-      trips: tripsResponse.items,
+      trips: [] as Trip[],
+      error: null
+    };
+  }
+
+  try {
+    const response = await getTrips(fetch);
+    return {
+      trips: response.items,
       error: null
     };
   } catch (error) {
-    console.error('Failed to load trips:', error);
+    // If we get a 401, redirect to login
+    if (error instanceof Error && error.message.includes('401')) {
+      if (browser) {
+        window.location.href = '/login';
+      }
+      return {
+        trips: [] as Trip[],
+        error: 'Authentication required'
+      };
+    }
+
     return {
-      trips: [],
-      error: 'Failed to load trips. Please try again later.'
+      trips: [] as Trip[],
+      error: 'Failed to load trips: ' + error
     };
   }
-}) satisfies PageLoad;
-
-export const ssr = false;  // Disable server-side rendering for this route 
+};

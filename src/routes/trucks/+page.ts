@@ -1,7 +1,21 @@
+import { getTrucks } from '$lib/api/trucks';
 import type { PageLoad } from './$types';
-import { getTrucks, type Truck } from '$lib/api/trucks';
+import type { Truck } from '$lib/api/trucks';
+import { browser } from '$app/environment';
 
-export const load: PageLoad = (async ({ fetch }) => {
+// Force client-side rendering
+export const ssr = false;
+export const csr = true;
+
+export const load: PageLoad = async ({ fetch }) => {
+  // Only fetch data on the client side
+  if (!browser) {
+    return {
+      trucks: [] as Truck[],
+      error: null
+    };
+  }
+
   try {
     const response = await getTrucks(fetch);
     return {
@@ -9,10 +23,20 @@ export const load: PageLoad = (async ({ fetch }) => {
       error: null
     };
   } catch (error) {
-    console.error('Failed to load trucks:', error);
+    // If we get a 401, redirect to login
+    if (error instanceof Error && error.message.includes('401')) {
+      if (browser) {
+        window.location.href = '/login';
+      }
+      return {
+        trucks: [] as Truck[],
+        error: 'Authentication required'
+      };
+    }
+
     return {
       trucks: [] as Truck[],
       error: 'Failed to load trucks: ' + error
     };
   }
-}) satisfies PageLoad;
+};

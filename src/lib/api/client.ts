@@ -30,6 +30,12 @@ export async function fetchApi<T>(
   const url = `${API_BASE_URL}${endpoint}`;
   const token = getAuthToken();
   
+  // If no token is present, redirect to login immediately
+  if (!token && typeof window !== 'undefined') {
+    window.location.href = '/login';
+    throw new Error('No authentication token found');
+  }
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` }),
@@ -42,15 +48,17 @@ export async function fetchApi<T>(
       headers
     });
 
-    if (response.status === 401 && typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
-      window.location.href = '/login';
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        window.location.href = '/login';
+      }
       throw new Error('Authentication required');
     }
 
     if (!response.ok) {
-      console.error(`API call failed for ${url}:`, response.status, response.statusText);
-      throw new Error(`API call failed: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`API call failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     return response.json();
@@ -70,6 +78,12 @@ export async function mutateApi<T>(
   const url = `${API_BASE_URL}${endpoint}`;
   const token = getAuthToken();
   
+  // If no token is present, redirect to login immediately  
+  if (!token && typeof window !== 'undefined') {
+    window.location.href = '/login';
+    throw new Error('No authentication token found');
+  }
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...(token && { 'Authorization': `Bearer ${token}` })
@@ -127,6 +141,12 @@ export async function fetchSingleItem<T>(
   const url = `${API_BASE_URL}${endpoint}`;
   const token = getAuthToken();
   
+  // If no token is present, redirect to login immediately
+  if (!token && typeof window !== 'undefined') {
+    window.location.href = '/login';
+    throw new Error('No authentication token found');
+  }
+  
   try {
     const response = await fetchFn(url, {
       ...options,
@@ -136,6 +156,14 @@ export async function fetchSingleItem<T>(
         ...options.headers
       }
     });
+
+    if (response.status === 401) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token');
+        window.location.href = '/login';
+      }
+      throw new Error('Authentication required');
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
