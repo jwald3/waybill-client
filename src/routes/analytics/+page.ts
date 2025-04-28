@@ -1,10 +1,14 @@
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 import { getTrips } from '$lib/api/trips';
 import { getTrucks } from '$lib/api/trucks';
 import { getIncidents } from '$lib/api/incidents';
 import { getMaintenanceLogs } from '$lib/api/maintenance';
 
-export const load: PageServerLoad = async ({ fetch }) => {
+// Force client-side rendering
+export const ssr = false;
+export const csr = true;
+
+export const load: PageLoad = async ({ fetch }) => {
   try {
     const [ tripsRes, trucksRes, incidentsRes, maintenanceRes] = await Promise.all([
       getTrips(fetch),
