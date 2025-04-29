@@ -107,6 +107,8 @@
     }
   }
 
+  console.log(trip);
+
   function openAddNote() {
     isAddNoteModalOpen = true;
   }
@@ -214,7 +216,7 @@
                 <span class="resource-page-detail-label">Driver</span>
                 {#if trip.driver}
                   <a 
-                    href="/drivers/{trip.driver_id}" 
+                    href="/drivers/{trip.driver.id}" 
                     class="resource-page-detail-value link"
                   >
                     {trip.driver.first_name} {trip.driver.last_name}
