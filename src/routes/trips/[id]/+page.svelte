@@ -228,7 +228,7 @@
                 <span class="resource-page-detail-label">Truck</span>
                 {#if trip.truck}
                   <a 
-                    href="/trucks/{trip.truck_id}" 
+                    href="/trucks/{trip.truck.id}" 
                     class="resource-page-detail-value link"
                   >
                     Unit #{trip.truck.id}
@@ -245,7 +245,7 @@
                 <span class="resource-page-detail-label">Origin Facility</span>
                 {#if trip.start_facility}
                   <a 
-                    href="/facilities/{trip.start_facility_id}" 
+                    href="/facilities/{trip.start_facility.id}" 
                     class="resource-page-detail-value link"
                   >
                     {trip.start_facility.name}
@@ -259,7 +259,7 @@
                 <span class="resource-page-detail-label">Destination Facility</span>
                 {#if trip.end_facility}
                   <a 
-                    href="/facilities/{trip.end_facility_id}" 
+                    href="/facilities/{trip.end_facility.id}" 
                     class="resource-page-detail-value link"
                   >
                     {trip.end_facility.name}
