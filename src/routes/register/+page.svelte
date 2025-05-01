@@ -108,7 +108,7 @@
       
       <div class="social-auth-buttons">
         <button type="button" class="social-auth-button">
-          <img src="" alt="" width="20" height="20" />
+          <img src="/google-icon.png" alt="" width="20" height="20" />
           Continue with Google
         </button>
       </div>
