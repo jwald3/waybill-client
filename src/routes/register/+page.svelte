@@ -35,7 +35,7 @@
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-header">
-      <div class="auth-brand">Waybill</div>
+      <img src="/waybill_logo_cropped.png" alt="Waybill Logo" class="auth-logo" />
       <h1 class="auth-title">Create Account</h1>
       <p class="auth-subtitle">Get started with your account</p>
     </div>
@@ -120,3 +120,15 @@
     </div>
   </div>
 </div> 
+
+<style>
+  .auth-logo {
+    width: 180px;
+    height: 80px;
+    margin-bottom: 2rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+  }
+</style> 
