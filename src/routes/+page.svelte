@@ -273,7 +273,7 @@
 
   .summary-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 1.5rem;
     margin-bottom: 2rem;
   }
@@ -376,6 +376,7 @@
   .trip-info, .delivery-info {
     flex: 1;
     min-width: 0;
+    overflow: hidden;
   }
 
   .route {
@@ -419,6 +420,9 @@
     color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .eta-container {
@@ -466,10 +470,9 @@
     background: #94a3b8;
   }
 
-  @media (min-width: 769px) and (max-width: 1200px) {
+  @media (max-width: 1024px) {
     .dashboard {
       padding: 1.5rem;
-      gap: 1.5rem;
     }
 
     .dashboard-title {
@@ -477,82 +480,56 @@
       margin-bottom: 2rem;
     }
 
-    .summary-cards {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
-    }
-
     .card {
       padding: 1.75rem;
     }
 
     .number {
-      font-size: 3.5rem;
-    }
-
-    .trip-item, .delivery-item {
-      padding: 1.25rem;
-      gap: 1rem;
-    }
-
-    .avatar {
-      min-width: 48px;
-      height: 48px;
-      margin-right: 1rem;
-    }
-
-    .route {
-      font-size: 1.05rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .status {
-      gap: 0.75rem;
-    }
-
-    .eta-container {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.85rem;
-      min-width: 110px;
+      font-size: 3rem;
     }
   }
 
   @media (max-width: 768px) {
     .dashboard {
       padding: 1rem;
-      gap: 1rem;
     }
 
     .dashboard-title {
       font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-cards {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.5rem;
+    }
+
+    .number {
+      font-size: 2.75rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .summary-cards {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.25rem;
     }
 
     .number {
       font-size: 2.5rem;
     }
 
-    .trip-item, .delivery-item {
-      padding: 1rem;
-      gap: 0.75rem;
-    }
-
-    .route {
-      font-size: 1rem;
-    }
-
-    .details {
-      font-size: 0.9rem;
-    }
-
-    .avatar {
-      min-width: 40px;
-      height: 40px;
-      font-size: 1rem;
-    }
-
-    .eta-container {
-      font-size: 0.85rem;
-      padding: 0.3rem 0.6rem;
+    .dashboard-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.25rem;
     }
   }
 
