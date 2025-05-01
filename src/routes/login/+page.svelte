@@ -33,7 +33,7 @@
       <p class="auth-subtitle">Sign in to your account</p>
     </div>
     
- z   <form class="auth-form" on:submit|preventDefault={handleSubmit}>
+    <form class="auth-form" on:submit|preventDefault={handleSubmit}>
       {#if error}
         <div class="auth-error">
           {error}
