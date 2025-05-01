@@ -284,7 +284,7 @@
   }
 
   .nav-header {
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -318,22 +318,56 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  /* Add this media query for shorter screens */
+  @media (max-height: 600px) {
+    .sidebar-content {
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-color) transparent;
+    }
+
+    .sidebar-content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .sidebar-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar-content::-webkit-scrollbar-thumb {
+      background-color: var(--border-color);
+      border-radius: 2px;
+    }
+
+    .sidebar-content::-webkit-scrollbar-thumb:hover {
+      background-color: color-mix(in srgb, var(--text-secondary) 50%, var(--border-color));
+    }
+
+    /* Ensure nav links don't get squished */
+    .nav-links {
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      min-height: min-content;
+    }
   }
 
   .nav-links {
-    padding: 1rem;
+    padding: 0.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   .nav-link {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 0.75rem;
     color: var(--text-secondary);
     text-decoration: none;
     border-radius: 12px;
@@ -343,8 +377,8 @@
 
   /* Update the nav-link styles when sidebar is not expanded */
   nav:not(.expanded) .nav-link {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     margin: 0 auto;
     justify-content: center;
@@ -386,7 +420,8 @@
   .desktop-secondary-nav {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
   }
 
   .mobile-nav {
