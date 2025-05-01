@@ -48,7 +48,7 @@ export interface Trip {
     scheduled: string;
     actual?: string;
   };
-  status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  status: 'SCHEDULED' | 'IN_TRANSIT' | 'COMPLETED' | 'CANCELED';
   cargo: {
     description: string;
     weight: number;

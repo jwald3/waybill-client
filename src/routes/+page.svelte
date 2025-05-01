@@ -30,8 +30,8 @@
     }
   });
 
-  // Compute active trips (those with status IN_PROGRESS)
-  $: activeTrips = trips.filter(trip => trip.status === 'IN_PROGRESS');
+  // Compute active trips (those with status IN_TRANSIT)
+  $: activeTrips = trips.filter(trip => trip.status === 'IN_TRANSIT');
   
   // Compute active drivers (those with ACTIVE status)
   $: activeDrivers = drivers.filter(driver => driver.employment_status === 'ACTIVE');

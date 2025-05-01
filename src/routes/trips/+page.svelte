@@ -21,7 +21,7 @@
 
   // Make stats calculation reactive based on trips data
   $: stats = trips ? {
-    active: trips.filter(t => t.status === 'IN_PROGRESS').length,
+    active: trips.filter(t => t.status === 'IN_TRANSIT').length,
     scheduled: trips.filter(t => t.status === 'SCHEDULED').length,
     completed: trips.filter(t => t.status === 'COMPLETED').length,
     totalMiles: trips.reduce((sum, trip) => sum + trip.distance_miles, 0),
