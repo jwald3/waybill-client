@@ -48,10 +48,10 @@
   </div>
 
   <div class="record-actions">
-    <a href="/trucks/{truck.id}" class="action-button">View Details</a>
-    <a href="/maintenance/new?truck={truck.id}" class="action-button">Schedule Maintenance</a>
+    <a href="/trucks/{truck.id}" class="centered-action-button">View Details</a>
+    <a href="/maintenance/new?truck={truck.id}" class="centered-action-button">Schedule Maintenance</a>
     {#if truck.status !== 'RETIRED'}
-      <button class="action-button" on:click={() => onUpdateStatus(truck)}>
+      <button class="centered-action-button" on:click={() => onUpdateStatus(truck)}>
         Update Status
       </button>
     {/if}

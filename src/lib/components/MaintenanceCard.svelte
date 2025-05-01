@@ -57,7 +57,7 @@
   <p class="description">{record.notes}</p>
 
   <div class="record-actions">
-    <a href="/maintenance/{record.id}" class="action-button">View Full Details</a>
-    <button class="action-button">Update Record</button>
+    <a href="/maintenance/{record.id}" class="centered-action-button">View Full Details</a>
+    <button class="centered-action-button">Update Record</button>
   </div>
 </div> 

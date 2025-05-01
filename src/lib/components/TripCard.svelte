@@ -106,13 +106,13 @@
   {/if}
 
   <div class="record-actions">
-    <a href="/trips/{trip.id}" class="action-button">View Details</a>
+    <a href="/trips/{trip.id}" class="centered-action-button">View Details</a>
     {#if ['SCHEDULED', 'IN_TRANSIT'].includes(trip.status)}
-      <button class="action-button" on:click={() => onUpdateStatus(trip)}>
+      <button class="centered-action-button" on:click={() => onUpdateStatus(trip)}>
         Update Status
       </button>
     {/if}
-    <button class="action-button" on:click={() => onAddNote(trip.id)}>
+    <button class="centered-action-button" on:click={() => onAddNote(trip.id)}>
       Add Note
     </button>
   </div>

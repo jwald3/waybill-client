@@ -43,10 +43,10 @@
   </div>
 
   <div class="record-actions">
-    <a href="/drivers/{driver.id}" class="action-button">View Details</a>
-    <button class="action-button">Edit</button>
+    <a href="/drivers/{driver.id}" class="centered-action-button">View Details</a>
+    <button class="centered-action-button">Edit</button>
     {#if driver.employment_status !== 'TERMINATED'}
-      <button class="action-button" on:click={() => onUpdateStatus(driver)}>
+      <button class="centered-action-button" on:click={() => onUpdateStatus(driver)}>
         Update Status
       </button>
     {/if}

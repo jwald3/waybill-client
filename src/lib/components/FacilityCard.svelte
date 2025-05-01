@@ -43,8 +43,8 @@
   </div>
 
   <div class="record-actions">
-    <a href="/facilities/{facility.id}" class="action-button">View Details</a>
-    <button class="action-button">Edit Facility</button>
+    <a href="/facilities/{facility.id}" class="centered-action-button">View Details</a>
+    <button class="centered-action-button">Edit Facility</button>
   </div>
 </div>
 

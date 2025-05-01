@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="record-actions">
-      <a href="/incidents/{incident.id}" class="action-button">View Details</a>
+      <a href="/incidents/{incident.id}" class="centered-action-button">View Details</a>
     </div>
   </div>
 </Card>

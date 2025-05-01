@@ -1048,3 +1048,27 @@
   margin-bottom: var(--spacing-lg);
   letter-spacing: -0.5px;
 }
+
+.centered-action-button {
+  padding: 0.625rem 1.25rem;
+  background: color-mix(in srgb, var(--theme-color) 5%, var(--bg-secondary));
+  border: 1px solid color-mix(in srgb, var(--theme-color) 15%, var(--border-color));
+  border-radius: 8px;
+  color: var(--theme-color);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  min-width: 120px;
+  flex: 1;
+}
+
+.centered-action-button:hover {
+  border-color: var(--theme-color);
+  color: var(--theme-color);
+  background: color-mix(in srgb, var(--theme-color) 8%, var(--bg-secondary));
+}
