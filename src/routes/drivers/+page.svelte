@@ -16,6 +16,7 @@
   import DriverCard from '$lib/components/DriverCard.svelte';
   import type { PageData } from './$types';
   import Pagination from '$lib/components/Pagination.svelte';
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
 
   export let data: PageData;
   
@@ -197,19 +198,18 @@
       <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
-        <Card title="Active Drivers" icon={icons.drivers}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.active}</p>
-            <p class="stat-label">Currently Active</p>
-          </div>
-        </Card>
-
-        <Card title="Suspended" icon={icons.drivers}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.suspended}</p>
-            <p class="stat-label">Temporarily Suspended</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.drivers}
+          title="Active Drivers"
+          value={stats.active}
+          subtitle="Currently Active"
+        />
+        <HomepageSummaryCard
+          icon={icons.incidents}
+          title="Suspended Drivers"
+          value={stats.suspended}
+          subtitle="Temporarily Suspended"
+        /> 
       </div>
 
       <Card title="Driver Records" icon={icons.drivers}>
