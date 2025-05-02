@@ -46,7 +46,7 @@
         </div>
         <div class="hero-text">
           <h2>Streamline Your Fleet Operations</h2>
-          <p>Join thousands of companies using Waybill to manage their fleet operations more efficiently</p>
+          <p>Join the next generation of fleet management with Waybill's powerful and intuitive platform</p>
         </div>
         <div class="feature-list">
           <div class="feature-item">
