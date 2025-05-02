@@ -17,7 +17,8 @@
   import TruckCard from '$lib/components/TruckCard.svelte';
   import type { PageData } from './$types';
   import Pagination from '$lib/components/Pagination.svelte';
-  
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
+
   export let data: PageData;
 
   let isNavExpanded = true;
@@ -212,26 +213,24 @@
       <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
-        <Card title="Total Fleet" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.totalTrucks}</p>
-            <p class="stat-label">Registered Trucks</p>
-          </div>
-        </Card>
-
-        <Card title="Active Fleet" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.activeFleet}</p>
-            <p class="stat-label">Available & In Transit</p>
-          </div>
-        </Card>
-
-        <Card title="Fleet Utilization" icon={icons.chart}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.fleetUtilization}<span class="percent">%</span></p>
-            <p class="stat-label">Currently In Transit</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard  
+          icon={icons.totalFleet}
+          title="Total Fleet"
+          value={stats.totalTrucks}
+          subtitle="Registered Trucks"
+        />
+        <HomepageSummaryCard
+          icon={icons.activeFleet}
+          title="Active Fleet"
+          value={stats.activeFleet}
+          subtitle="Available & In Transit"
+        />
+        <HomepageSummaryCard
+          icon={icons.utilization}
+          title="Fleet Utilization"
+          value={stats.fleetUtilization}
+          subtitle="Currently In Transit"
+        />
       </div>
 
       <Card title="Truck Records" icon={icons.truck}>
@@ -282,32 +281,6 @@
 </Layout>
 
 <style>
-  .stat-content {
-    text-align: center;
-    padding: 1.5rem;
-  }
-
-  .stat-number {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--theme-color);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .stat-label {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-
-  .percent {
-    font-size: 1.5rem;
-    opacity: 0.7;
-    vertical-align: super;
-    margin-left: 0.25rem;
-  }
-
   :global(.action-button.primary) {
     padding: var(--spacing-md) var(--spacing-xl);
     background: var(--theme-color);
