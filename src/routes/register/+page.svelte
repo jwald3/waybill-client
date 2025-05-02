@@ -32,6 +32,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>Create Account | Waybill</title>
+  <meta name="description" content="Create your Waybill account to get started" />
+</svelte:head>
+
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-header">

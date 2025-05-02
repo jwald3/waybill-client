@@ -25,6 +25,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>Sign In | Waybill</title>
+  <meta name="description" content="Sign in to your Waybill account" />
+</svelte:head>
+
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-header">
