@@ -8,6 +8,7 @@
   import MaintenanceCard from '$lib/components/MaintenanceCard.svelte';
   import type { PageData } from './$types';
   import Pagination from '$lib/components/Pagination.svelte';
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
 
   export let data: PageData;
 
@@ -144,26 +145,24 @@
       <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
-        <Card title="Routine Maintenance" icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.routine}</p>
-            <p class="stat-label">Services</p>
-          </div>
-        </Card>
-
-        <Card title="Repairs" icon={icons.maintenance}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.repair}</p>
-            <p class="stat-label">Active repairs</p>
-          </div>
-        </Card>
-
-        <Card title="Emergency Services" icon={icons.maintenance}>
-          <div class="stat-content warning">
-            <p class="stat-number">{stats.emergency}</p>
-            <p class="stat-label">Critical issues</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.calendar}
+          title="Routine Maintenance"
+          value={stats.routine}
+          subtitle="Services"
+        />
+        <HomepageSummaryCard
+          icon={icons.incidents}
+          title="Repairs"
+          value={stats.repair}
+          subtitle="Active repairs"
+        />
+        <HomepageSummaryCard
+          icon={icons.maintenance}
+          title="Emergency Services"
+          value={stats.emergency}
+          subtitle="Critical issues"
+        />
       </div>
 
       <Card title="Maintenance Records" icon={icons.maintenance}>
@@ -219,27 +218,6 @@
 </Layout>
 
 <style>
-  @media (max-width: 768px) {
-    .stat-content {
-      padding: 0.875rem 1rem;
-      min-height: 100px;
-    }
-
-    .stat-number {
-      font-size: 1.875rem;
-    }
-
-    .stat-label {
-      font-size: 0.75rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .stat-number {
-      font-size: 1.625rem;
-    }
-  }
-
   .no-records {
     display: flex;
     flex-direction: column;
