@@ -173,7 +173,7 @@
 
   .image-section-component {
     display: none;
-    background-image: linear-gradient(45deg, #6366f1, #818cf8);
+    background-image: linear-gradient(45deg, #517DF1, #6B90F3);
     position: relative;
     overflow: hidden;
   }
@@ -200,8 +200,8 @@
     justify-content: center;
     padding: 2rem;
     background: linear-gradient(45deg, 
-      rgba(99, 102, 241, 0.75), 
-      rgba(129, 140, 248, 0.75)
+      rgba(81, 125, 241, 0.75), 
+      rgba(107, 144, 243, 0.75)
     );
     backdrop-filter: blur(1px);
   }
@@ -305,7 +305,7 @@
     font-size: 1.875rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #6366f1, #818cf8);
+    background: linear-gradient(to right, #517DF1, #6B90F3);
     -webkit-background-clip: text;
     color: transparent;
   }
@@ -355,7 +355,7 @@
     width: 100%;
     padding: 0.75rem;
     border-radius: 8px;
-    background: linear-gradient(to right, #6366f1, #818cf8);
+    background: linear-gradient(to right, #517DF1, #6B90F3);
     color: white;
     font-weight: 600;
     transition: opacity 0.2s;
@@ -426,7 +426,7 @@
   }
 
   .auth-link-component {
-    color: #818cf8;
+    color: #517DF1;
     font-weight: 500;
     margin-left: 0.5rem;
     text-decoration: none;
