@@ -91,7 +91,7 @@
 
     <!-- Summary Cards -->
     <div class="summary-cards">
-      <div class="card">
+      <div class="stat-card">
         <div class="card-header">
           <span class="icon">
             {@html icons.truck}
@@ -102,7 +102,7 @@
         <p class="subtitle">{trips.filter(t => t.status === 'COMPLETED').length} completed total</p>
       </div>
 
-      <div class="card">
+      <div class="stat-card">
         <div class="card-header">
           <span class="icon">
             {@html icons.people}
@@ -113,7 +113,7 @@
         <p class="subtitle">{Math.round((activeDrivers.length / drivers.length) * 100)}% of fleet active</p>
       </div>
 
-      <div class="card">
+      <div class="stat-card">
         <div class="card-header">
           <span class="icon">
             {@html icons.chart}
@@ -273,83 +273,9 @@
 
   .summary-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
     margin-bottom: 2rem;
-  }
-
-  .card {
-    background: var(--bg-secondary);
-    border-radius: 20px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02),
-                0 12px 16px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid var(--border-color);
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: var(--theme-gradient);
-  }
-
-  .card:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.06),
-                0 20px 30px rgba(0, 0, 0, 0.07),
-                0 0 0 2px color-mix(in srgb, var(--theme-color) 10%, transparent);
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .card-header h2 {
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--theme-gradient);
-    color: white;
-    padding: 1rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
-    transform: rotate(-5deg);
-  }
-
-  .number {
-    font-size: 4rem;
-    font-weight: 800;
-    margin: 0.75rem 0;
-    background: var(--theme-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-    letter-spacing: -2px;
-  }
-
-  .subtitle {
-    color: var(--text-secondary);
-    font-size: 0.95rem;
-    font-weight: 500;
   }
 
   .trip-item, .delivery-item {
@@ -470,6 +396,13 @@
     background: #94a3b8;
   }
 
+  @media (max-width: 1200px) {
+    .summary-cards {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+
   @media (max-width: 1024px) {
     .dashboard {
       padding: 1.5rem;
@@ -480,12 +413,15 @@
       margin-bottom: 2rem;
     }
 
-    .card {
-      padding: 1.75rem;
+    .summary-cards {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
     }
+  }
 
-    .number {
-      font-size: 3rem;
+  @media (max-width: 900px) {
+    .summary-cards {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
@@ -503,30 +439,9 @@
       grid-template-columns: 1fr;
       gap: 1rem;
     }
-
-    .card {
-      padding: 1.5rem;
-    }
-
-    .number {
-      font-size: 2.75rem;
-    }
   }
 
   @media (max-width: 480px) {
-    .summary-cards {
-      grid-template-columns: 1fr;
-      gap: 1rem;
-    }
-
-    .card {
-      padding: 1.25rem;
-    }
-
-    .number {
-      font-size: 2.5rem;
-    }
-
     .dashboard-title {
       font-size: 1.75rem;
       margin-bottom: 1.25rem;
