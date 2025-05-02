@@ -142,10 +142,14 @@
     <h1 class="page-title">Maintenance Management</h1>
     
     {#if error}
-      <LoadErrorMessage message={error} />
-    {:else}
-      <div class="stats-grid">
-        <HomepageSummaryCard
+			<LoadErrorMessage
+				message={error}
+				icon={icons.maintenance}
+				title="Unable to Load Maintenance Records"
+			/>
+		{:else}
+			<div class="stats-grid">
+				<HomepageSummaryCard
           icon={icons.calendar}
           title="Routine Maintenance"
           value={stats.routine}

@@ -266,10 +266,14 @@
     <h1 class="page-title">Trip Management</h1>
     
     {#if error}
-      <LoadErrorMessage message={error} />
-    {:else}
-      <div class="stats-grid">
-        <HomepageSummaryCard
+			<LoadErrorMessage
+				message={error}
+				icon={icons.trips}
+				title="Unable to Load Trips"
+			/>
+		{:else}
+			<div class="stats-grid">
+				<HomepageSummaryCard
           icon={icons.truck}
           title="Active Trips"
           value={stats.active}

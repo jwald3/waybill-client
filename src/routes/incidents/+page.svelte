@@ -161,7 +161,11 @@
 		<h1 class="page-title">Incident Reports</h1>
 
 		{#if error}
-			<LoadErrorMessage message={error} />
+			<LoadErrorMessage 
+        message={error} 
+        icon={icons.incidents} 
+        title="Unable to Load Incidents" 
+      />
 		{:else}
 			<div class="stats-grid">
 				<HomepageSummaryCard

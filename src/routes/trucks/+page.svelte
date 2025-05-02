@@ -210,10 +210,14 @@
     <h1 class="page-title">Trucks</h1>
     
     {#if error}
-      <LoadErrorMessage message={error} />
-    {:else}
-      <div class="stats-grid">
-        <HomepageSummaryCard  
+			<LoadErrorMessage
+				message={error}
+				icon={icons.truck}
+				title="Unable to Load Trucks"
+			/>
+		{:else}
+			<div class="stats-grid">
+				<HomepageSummaryCard
           icon={icons.totalFleet}
           title="Total Fleet"
           value={stats.totalTrucks}

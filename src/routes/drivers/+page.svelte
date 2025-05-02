@@ -195,7 +195,11 @@
     <h1 class="page-title">Driver Management</h1>
     
     {#if error}
-      <LoadErrorMessage message={error} />
+      <LoadErrorMessage 
+        message={error} 
+        icon={icons.drivers}
+        title="Unable to Load Drivers"
+      />
     {:else}
       <div class="stats-grid">
         <HomepageSummaryCard
