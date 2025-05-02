@@ -189,6 +189,7 @@
     inset: 0;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 2rem;
     background: linear-gradient(45deg, 
       rgba(99, 102, 241, 0.75), 
@@ -206,20 +207,21 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 2.5rem;
   }
 
   .brand {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
   }
 
   .brand-logo {
-    height: 180px;
+    height: 120px;
     width: auto;
     filter: brightness(0) invert(1);
   }
 
   .hero-text {
-    margin-bottom: 2rem;
+    margin-bottom: 0;
   }
 
   .hero-text h2 {
@@ -228,6 +230,9 @@
     line-height: 1.2;
     margin-bottom: 1rem;
     color: white;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero-text p {
@@ -243,6 +248,7 @@
     gap: 1rem;
     width: 100%;
     max-width: 400px;
+    margin: 0 auto;
   }
 
   .feature-item {
@@ -433,7 +439,11 @@
     }
 
     .overlay {
-      padding: 3rem;
+      padding: 4rem;
+    }
+
+    .image-content {
+      gap: 3.5rem;
     }
   }
 </style>
