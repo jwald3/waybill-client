@@ -37,28 +37,28 @@
   <meta name="description" content="Create your Waybill account to get started" />
 </svelte:head>
 
-<div class="page-container">
-  <div class="image-section">
-    <div class="overlay">
-      <div class="image-content">
-        <div class="brand">
-          <img src="/waybill_logo_white.png" alt="Waybill" class="brand-logo" />
+<div class="page-container-component">
+  <div class="image-section-component">
+    <div class="overlay-component">
+      <div class="image-content-component">
+        <div class="brand-component">
+          <img src="/waybill_logo_white.png" alt="Waybill" class="brand-logo-component" />
         </div>
-        <div class="hero-text">
+        <div class="hero-text-component">
           <h2>Streamline Your Fleet Operations</h2>
           <p>Join the next generation of fleet management with Waybill's powerful and intuitive platform</p>
         </div>
-        <div class="feature-list">
-          <div class="feature-item">
-            <span class="feature-icon">📍</span>
+        <div class="feature-list-component">
+          <div class="feature-item-component">
+            <span class="feature-icon-component">📍</span>
             <span>Real-time fleet tracking</span>
           </div>
-          <div class="feature-item">
-            <span class="feature-icon">📊</span>
+          <div class="feature-item-component">
+            <span class="feature-icon-component">📊</span>
             <span>Advanced analytics</span>
           </div>
-          <div class="feature-item">
-            <span class="feature-icon">🔧</span>
+          <div class="feature-item-component">
+            <span class="feature-icon-component">🔧</span>
             <span>Maintenance management</span>
           </div>
         </div>
@@ -66,39 +66,39 @@
     </div>
   </div>
 
-  <div class="form-section">
-    <div class="auth-container">
-      <div class="auth-header">
+  <div class="form-section-component">
+    <div class="auth-container-component">
+      <div class="auth-header-component">
         <h1>Create your account</h1>
         <p>Get started with a free account</p>
       </div>
       
-      <form class="auth-form" on:submit|preventDefault={handleSubmit}>
+      <form class="auth-form-component" on:submit|preventDefault={handleSubmit}>
         {#if error}
-          <div class="auth-error">
+          <div class="auth-error-component">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16"/></svg>
             {error}
           </div>
         {/if}
         
-        <div class="auth-input-group">
+        <div class="auth-input-group-component">
           <label for="name">Full Name</label>
           <input 
             type="text" 
             id="name" 
-            class="auth-input" 
+            class="auth-input-component" 
             required 
             autocomplete="name"
             placeholder="Enter your full name"
           />
         </div>
         
-        <div class="auth-input-group">
+        <div class="auth-input-group-component">
           <label for="email">Email</label>
           <input 
             type="email" 
             id="email" 
-            class="auth-input"
+            class="auth-input-component"
             bind:value={email}
             required 
             autocomplete="email"
@@ -106,12 +106,12 @@
           />
         </div>
         
-        <div class="auth-input-group">
+        <div class="auth-input-group-component">
           <label for="password">Password</label>
           <input 
             type="password" 
             id="password" 
-            class="auth-input"
+            class="auth-input-component"
             bind:value={password}
             required 
             autocomplete="new-password"
@@ -120,12 +120,12 @@
           />
         </div>
         
-        <div class="auth-input-group">
+        <div class="auth-input-group-component">
           <label for="confirmPassword">Confirm Password</label>
           <input 
             type="password" 
             id="confirmPassword" 
-            class="auth-input"
+            class="auth-input-component"
             bind:value={confirmPassword}
             required 
             autocomplete="new-password"
@@ -136,45 +136,45 @@
         
         <button 
           type="submit" 
-          class="auth-button" 
+          class="auth-button-component" 
           disabled={loading}
         >
           {loading ? 'Creating account...' : 'Create Account'}
         </button>
         
-        <div class="auth-divider">or</div>
+        <div class="auth-divider-component">or</div>
         
-        <div class="social-auth-buttons">
-          <button type="button" class="social-auth-button">
+        <div class="social-auth-buttons-component">
+          <button type="button" class="social-auth-button-component">
             <img src="/google-icon.png" alt="" width="18" height="18" />
             <span>Continue with Google</span>
           </button>
         </div>
       </form>
       
-      <div class="auth-footer">
+      <div class="auth-footer-component">
         <span>Already have an account?</span>
-        <a href="/login" class="auth-link">Sign in →</a>
+        <a href="/login" class="auth-link-component">Sign in →</a>
       </div>
     </div>
   </div>
 </div>
 
 <style>
-  .page-container {
+  .page-container-component {
     display: flex;
     height: 100vh;
     overflow: hidden;
   }
 
-  .image-section {
+  .image-section-component {
     display: none;
     background-image: linear-gradient(45deg, #6366f1, #818cf8);
     position: relative;
     overflow: hidden;
   }
 
-  .image-section::before {
+  .image-section-component::before {
     content: '';
     position: absolute;
     top: 0;
@@ -188,7 +188,7 @@
     mix-blend-mode: soft-light;
   }
 
-  .overlay {
+  .overlay-component {
     position: absolute;
     inset: 0;
     display: flex;
@@ -202,7 +202,7 @@
     backdrop-filter: blur(1px);
   }
 
-  .image-content {
+  .image-content-component {
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
@@ -214,21 +214,21 @@
     gap: 2.5rem;
   }
 
-  .brand {
+  .brand-component {
     margin-bottom: 0;
   }
 
-  .brand-logo {
+  .brand-logo-component {
     height: 120px;
     width: auto;
     filter: brightness(0) invert(1);
   }
 
-  .hero-text {
+  .hero-text-component {
     margin-bottom: 0;
   }
 
-  .hero-text h2 {
+  .hero-text-component h2 {
     font-size: 2.5rem;
     font-weight: 700;
     line-height: 1.2;
@@ -239,14 +239,14 @@
     margin-right: auto;
   }
 
-  .hero-text p {
+  .hero-text-component p {
     font-size: 1.25rem;
     line-height: 1.6;
     opacity: 0.9;
     max-width: 500px;
   }
 
-  .feature-list {
+  .feature-list-component {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -255,7 +255,7 @@
     margin: 0 auto;
   }
 
-  .feature-item {
+  .feature-item-component {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -266,7 +266,7 @@
     backdrop-filter: blur(8px);
   }
 
-  .feature-icon {
+  .feature-icon-component {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -276,7 +276,7 @@
     border-radius: 6px;
   }
 
-  .form-section {
+  .form-section-component {
     flex: 1;
     background: var(--background-color);
     display: flex;
@@ -285,19 +285,19 @@
     margin-bottom: 0 !important;
   }
 
-  .auth-container {
+  .auth-container-component {
     width: 100%;
     max-width: 420px;
     margin: auto;
     padding: 0.75rem;
   }
 
-  .auth-header {
+  .auth-header-component {
     text-align: center;
     margin-bottom: 1.5rem;
   }
 
-  .auth-header h1 {
+  .auth-header-component h1 {
     font-size: 1.875rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
@@ -306,11 +306,11 @@
     color: transparent;
   }
 
-  .auth-header p {
+  .auth-header-component p {
     color: var(--text-secondary);
   }
 
-  .auth-error {
+  .auth-error-component {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -321,18 +321,18 @@
     margin-bottom: 1.5rem;
   }
 
-  :global(.auth-input-group) {
+  :global(.auth-input-group-component) {
     margin-bottom: 0.875rem;
   }
 
-  :global(.auth-input-group label) {
+  :global(.auth-input-group-component label) {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
     color: var(--text-color);
   }
 
-  :global(.auth-input) {
+  :global(.auth-input-component) {
     width: 100%;
     padding: 0.75rem 1rem;
     border-radius: 8px;
@@ -341,13 +341,13 @@
     transition: all 0.2s;
   }
 
-  :global(.auth-input:focus) {
+  :global(.auth-input-component:focus) {
     border-color: #3949ab;
     box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.1);
     outline: none;
   }
 
-  :global(.auth-button) {
+  :global(.auth-button-component) {
     width: 100%;
     padding: 0.75rem;
     border-radius: 8px;
@@ -357,16 +357,16 @@
     transition: opacity 0.2s;
   }
 
-  :global(.auth-button:hover) {
+  :global(.auth-button-component:hover) {
     opacity: 0.9;
   }
 
-  :global(.auth-button:disabled) {
+  :global(.auth-button-component:disabled) {
     opacity: 0.7;
     cursor: not-allowed;
   }
 
-  .auth-divider {
+  .auth-divider-component {
     text-align: center;
     margin: 1rem 0;
     display: flex;
@@ -375,15 +375,15 @@
     color: var(--text-secondary);
   }
 
-  .auth-divider::before,
-  .auth-divider::after {
+  .auth-divider-component::before,
+  .auth-divider-component::after {
     content: '';
     flex: 1;
     height: 1px;
     background: var(--border-color);
   }
 
-  :global(.social-auth-button) {
+  :global(.social-auth-button-component) {
     width: 100%;
     padding: 0.75rem;
     border-radius: 8px;
@@ -399,54 +399,54 @@
     height: 42px;
   }
 
-  :global(.social-auth-button img) {
+  :global(.social-auth-button-component img) {
     width: 18px;
     height: 18px;
     object-fit: contain;
   }
 
-  :global(.social-auth-button:hover) {
+  :global(.social-auth-button-component:hover) {
     background: #f8fafc;
     border-color: #cbd5e1;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   }
 
-  :global(.social-auth-button:active) {
+  :global(.social-auth-button-component:active) {
     background: #f1f5f9;
   }
 
-  .auth-footer {
+  .auth-footer-component {
     margin-top: 1rem;
     text-align: center;
     color: var(--text-secondary);
   }
 
-  .auth-link {
+  .auth-link-component {
     color: #818cf8;
     font-weight: 500;
     margin-left: 0.5rem;
     text-decoration: none;
   }
 
-  .auth-link:hover {
+  .auth-link-component:hover {
     text-decoration: underline;
   }
 
   @media (min-width: 1024px) {
-    .image-section {
+    .image-section-component {
       display: block;
       flex: 1.1;
     }
 
-    .form-section {
+    .form-section-component {
       flex: 0.9;
     }
 
-    .overlay {
+    .overlay-component {
       padding: 4rem;
     }
 
-    .image-content {
+    .image-content-component {
       gap: 3.5rem;
     }
   }
