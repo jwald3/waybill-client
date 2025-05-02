@@ -8,6 +8,7 @@
   import { getDrivers } from '$lib/api/drivers';
   import type { Trip } from '$lib/api/trips';
   import type { Driver } from '$lib/api/drivers';
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
 
   let isNavExpanded = true;
   let trips: Trip[] = [];
@@ -56,6 +57,11 @@
     ? Math.round((onTimeDeliveries.length / completedTrips.length) * 100)
     : '-'; // Return '-' instead of 0 when there are no completed trips
 
+  // Compute active drivers percentage
+  $: driversPercentage = drivers.length > 0
+    ? Math.round((activeDrivers.length / drivers.length) * 100)
+    : '-';
+
   // Helper function to format date/time
   function formatTime(isoString: string): string {
     return new Date(isoString).toLocaleTimeString('en-US', {
@@ -91,38 +97,26 @@
 
     <!-- Summary Cards -->
     <div class="summary-cards">
-      <div class="stat-card">
-        <div class="card-header">
-          <span class="icon">
-            {@html icons.truck}
-          </span>
-          <h2>Active Trips</h2>
-        </div>
-        <p class="number">{activeTrips.length}</p>
-        <p class="subtitle">{trips.filter(t => t.status === 'COMPLETED').length} completed total</p>
-      </div>
+      <HomepageSummaryCard
+        icon={icons.truck}
+        title="Active Trips"
+        value={activeTrips.length === 0 ? '-' : activeTrips.length}
+        subtitle={activeTrips.length === 0 ? 'Currently in transit' : `${trips.filter(t => t.status === 'COMPLETED').length} completed total`}
+      />
 
-      <div class="stat-card">
-        <div class="card-header">
-          <span class="icon">
-            {@html icons.people}
-          </span>
-          <h2>Drivers on Duty</h2>
-        </div>
-        <p class="number">{activeDrivers.length}</p>
-        <p class="subtitle">{Math.round((activeDrivers.length / drivers.length) * 100)}% of fleet active</p>
-      </div>
+      <HomepageSummaryCard
+        icon={icons.people}
+        title="Drivers on Duty"
+        value={activeDrivers.length === 0 ? '-' : activeDrivers.length}
+        subtitle={activeDrivers.length === 0 ? 'Available drivers' : `${driversPercentage}% fleet active`}
+      />
 
-      <div class="stat-card">
-        <div class="card-header">
-          <span class="icon">
-            {@html icons.chart}
-          </span>
-          <h2>Delivery Performance</h2>
-        </div>
-        <p class="number">{onTimePercentage === '-' ? onTimePercentage : `${onTimePercentage}%`}</p>
-        <p class="subtitle">On-time delivery rate</p>
-      </div>
+      <HomepageSummaryCard
+        icon={icons.chart}
+        title="Delivery Performance"
+        value={onTimePercentage === '-' ? onTimePercentage : `${onTimePercentage}%`}
+        subtitle="On-time delivery rate"
+      />
     </div>
 
     <!-- Active Trips -->
