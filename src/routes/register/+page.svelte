@@ -68,8 +68,8 @@
 
   <div class="form-section-component">
     <div class="auth-container-component">
-      <div class="mobile-brand-component">
-        <img src="/waybill_logo_cropped.png" alt="Waybill" class="mobile-logo-component" />
+      <div class="brand-container">
+        <img src="/waybill_logo_cropped.png" alt="Waybill" class="form-logo" />
       </div>
       
       <div class="auth-header-component">
@@ -378,13 +378,12 @@
     text-decoration: underline;
   }
 
-  .mobile-brand-component {
+  .brand-container {
     text-align: center;
     margin-bottom: 2rem;
-    display: block;
   }
 
-  .mobile-logo-component {
+  .form-logo {
     width: 140px;
     height: auto;
     margin: 0 auto;
@@ -406,10 +405,6 @@
 
     .image-content-component {
       gap: 3.5rem;
-    }
-
-    .mobile-brand-component {
-      display: none;
     }
   }
 </style>
