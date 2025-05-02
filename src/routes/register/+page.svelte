@@ -145,15 +145,6 @@
         >
           {loading ? 'Creating account...' : 'Create Account'}
         </button>
-        
-        <div class="auth-divider-component">or</div>
-        
-        <div class="social-auth-buttons-component">
-          <button type="button" class="social-auth-button-component">
-            <img src="/google-icon.png" alt="" width="18" height="18" />
-            <span>Continue with Google</span>
-          </button>
-        </div>
       </form>
       
       <div class="auth-footer-component">
@@ -368,55 +359,6 @@
   :global(.auth-button-component:disabled) {
     opacity: 0.7;
     cursor: not-allowed;
-  }
-
-  .auth-divider-component {
-    text-align: center;
-    margin: 1rem 0;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    color: var(--text-secondary);
-  }
-
-  .auth-divider-component::before,
-  .auth-divider-component::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border-color);
-  }
-
-  :global(.social-auth-button-component) {
-    width: 100%;
-    padding: 0.75rem;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    font-weight: 500;
-    color: #1a1a1a;
-    transition: all 0.2s;
-    height: 42px;
-  }
-
-  :global(.social-auth-button-component img) {
-    width: 18px;
-    height: 18px;
-    object-fit: contain;
-  }
-
-  :global(.social-auth-button-component:hover) {
-    background: #f8fafc;
-    border-color: #cbd5e1;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  :global(.social-auth-button-component:active) {
-    background: #f1f5f9;
   }
 
   .auth-footer-component {
