@@ -8,8 +8,9 @@
   import FacilityCard from '$lib/components/FacilityCard.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import type { PageData } from './$types';
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
 
-  export let data;
+  export let data: PageData;
 
   let isNavExpanded = true;
   
@@ -141,26 +142,26 @@
       <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
-        <Card title="Total Facilities" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.totalFacilities}</p>
-            <p class="stat-label">Active Facilities</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.facilities}
+          title="Total Facilities"
+          value={stats.totalFacilities}
+          subtitle="Active Facilities"
+        />
 
-        <Card title="Total Capacity" icon={icons.truck}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.totalCapacity.toLocaleString()}</p>
-            <p class="stat-label">Parking Spaces</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.totalFleet}
+          title="Total Capacity"
+          value={stats.totalCapacity.toLocaleString()}
+          subtitle="Parking Spaces"
+        />
 
-        <Card title="Average Utilization" icon={icons.chart}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.averageUtilization}<span class="percent">%</span></p>
-            <p class="stat-label">Facility Space Utilized</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.utilization}
+          title="Average Utilization"
+          value={stats.averageUtilization}
+          subtitle="Facility Space Utilized"
+        />
       </div>
 
       <Card title="Facility Records" icon={icons.truck}>
