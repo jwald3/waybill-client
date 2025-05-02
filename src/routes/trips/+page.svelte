@@ -276,13 +276,13 @@
           subtitle="In Progress"
         />
         <HomepageSummaryCard
-          icon={icons.trips}
-          title="Scheduled"
+          icon={icons.calendar}
+          title="Scheduled Trips"
           value={stats.scheduled}
           subtitle="Upcoming"
         />
         <HomepageSummaryCard
-          icon={icons.trips}
+          icon={icons.route}
           title="Total Distance"
           value={stats.totalMiles}
           subtitle="Miles"
