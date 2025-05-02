@@ -89,6 +89,7 @@
             class="auth-input" 
             required 
             autocomplete="name"
+            placeholder="Enter your full name"
           />
         </div>
         
@@ -101,6 +102,7 @@
             bind:value={email}
             required 
             autocomplete="email"
+            placeholder="Enter your email address"
           />
         </div>
         
@@ -114,6 +116,7 @@
             required 
             autocomplete="new-password"
             minlength="8"
+            placeholder="Choose a strong password (min. 8 characters)"
           />
         </div>
         
@@ -127,6 +130,7 @@
             required 
             autocomplete="new-password"
             minlength="8"
+            placeholder="Re-enter your password"
           />
         </div>
         
