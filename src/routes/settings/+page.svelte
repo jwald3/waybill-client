@@ -119,7 +119,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
     gap: var(--spacing-xl);
-    max-width: 1200px;
     margin: 0 auto;
   }
 
@@ -128,8 +127,6 @@
     flex-direction: column;
     gap: var(--spacing-xl);
     padding: var(--spacing-xl);
-    max-width: 600px;
-    margin: 0 auto;
   }
 
   .setting-item {
