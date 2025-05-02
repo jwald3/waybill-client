@@ -11,7 +11,7 @@
   import TripCard from '$lib/components/TripCard.svelte';
   import Pagination from '$lib/components/Pagination.svelte';
   import type { PageData } from './$types';
-
+  import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
   export let data: PageData;
 
   let isNavExpanded = true;
@@ -269,26 +269,24 @@
       <LoadErrorMessage message={error} />
     {:else}
       <div class="stats-grid">
-        <Card title="Active Trips" icon={icons.trips}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.active}</p>
-            <p class="stat-label">In Progress</p>
-          </div>
-        </Card>
-
-        <Card title="Scheduled" icon={icons.trips}>
-          <div class="stat-content">
-            <p class="stat-number">{stats.scheduled}</p>
-            <p class="stat-label">Upcoming</p>
-          </div>
-        </Card>
-
-        <Card title="Total Distance" icon={icons.trips}>
-          <div class="stat-content">
-            <p class="stat-number">{formatNumber(stats.totalMiles)}</p>
-            <p class="stat-label">Miles</p>
-          </div>
-        </Card>
+        <HomepageSummaryCard
+          icon={icons.truck}
+          title="Active Trips"
+          value={stats.active}
+          subtitle="In Progress"
+        />
+        <HomepageSummaryCard
+          icon={icons.trips}
+          title="Scheduled"
+          value={stats.scheduled}
+          subtitle="Upcoming"
+        />
+        <HomepageSummaryCard
+          icon={icons.trips}
+          title="Total Distance"
+          value={stats.totalMiles}
+          subtitle="Miles"
+        />
       </div>
 
       <Card title="Trip Records" icon={icons.trips}>
