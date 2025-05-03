@@ -79,155 +79,174 @@
   <div class="page">
     <h1 class="page-title">Fleet Analytics</h1>
 
-    <div class="stats-grid">
-      {#each metrics as metric}
-        <MetricCard {...metric} />
-      {/each}
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="main-column">
-        <Card title="Fleet Overview" icon={icons.truck}>
-          <div class="overview-stats">
-            <div class="stat-item">
-              <span class="label">Total Mileage</span>
-              <span class="value">{data.metrics.efficiency.totalMileage} mi</span>
-            </div>
-            <div class="stat-item">
-              <span class="label">Fuel Used</span>
-              <span class="value">{data.metrics.efficiency.totalFuelUsage} gal</span>
-            </div>
-            <div class="stat-item">
-              <span class="label">Active Trips</span>
-              <span class="value">{data.metrics.delivery.activeTrips}</span>
-            </div>
+    {#if data.error}
+      <div class="error-container">
+        <div class="error-content">
+          <div class="error-icon">
+            {@html icons.warning}
           </div>
-          <div class="chart-row" class:has-data={!isEmpty(data.charts.fleetStatus)}>
-            <div class="chart-container">
-              {#if !isEmpty(data.charts.fleetStatus)}
-                <PieChart 
-                  data={data.charts.fleetStatus} 
-                  centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
-                  centerLabel="Available"
-                />
-                <div class="chart-legend">
-                  {#each data.charts.fleetStatus as status}
-                    <div class="legend-item">
-                      <span class="legend-color" style="background-color: {status.color}"></span>
-                      <span class="legend-label">{status.label}</span>
-                      <span class="legend-value">{status.value}</span>
+          <h2>Data Loading Error</h2>
+          <p>{data.error.message}</p>
+          <button 
+            class="button primary"
+            on:click={() => window.location.reload()}
+          >
+            <span class="icon">{@html icons.refresh}</span>
+            Retry
+          </button>
+        </div>
+      </div>
+    {:else}
+      <div class="stats-grid">
+        {#each metrics as metric}
+          <MetricCard {...metric} />
+        {/each}
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="main-column">
+          <Card title="Fleet Overview" icon={icons.truck}>
+            <div class="overview-stats">
+              <div class="stat-item">
+                <span class="label">Total Mileage</span>
+                <span class="value">{data.metrics.efficiency.totalMileage} mi</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Fuel Used</span>
+                <span class="value">{data.metrics.efficiency.totalFuelUsage} gal</span>
+              </div>
+              <div class="stat-item">
+                <span class="label">Active Trips</span>
+                <span class="value">{data.metrics.delivery.activeTrips}</span>
+              </div>
+            </div>
+            <div class="chart-row" class:has-data={!isEmpty(data.charts.fleetStatus)}>
+              <div class="chart-container">
+                {#if !isEmpty(data.charts.fleetStatus)}
+                  <PieChart 
+                    data={data.charts.fleetStatus} 
+                    centerValue={`${Math.round((data.metrics.fleet.available / data.metrics.fleet.total) * 100)}%`}
+                    centerLabel="Available"
+                  />
+                  <div class="chart-legend">
+                    {#each data.charts.fleetStatus as status}
+                      <div class="legend-item">
+                        <span class="legend-color" style="background-color: {status.color}"></span>
+                        <span class="legend-label">{status.label}</span>
+                        <span class="legend-value">{status.value}</span>
+                      </div>
+                    {/each}
+                  </div>
+                {:else}
+                  <div class="empty-state">
+                    <div class="icon">
+                      {@html icons.truck}
                     </div>
-                  {/each}
-                </div>
+                    <p>No fleet status data available</p>
+                  </div>
+                {/if}
+              </div>
+            </div>
+          </Card>
+
+          <Card title="Recent Trips" icon={icons.routes}>
+            <div class="trips-list">
+              {#if !isEmpty(data.recentData.trips)}
+                {#each data.recentData.trips as trip}
+                  <a href="/trips/{trip.id}" class="trip-item">
+                    <div class="trip-header">
+                      <div class="trip-id">
+                        <StatusBadge status={trip.status} type="trip" />
+                        <span class="trip-number">{trip.tripNumber}</span>
+                      </div>
+                      <div class="trip-stats">
+                        <span>{trip.distance} mi</span>
+                        <span class="separator">•</span>
+                        <span>{trip.fuelUsage} gal</span>
+                        <span class="separator">•</span>
+                        <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </a>
+                {/each}
               {:else}
                 <div class="empty-state">
                   <div class="icon">
-                    {@html icons.truck}
+                    {@html icons.routes}
                   </div>
-                  <p>No fleet status data available</p>
+                  <p>No recent trips to display</p>
                 </div>
               {/if}
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
 
-        <Card title="Recent Trips" icon={icons.routes}>
-          <div class="trips-list">
-            {#if !isEmpty(data.recentData.trips)}
-              {#each data.recentData.trips as trip}
-                <a href="/trips/{trip.id}" class="trip-item">
-                  <div class="trip-header">
-                    <div class="trip-id">
-                      <StatusBadge status={trip.status} type="trip" />
-                      <span class="trip-number">{trip.tripNumber}</span>
-                    </div>
-                    <div class="trip-stats">
-                      <span>{trip.distance} mi</span>
-                      <span class="separator">•</span>
-                      <span>{trip.fuelUsage} gal</span>
-                      <span class="separator">•</span>
-                      <span>ETA: {new Date(trip.scheduledArrival).toLocaleDateString()}</span>
-                    </div>
+        <div class="side-column">
+          <Card title="Maintenance Overview" icon={icons.maintenance}>
+            <div class="chart-container-small">
+              {#if !isEmpty(data.charts.maintenanceTypes)}
+                {@const total = data.charts.maintenanceTypes.reduce((sum, type) => sum + type.value, 0)}
+                {@const routineCount = data.charts.maintenanceTypes.find(t => t.label === 'Routine')?.value || 0}
+                <PieChart 
+                  data={data.charts.maintenanceTypes}
+                  centerValue={`${total > 0 ? Math.round((routineCount / total) * 100) : 0}%`}
+                  centerLabel="Routine"
+                />
+              {:else}
+                <div class="empty-state">
+                  <div class="icon">
+                    {@html icons.maintenance}
                   </div>
-                </a>
-              {/each}
-            {:else}
-              <div class="empty-state">
-                <div class="icon">
-                  {@html icons.routes}
+                  <p>No maintenance data available</p>
                 </div>
-                <p>No recent trips to display</p>
-              </div>
-            {/if}
-          </div>
-        </Card>
-      </div>
-
-      <div class="side-column">
-        <Card title="Maintenance Overview" icon={icons.maintenance}>
-          <div class="chart-container-small">
-            {#if !isEmpty(data.charts.maintenanceTypes)}
-              {@const total = data.charts.maintenanceTypes.reduce((sum, type) => sum + type.value, 0)}
-              {@const routineCount = data.charts.maintenanceTypes.find(t => t.label === 'Routine')?.value || 0}
-              <PieChart 
-                data={data.charts.maintenanceTypes}
-                centerValue={`${total > 0 ? Math.round((routineCount / total) * 100) : 0}%`}
-                centerLabel="Routine"
-              />
-            {:else}
-              <div class="empty-state">
-                <div class="icon">
-                  {@html icons.maintenance}
-                </div>
-                <p>No maintenance data available</p>
-              </div>
-            {/if}
-          </div>
-          <!-- Only show maintenance list if we have data -->
-          {#if !isEmpty(data.recentData.maintenance)}
-            <div class="maintenance-list">
-              {#each data.recentData.maintenance as log}
-                <a href="/maintenance/{log.id}" class="maintenance-item">
-                  <div class="item-row">
-                    <StatusBadge status={log.type} type="maintenance" />
-                    <span class="cost">${log.cost}</span>
-                  </div>
-                  <div class="item-row secondary">
-                    <span>{new Date(log.date).toLocaleDateString()}</span>
-                  </div>
-                </a>
-              {/each}
+              {/if}
             </div>
-          {/if}
-        </Card>
-
-        <Card title="Recent Incidents" icon={icons.incidents}>
-          <div class="incidents-list">
-            {#if !isEmpty(data.recentData.incidents)}
-              {#each data.recentData.incidents as incident}
-                <a href="/incidents/{incident.id}" class="incident-item">
-                  <div class="item-row">
-                    <StatusBadge status={incident.type} type="incident" />
-                    <span class="cost">${incident.damageEstimate}</span>
-                  </div>
-                  <p class="incident-desc">{incident.description}</p>
-                  <div class="item-row secondary">
-                    <span>{new Date(incident.date).toLocaleDateString()}</span>
-                  </div>
-                </a>
-              {/each}
-            {:else}
-              <div class="empty-state">
-                <div class="icon">
-                  {@html icons.incidents}
-                </div>
-                <p>No recent incidents reported</p>
+            <!-- Only show maintenance list if we have data -->
+            {#if !isEmpty(data.recentData.maintenance)}
+              <div class="maintenance-list">
+                {#each data.recentData.maintenance as log}
+                  <a href="/maintenance/{log.id}" class="maintenance-item">
+                    <div class="item-row">
+                      <StatusBadge status={log.type} type="maintenance" />
+                      <span class="cost">${log.cost}</span>
+                    </div>
+                    <div class="item-row secondary">
+                      <span>{new Date(log.date).toLocaleDateString()}</span>
+                    </div>
+                  </a>
+                {/each}
               </div>
             {/if}
-          </div>
-        </Card>
+          </Card>
+
+          <Card title="Recent Incidents" icon={icons.incidents}>
+            <div class="incidents-list">
+              {#if !isEmpty(data.recentData.incidents)}
+                {#each data.recentData.incidents as incident}
+                  <a href="/incidents/{incident.id}" class="incident-item">
+                    <div class="item-row">
+                      <StatusBadge status={incident.type} type="incident" />
+                      <span class="cost">${incident.damageEstimate}</span>
+                    </div>
+                    <p class="incident-desc">{incident.description}</p>
+                    <div class="item-row secondary">
+                      <span>{new Date(incident.date).toLocaleDateString()}</span>
+                    </div>
+                  </a>
+                {/each}
+              {:else}
+                <div class="empty-state">
+                  <div class="icon">
+                    {@html icons.incidents}
+                  </div>
+                  <p>No recent incidents reported</p>
+                </div>
+              {/if}
+            </div>
+          </Card>
+        </div>
       </div>
-    </div>
+    {/if}
   </div>
 </Layout>
 
@@ -462,5 +481,69 @@
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     white-space: nowrap;
+  }
+
+  .error-container {
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-2xl);
+    margin: 0 auto;
+    max-width: 800px;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .error-content {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    text-align: center;
+  }
+
+  .error-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--theme-color);
+  }
+
+  .error-content h2 {
+    font-size: var(--font-size-xl);
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .error-content p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--theme-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--theme-color) 20%, transparent);
+  }
+
+  .button .icon {
+    width: 20px;
+    height: 20px;
   }
 </style> 

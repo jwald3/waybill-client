@@ -8,6 +8,12 @@ import { getMaintenanceLogs } from '$lib/api/maintenance';
 export const ssr = false;
 export const csr = true;
 
+// Add error type
+type LoadError = {
+  message: string;
+  code: string;
+};
+
 export const load: PageLoad = async ({ fetch }) => {
   try {
     const [ tripsRes, trucksRes, incidentsRes, maintenanceRes] = await Promise.all([
@@ -16,6 +22,11 @@ export const load: PageLoad = async ({ fetch }) => {
       getIncidents(fetch),
       getMaintenanceLogs(fetch)
     ]);
+
+    // Check if any of the responses are null/undefined
+    if (!tripsRes || !trucksRes || !incidentsRes || !maintenanceRes) {
+      throw new Error('Failed to load one or more required data sources');
+    }
 
     // Ensure we have valid response objects with items arrays
     const trips = tripsRes?.items || [];
@@ -126,11 +137,12 @@ export const load: PageLoad = async ({ fetch }) => {
             date: log.date,
             notes: log.notes
           }))
-      }
+      },
+      error: null as LoadError | null
     };
   } catch (error) {
     console.error('Error loading analytics data:', error);
-    // Return safe default values
+    
     return {
       metrics: {
         fleet: {
@@ -160,7 +172,11 @@ export const load: PageLoad = async ({ fetch }) => {
         trips: [],
         incidents: [],
         maintenance: []
-      }
+      },
+      error: {
+        message: 'Unable to load analytics data. Please try refreshing the page.',
+        code: 'DATA_LOAD_ERROR'
+      } as LoadError
     };
   }
 }; 
