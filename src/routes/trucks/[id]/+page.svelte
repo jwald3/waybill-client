@@ -17,12 +17,12 @@
   let isNavExpanded = true;
   
   export let data;
-  let truck: Truck = data.truck;
+  let truck: Truck | null = data.truck ?? null;
 
   let isUpdateStatusModalOpen = false;
 
   function openUpdateStatus() {
-    if (truck.status === 'RETIRED') {
+    if (!truck || truck.status === 'RETIRED') {
       console.error('Cannot update retired truck');
       return;
     }
@@ -39,16 +39,16 @@
 
       switch (newStatus) {
         case 'AVAILABLE':
-          updatedTruck = await setTruckAvailable(truck.id);
+          updatedTruck = await setTruckAvailable(truck?.id || '');
           break;
         case 'IN_TRANSIT':
-          updatedTruck = await setTruckInTransit(truck.id);
+          updatedTruck = await setTruckInTransit(truck?.id || '');
           break;
         case 'UNDER_MAINTENANCE':
-          updatedTruck = await setTruckInMaintenance(truck.id);
+          updatedTruck = await setTruckInMaintenance(truck?.id || '');
           break;
         case 'RETIRED':
-          updatedTruck = await retireTruck(truck.id);
+          updatedTruck = await retireTruck(truck?.id || '');
           break;
         default:
           throw new Error('Invalid status selected');
@@ -217,7 +217,7 @@
   isOpen={isUpdateStatusModalOpen}
   onClose={closeUpdateStatus}
   onSubmit={handleUpdateStatus}
-  availableStatuses={truck.status !== 'RETIRED' ? getAvailableStatusTransitions(truck.status) : []}
+  availableStatuses={truck?.status !== 'RETIRED' ? getAvailableStatusTransitions(truck?.status as TruckStatus) : []}
 />
 
 <style>

@@ -13,10 +13,6 @@ export const load = (async ({ params, fetch, parent }) => {
 
   try {
     const { token } = await parent();
-    console.log('[Driver Page Load]', { 
-      hasToken: !!token,
-      driverId: params.id 
-    });
 
     const customFetch: typeof fetch = (input, init) => {
       console.log('[Custom Fetch]', {
