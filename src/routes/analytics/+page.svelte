@@ -7,9 +7,7 @@
   import PieChart from '$lib/components/PieChart.svelte';
   
   export let data;
-  
-  console.log('Trips data:', data.recentData.trips);
-  
+    
   let isNavExpanded = true;
 
   // Key metrics

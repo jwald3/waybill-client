@@ -77,9 +77,8 @@ interface FinishTripRequest {
 
 export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
   try {
-    console.log('Fetching trips...');
     const response = await fetchApi<Trip>('/trips', fetchFn);
-    console.log('Trips response:', response);
+
     return response;
   } catch (err) {
     console.error('[getTrips] Error details:', {

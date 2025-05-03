@@ -32,10 +32,6 @@
 
   async function handleSubmit() {
     try {
-      console.log('Submitting driver data:', formData);
-      const token = localStorage.getItem('auth_token');
-      console.log('Current auth token:', token ? 'present' : 'missing');
-      
       await createDriver(formData);
       goto('/drivers');
     } catch (error) {

@@ -63,9 +63,8 @@ export async function createDriver(
   fetchFn: typeof fetch = fetch
 ): Promise<Driver> {
   try {
-    console.log('Creating driver with payload:', driver);
     const result = await mutateApi<Driver>('/drivers', 'POST', driver, fetchFn);
-    console.log('Driver creation response:', result);
+
     return result;
   } catch (err) {
     console.error('Error creating driver:', err);

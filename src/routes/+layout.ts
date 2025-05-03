@@ -7,13 +7,6 @@ export const load = (async ({ url, data }) => {
   const publicPaths = ['/login', '/register'];
   const isPublicPath = publicPaths.includes(url.pathname);
   
-  console.log('[Layout Load]', {
-    browser,
-    isPublicPath,
-    pathname: url.pathname,
-    token: browser ? localStorage.getItem('auth_token') : 'server-side'
-  });
-  
   if (browser) {
     isAuthenticated.initialize();
     const token = localStorage.getItem('auth_token');
