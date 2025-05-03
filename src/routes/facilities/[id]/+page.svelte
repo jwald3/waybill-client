@@ -8,7 +8,7 @@
   let isNavExpanded = true;
   
   export let data;
-  const facility: Facility = data.facility;
+  const facility: Facility | null = data.facility ?? null;
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
