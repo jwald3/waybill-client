@@ -13,17 +13,17 @@
   import DriverStatusModal from '$lib/components/DriverStatusModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
 
-  export let data;
-  let driver: Driver = data.driver;
-  
   let isNavExpanded = true;
+
+  export let data;
+  let driver: Driver | null = data.driver ?? null;
 
   let isUpdateStatusModalOpen = false;
   let currentDriverStatus: EmploymentStatus | null = null;
 
   function openUpdateStatus() {
-    if (!['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
-      console.error('Invalid current status:', driver.employment_status);
+    if (!driver || !['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
+      console.error('Invalid current status:', driver?.employment_status);
       return;
     }
     
@@ -42,13 +42,13 @@
 
       switch (newStatus) {
         case 'ACTIVE':
-          updatedDriver = await activateDriver(driver.id);
+          updatedDriver = await activateDriver(driver?.id || '');
           break;
         case 'SUSPENDED':
-          updatedDriver = await suspendDriver(driver.id);
+          updatedDriver = await suspendDriver(driver?.id || '');
           break;
         case 'TERMINATED':
-          updatedDriver = await terminateDriver(driver.id);
+          updatedDriver = await terminateDriver(driver?.id || '');
           break;
         default:
           throw new Error('Invalid status selected');
