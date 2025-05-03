@@ -107,8 +107,6 @@
     }
   }
 
-  console.log(trip);
-
   function openAddNote() {
     isAddNoteModalOpen = true;
   }
