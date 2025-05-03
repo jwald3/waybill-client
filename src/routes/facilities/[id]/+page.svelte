@@ -46,8 +46,8 @@
             <div class="id-number">{facility.name}</div>
           </div>
           
-          <div class="header-controls">
-            <button class="edit-control">
+          <div class="header-controls button-group">
+            <button class="button primary">
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -228,26 +228,6 @@
     color: var(--theme-color);
     font-size: var(--font-size-xl);
     font-weight: 600;
-  }
-
-  .edit-control {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: rgb(99, 102, 241);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .edit-control:hover {
-    background: rgb(79, 82, 231);
   }
 
   @media (max-width: 480px) {

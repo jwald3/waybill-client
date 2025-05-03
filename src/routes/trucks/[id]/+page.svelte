@@ -97,22 +97,22 @@
             <div class="id-number">{truck.make} {truck.model}</div>
           </div>
           
-          <div class="header-controls">
-            <a href="/maintenance/new?truck={truck.id}" class="action-button primary">
+          <div class="header-controls button-group">
+            <a href="/maintenance/new?truck={truck.id}" class="button primary">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
               </svg>
               Schedule Maintenance
             </a>
             {#if truck.status !== 'RETIRED'}
-              <button class="action-button primary" on:click={openUpdateStatus}>
+              <button class="button primary" on:click={openUpdateStatus}>
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.17-5.24l-1.1-1.1c.71-1.33.53-3.01-.59-4.13-1.38-1.38-1.38-3.61-1.38-4.99 0-1.38 1.38-1.38 3.61 0 4.99 1.12 1.12 2.8 1.31 4.13.59l1.1 1.1c.19.19.45.29.71.29.26 0 .52-.1.71-.29.39-.39.39-1.02 0-1.41z"/>
                 </svg>
                 Update Status
               </button>
             {/if}
-            <button class="edit-control">
+            <button class="button secondary">
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
@@ -302,70 +302,6 @@
     color: var(--theme-color);
     font-size: var(--font-size-xl);
     font-weight: 600;
-  }
-
-  .edit-control {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: rgb(99, 102, 241);
-    color: white;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .edit-control:hover {
-    background: rgb(79, 82, 231);
-  }
-
-  .header-controls {
-    display: flex;
-    gap: var(--spacing-md);
-    align-items: center;
-  }
-
-  .action-button {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-lg);
-    background: white;
-    color: var(--text-primary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  }
-
-  .action-button.primary {
-    background: rgb(99, 102, 241);
-    color: white;
-    border: none;
-  }
-
-  .action-button.primary:hover {
-    background: rgb(79, 82, 231);
-  }
-
-  @media (max-width: 480px) {
-    .header-controls {
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .header-controls button {
-      width: 100%;
-      justify-content: center;
-    }
   }
 
   .loading {

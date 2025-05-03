@@ -48,15 +48,15 @@
             <div class="id-number">{maintenance.truck.make} {maintenance.truck.model}</div>
           </div>
           
-          <div class="header-controls">
-            <button class="edit-control">
+          <div class="header-controls button-group">
+            <button class="button secondary">
               <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
               Edit Record
             </button>
-            <a href={`/trucks/${maintenance.truck.id}`} class="action-button primary">
+            <a href={`/trucks/${maintenance.truck.id}`} class="button primary">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
                 <path d="M18 18.5v-1c0-.8-.7-1.5-1.5-1.5H13v6h1.5v-2h1.1l.9 2H18l-.9-2.1c.5-.3.9-.8.9-1.4zm-3 0v-1h1.5v1H15zm-5.5-1H7c-.8 0-1.5.7-1.5 1.5v3c0 .8.7 1.5 1.5 1.5h2.5c.8 0 1.5-.7 1.5-1.5v-3c0-.8-.7-1.5-1.5-1.5zm0 4.5H7v-3h2.5v3zm11-9.5h-1.8l1.8-2v2zm.2-5H15v3h-2V5H4v14h6v2h8v-2h2v-2h2V7.5c0-.8-.7-1.5-1.5-1.5zM18 15h-2v2h2v-2z"/>
               </svg>
