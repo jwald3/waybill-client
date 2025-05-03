@@ -64,12 +64,6 @@
           </button>
         </div>
       </div>
-
-      {#if $page.error?.message}
-        <div class="error-details">
-          <p>{$page.error.message}</p>
-        </div>
-      {/if}
     </div>
   </div>
 </Layout>
@@ -223,15 +217,6 @@
     height: 20px;
     display: flex;
     align-items: center;
-  }
-
-  .error-details {
-    margin-top: var(--spacing-xl);
-    padding: var(--spacing-lg);
-    background: var(--bg-primary);
-    border-radius: var(--radius-lg);
-    color: var(--text-secondary);
-    font-size: var(--font-size-sm);
   }
 
   @keyframes driveAndBounce {
