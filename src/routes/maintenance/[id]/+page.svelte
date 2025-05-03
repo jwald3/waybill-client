@@ -8,7 +8,7 @@
   let isNavExpanded = true;
   
   export let data;
-  const maintenance: MaintenanceLog = data.maintenance;
+  const maintenance: MaintenanceLog | null = data.maintenance ?? null;
 
   function formatServiceType(type: string): string {
     return type.split('_')
