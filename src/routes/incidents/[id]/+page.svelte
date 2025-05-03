@@ -9,7 +9,7 @@
   let isNavExpanded = true;
   
   export let data;
-  const incident: IncidentReport = data.incident;
+  const incident: IncidentReport | null = data.incident ?? null;
 </script>
 
 <svelte:head>

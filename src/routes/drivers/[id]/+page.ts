@@ -15,10 +15,6 @@ export const load = (async ({ params, fetch, parent }) => {
     const { token } = await parent();
 
     const customFetch: typeof fetch = (input, init) => {
-      console.log('[Custom Fetch]', {
-        url: typeof input === 'string' ? input : input instanceof Request ? input.url : input.href,
-        headers: init?.headers
-      });
       return fetch(input, {
         ...init,
         headers: {
@@ -37,7 +33,7 @@ export const load = (async ({ params, fetch, parent }) => {
       if (browser) {
         window.location.href = '/login';
       }
-      return { trip: null };
+      return { driver: null };
     }
     
     throw error(err instanceof Error && err.message.includes('404') ? 404 : 500, {
