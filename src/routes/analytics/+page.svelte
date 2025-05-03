@@ -423,26 +423,67 @@
   @media (max-width: 1200px) {
     .dashboard-grid {
       grid-template-columns: 1fr;
+      gap: var(--spacing-md);
     }
 
-    .chart-row {
+    .chart-row.has-data {
       grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .chart-container {
+      height: 300px;
     }
 
     .chart-legend {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: var(--spacing-xs);
+      width: 100%;
     }
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .overview-stats {
-      grid-template-columns: 1fr;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-sm);
+    }
+
+    .chart-container,
+    .chart-container-small {
+      height: 250px;
     }
 
     .trip-header {
       flex-direction: column;
       align-items: flex-start;
+      gap: var(--spacing-xs);
+    }
+
+    .trip-stats {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .overview-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .chart-container,
+    .chart-container-small {
+      height: 200px;
+    }
+
+    .trip-item,
+    .maintenance-item,
+    .incident-item {
+      padding: var(--spacing-sm);
+    }
+
+    .chart-legend {
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 

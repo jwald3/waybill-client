@@ -36,11 +36,10 @@
 
 /* Reusable Classes */
 .page {
-  padding: 2rem;
+  padding: var(--spacing-lg);
   max-width: 1400px;
   margin: 0 auto;
 }
-
 
 .page-title {
   font-size: var(--font-size-4xl);
@@ -67,6 +66,7 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
+  padding: 0;
 }
 
 .controls {
@@ -311,15 +311,20 @@
   color: var(--text-primary);
 }
 
-
-
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  :root {
-    --spacing-lg: 1rem;
-    --spacing-xl: 1.5rem;
-    --spacing-2xl: 2rem;
-    --font-size-4xl: 2rem;
+  .page {
+    padding: var(--spacing-md);
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-xl);
   }
 
   .record-actions {
@@ -329,16 +334,6 @@
   .record-details {
     grid-template-columns: 1fr;
     gap: 1rem;
-  }
-
-  .page {
-    padding: 1rem;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-md);
-    padding: 0 var(--spacing-md);
   }
 
   .controls {
@@ -469,8 +464,13 @@
 
 /* Add breakpoint for very small screens */
 @media (max-width: 480px) {
+  .page {
+    padding: var(--spacing-sm);
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
   }
 }
 
