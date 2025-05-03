@@ -18,7 +18,7 @@
   let isNavExpanded = true;
   
   export let data;
-  let trip: Trip = data.trip;
+  let trip: Trip | null = data.trip;
 
   let isUpdateStatusModalOpen = false;
   let currentTripForUpdate: {
@@ -61,8 +61,8 @@
 
   function openUpdateStatus() {
     currentTripForUpdate = {
-      id: trip.id,
-      status: trip.status as TripStatus
+      id: trip?.id || '',
+      status: trip?.status as TripStatus || 'SCHEDULED'
     };
     isUpdateStatusModalOpen = true;
   }
@@ -118,7 +118,7 @@
   }
 
   async function handleAddNote(noteContent: string) {
-    const updatedTrip = await addTripNote(trip.id, {
+    const updatedTrip = await addTripNote(trip?.id || '', {
       content: noteContent.trim()
     });
 

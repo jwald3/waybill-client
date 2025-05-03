@@ -8,9 +8,9 @@
 	let { data, children } = $props();
 	
 	onMount(() => {
-		const publicPaths = ['/login', '/register'];
-		const isPublicPath = publicPaths.some(path => window.location.pathname.includes(path));
-		if (!data.token && !isPublicPath) {
+		if (!data.token && !window.location.pathname.includes('/login')) {
+
+
 			goto('/login');
 		}
 	});
