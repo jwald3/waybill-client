@@ -1,5 +1,5 @@
-export const API_BASE_URL = '/api/v1'; 
-// export const API_BASE_URL = 'http://localhost:8000/api/v1';  // Remove the conditional, always use the proxy path
+// export const API_BASE_URL = '/api/v1'; 
+export const API_BASE_URL = 'http://localhost:8000/api/v1';  // Remove the conditional, always use the proxy path
 
 export interface ApiResponse<T> {
   items: T[];

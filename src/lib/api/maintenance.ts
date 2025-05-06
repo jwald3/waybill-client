@@ -39,8 +39,14 @@ export async function getMaintenanceLog(id: string, fetchFn: typeof fetch = fetc
   }
 }
 
-export async function getMaintenanceLogs(fetchFn: typeof fetch = fetch): Promise<ApiResponse<MaintenanceLog>> {
-  return fetchApi<MaintenanceLog>('/maintenance-logs', fetchFn);
+export async function getMaintenanceLogs(
+  fetchFn: typeof fetch = fetch,
+  truckId?: string
+): Promise<ApiResponse<MaintenanceLog>> {
+  const endpoint = truckId 
+    ? `/maintenance-logs?truckID=${truckId}`
+    : '/maintenance-logs';
+  return fetchApi<MaintenanceLog>(endpoint, fetchFn);
 }
 
 export async function createMaintenanceLog(

@@ -208,6 +208,53 @@
             </div>
           </div>
         </Card>
+
+        <Card title="Maintenance History" icon={icons.maintenance}>
+          {#if data.maintenanceLogs.length === 0}
+            <div class="empty-state">
+              <p>No maintenance records found for this truck.</p>
+            </div>
+          {:else}
+            <div class="maintenance-logs">
+              {#each data.maintenanceLogs as log}
+                <div class="maintenance-log">
+                  <div class="log-header">
+                    <div class="log-type">
+                      <span class="label">Service Type</span>
+                      <span class="value highlight">{log.service_type.replace('_', ' ')}</span>
+                    </div>
+                    <div class="log-date">
+                      <span class="label">Date</span>
+                      <span class="value">{formatDate(log.date)}</span>
+                    </div>
+                    <div class="log-cost">
+                      <span class="label">Cost</span>
+                      <span class="value">${log.cost.toLocaleString()}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="log-details">
+                    <div class="log-mechanic">
+                      <span class="label">Mechanic</span>
+                      <span class="value">{log.mechanic}</span>
+                    </div>
+                    <div class="log-location">
+                      <span class="label">Location</span>
+                      <span class="value">{log.location}</span>
+                    </div>
+                  </div>
+                  
+                  {#if log.notes}
+                    <div class="log-notes">
+                      <span class="label">Notes</span>
+                      <p class="value">{log.notes}</p>
+                    </div>
+                  {/if}
+                </div>
+              {/each}
+            </div>
+          {/if}
+        </Card>
       </div>
     {/if}
   </div>
@@ -307,6 +354,44 @@
   .loading {
     text-align: center;
     padding: 2rem;
+    color: var(--text-secondary);
+  }
+
+  .maintenance-logs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .maintenance-log {
+    padding: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+  }
+
+  .log-header {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .log-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .log-notes {
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-xl);
     color: var(--text-secondary);
   }
 </style> 
