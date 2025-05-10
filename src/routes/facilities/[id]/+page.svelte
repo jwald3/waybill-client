@@ -4,11 +4,37 @@
   import { icons } from '$lib/icons';
   import type { Facility } from '$lib/api/facilities';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
+  import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
   
   let isNavExpanded = true;
   
   export let data;
   const facility: Facility | null = data.facility ?? null;
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.facilities },
+    { id: 'inventory', label: 'Inventory', icon: icons.box },
+    { id: 'maintenance', label: 'Maintenance', icon: icons.maintenance },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
+
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -72,82 +98,104 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Facility Information" icon={icons.facilities}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Facility Name</span>
-                <span class="resource-page-detail-value highlight">{facility.name}</span>
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Facility Information" icon={icons.facilities}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Facility Name</span>
+                    <span class="resource-page-detail-value highlight">{facility.name}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Facility Type</span>
+                    <span class="resource-page-detail-value">Type {facility.type}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Phone</span>
+                    <span class="resource-page-detail-value mono">{facility.contact_info.phone}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Email</span>
+                    <span class="resource-page-detail-value mono">{facility.contact_info.email}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Facility Type</span>
-                <span class="resource-page-detail-value">Type {facility.type}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Phone</span>
-                <span class="resource-page-detail-value mono">{facility.contact_info.phone}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Email</span>
-                <span class="resource-page-detail-value mono">{facility.contact_info.email}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Location Details" icon={icons.routes}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item full-width">
-                <span class="resource-page-detail-label">Street Address</span>
-                <span class="resource-page-detail-value">{facility.address.street}</span>
+            <Card title="Location Details" icon={icons.routes}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item full-width">
+                    <span class="resource-page-detail-label">Street Address</span>
+                    <span class="resource-page-detail-value">{facility.address.street}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">City</span>
+                    <span class="resource-page-detail-value">{facility.address.city}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">State</span>
+                    <span class="resource-page-detail-value">{facility.address.state}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">ZIP Code</span>
+                    <span class="resource-page-detail-value mono">{facility.address.zip}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">City</span>
-                <span class="resource-page-detail-value">{facility.address.city}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">State</span>
-                <span class="resource-page-detail-value">{facility.address.state}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">ZIP Code</span>
-                <span class="resource-page-detail-value mono">{facility.address.zip}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Available Services" icon={icons.maintenance}>
-          <div class="resource-page-detail-group">
-            <div class="services-list">
-              {#each facility.services_available as service}
-                <span class="service-badge">{service}</span>
-              {/each}
-            </div>
-          </div>
-        </Card>
+            <Card title="Available Services" icon={icons.maintenance}>
+              <div class="resource-page-detail-group">
+                <div class="services-list">
+                  {#each facility.services_available as service}
+                    <span class="service-badge">{service}</span>
+                  {/each}
+                </div>
+              </div>
+            </Card>
 
-        <Card title="Record Details" icon={icons.chart}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Created</span>
-                <span class="resource-page-detail-value">{formatDate(facility.created_at)}</span>
+            <Card title="Record Details" icon={icons.chart}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Created</span>
+                    <span class="resource-page-detail-value">{formatDate(facility.created_at)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Last Updated</span>
+                    <span class="resource-page-detail-value">{formatDate(facility.updated_at)}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Last Updated</span>
-                <span class="resource-page-detail-value">{formatDate(facility.updated_at)}</span>
-              </div>
+            </Card>
+          </div>
+        {:else if activeTab === 'inventory'}
+          <div class="inventory-section">
+            <div class="empty-state">
+              <p>Inventory management coming soon.</p>
             </div>
           </div>
-        </Card>
-      </div>
+        {:else if activeTab === 'maintenance'}
+          <div class="maintenance-section">
+            <div class="empty-state">
+              <p>Facility maintenance records coming soon.</p>
+            </div>
+          </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
+            </div>
+          </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 </Layout>
@@ -255,5 +303,20 @@
     border-radius: 8px;
     font-size: 0.875rem;
     font-weight: 500;
+  }
+
+  .inventory-section,
+  .maintenance-section,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
   }
 </style> 
