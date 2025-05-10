@@ -13,6 +13,7 @@
   } from '$lib/api/trucks';
   import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
+  import TabGroup from '$lib/components/TabGroup.svelte';
   
   let isNavExpanded = true;
   
@@ -20,6 +21,16 @@
   let truck: Truck | null = data.truck ?? null;
 
   let isUpdateStatusModalOpen = false;
+
+  // Add tab configuration
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.truck },
+    { id: 'maintenance', label: 'Maintenance History', icon: icons.maintenance },
+    { id: 'trips', label: 'Trip History', icon: icons.trips },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
 
   function openUpdateStatus() {
     if (!truck || truck.status === 'RETIRED') {
@@ -137,125 +148,141 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Vehicle Information" icon={icons.truck}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Make & Model</span>
-                <span class="resource-page-detail-value highlight">{truck.make} {truck.model}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Year</span>
-                <span class="resource-page-detail-value">{truck.year}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">VIN</span>
-                <span class="resource-page-detail-value mono">{truck.vin}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">License Plate</span>
-                <span class="resource-page-detail-value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Specifications" icon={icons.settings}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Trailer Type</span>
-                <span class="resource-page-detail-value highlight">{truck.trailer_type.replace('_', ' ')}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Capacity</span>
-                <span class="resource-page-detail-value">{truck.capacity_tons} tons</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Fuel Type</span>
-                <span class="resource-page-detail-value">{truck.fuel_type}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Usage & Maintenance" icon={icons.chart}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Current Mileage</span>
-                <span class="resource-page-detail-value highlight">{formatNumber(truck.mileage)} miles</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Last Maintenance</span>
-                <span class="resource-page-detail-value">{formatDate(truck.last_maintenance)}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Added to Fleet</span>
-                <span class="resource-page-detail-value">{formatDate(truck.created_at)}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Last Updated</span>
-                <span class="resource-page-detail-value">{formatDate(truck.updated_at)}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Maintenance History" icon={icons.maintenance}>
-          {#if data.maintenanceLogs.length === 0}
-            <div class="empty-state">
-              <p>No maintenance records found for this truck.</p>
-            </div>
-          {:else}
-            <div class="maintenance-logs">
-              {#each data.maintenanceLogs as log}
-                <div class="maintenance-log">
-                  <div class="log-header">
-                    <div class="log-type">
-                      <span class="label">Service Type</span>
-                      <span class="value highlight">{log.service_type.replace('_', ' ')}</span>
-                    </div>
-                    <div class="log-date">
-                      <span class="label">Date</span>
-                      <span class="value">{formatDate(log.date)}</span>
-                    </div>
-                    <div class="log-cost">
-                      <span class="label">Cost</span>
-                      <span class="value">${log.cost.toLocaleString()}</span>
-                    </div>
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Vehicle Information" icon={icons.truck}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Make & Model</span>
+                    <span class="resource-page-detail-value highlight">{truck.make} {truck.model}</span>
                   </div>
-                  
-                  <div class="log-details">
-                    <div class="log-mechanic">
-                      <span class="label">Mechanic</span>
-                      <span class="value">{log.mechanic}</span>
-                    </div>
-                    <div class="log-location">
-                      <span class="label">Location</span>
-                      <span class="value">{log.location}</span>
-                    </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Year</span>
+                    <span class="resource-page-detail-value">{truck.year}</span>
                   </div>
-                  
-                  {#if log.notes}
-                    <div class="log-notes">
-                      <span class="label">Notes</span>
-                      <p class="value">{log.notes}</p>
-                    </div>
-                  {/if}
                 </div>
-              {/each}
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">VIN</span>
+                    <span class="resource-page-detail-value mono">{truck.vin}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">License Plate</span>
+                    <span class="resource-page-detail-value mono">{truck.license_plate.number} <span class="state">({truck.license_plate.state})</span></span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card title="Specifications" icon={icons.settings}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Trailer Type</span>
+                    <span class="resource-page-detail-value highlight">{truck.trailer_type.replace('_', ' ')}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Capacity</span>
+                    <span class="resource-page-detail-value">{truck.capacity_tons} tons</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Fuel Type</span>
+                    <span class="resource-page-detail-value">{truck.fuel_type}</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <Card title="Usage & Maintenance" icon={icons.chart}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Current Mileage</span>
+                    <span class="resource-page-detail-value highlight">{formatNumber(truck.mileage)} miles</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Last Maintenance</span>
+                    <span class="resource-page-detail-value">{formatDate(truck.last_maintenance)}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Added to Fleet</span>
+                    <span class="resource-page-detail-value">{formatDate(truck.created_at)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Last Updated</span>
+                    <span class="resource-page-detail-value">{formatDate(truck.updated_at)}</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+        {:else if activeTab === 'maintenance'}
+          <div class="maintenance-history">
+            {#if data.maintenanceLogs.length === 0}
+              <div class="empty-state">
+                <p>No maintenance records found for this truck.</p>
+              </div>
+            {:else}
+              <div class="maintenance-logs">
+                {#each data.maintenanceLogs as log}
+                  <div class="maintenance-log">
+                    <div class="log-header">
+                      <div class="log-type">
+                        <span class="label">Service Type</span>
+                        <span class="value highlight">{log.service_type.replace('_', ' ')}</span>
+                      </div>
+                      <div class="log-date">
+                        <span class="label">Date</span>
+                        <span class="value">{formatDate(log.date)}</span>
+                      </div>
+                      <div class="log-cost">
+                        <span class="label">Cost</span>
+                        <span class="value">${log.cost.toLocaleString()}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="log-details">
+                      <div class="log-mechanic">
+                        <span class="label">Mechanic</span>
+                        <span class="value">{log.mechanic}</span>
+                      </div>
+                      <div class="log-location">
+                        <span class="label">Location</span>
+                        <span class="value">{log.location}</span>
+                      </div>
+                    </div>
+                    
+                    {#if log.notes}
+                      <div class="log-notes">
+                        <span class="label">Notes</span>
+                        <p class="value">{log.notes}</p>
+                      </div>
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            {/if}
+          </div>
+        {:else if activeTab === 'trips'}
+          <div class="trips-history">
+            <div class="empty-state">
+              <p>Trip history coming soon.</p>
             </div>
-          {/if}
-        </Card>
-      </div>
+          </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
+            </div>
+          </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 </Layout>
@@ -391,7 +418,16 @@
 
   .empty-state {
     text-align: center;
-    padding: var(--spacing-xl);
+    padding: var(--spacing-2xl);
     color: var(--text-secondary);
+  }
+
+  .maintenance-history,
+  .trips-history,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
   }
 </style> 
