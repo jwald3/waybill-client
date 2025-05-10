@@ -14,7 +14,11 @@
   import UpdateStatusModal from '$lib/components/UpdateStatusModal.svelte';
   import AddNoteModal from '$lib/components/AddNoteModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
-  
+  import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
+
   let isNavExpanded = true;
   
   export let data;
@@ -27,6 +31,30 @@
   } | null = null;
 
   let isAddNoteModalOpen = false;
+
+  // Add tab configuration
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.route },
+    { id: 'cargo', label: 'Cargo Details', icon: icons.box },
+    { id: 'notes', label: 'Trip Notes', icon: icons.notes },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
+  
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  // Update URL when tab changes
+  $: if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -185,119 +213,144 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Schedule Information" icon={icons.calendar}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Departure (Scheduled)</span>
-                <span class="resource-page-detail-value">{formatDate(trip.departure_time.scheduled)}</span>
-                {#if trip.departure_time.actual}
-                  <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
-                {/if}
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Schedule Information" icon={icons.calendar}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Departure (Scheduled)</span>
+                    <span class="resource-page-detail-value">{formatDate(trip.departure_time.scheduled)}</span>
+                    {#if trip.departure_time.actual}
+                      <span class="sub-value">Actual: {formatDate(trip.departure_time.actual)}</span>
+                    {/if}
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Arrival (Scheduled)</span>
+                    <span class="resource-page-detail-value">{formatDate(trip.arrival_time.scheduled)}</span>
+                    {#if trip.arrival_time.actual}
+                      <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
+                    {/if}
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Arrival (Scheduled)</span>
-                <span class="resource-page-detail-value">{formatDate(trip.arrival_time.scheduled)}</span>
-                {#if trip.arrival_time.actual}
-                  <span class="sub-value">Actual: {formatDate(trip.arrival_time.actual)}</span>
-                {/if}
+            </Card>
+
+            <Card title="Trip Resources" icon={icons.truck}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Driver</span>
+                    {#if trip.driver}
+                      <a 
+                        href="/drivers/{trip.driver.id}" 
+                        class="resource-page-detail-value link"
+                      >
+                        {trip.driver.first_name} {trip.driver.last_name}
+                      </a>
+                      <span class="sub-value">Employee #{trip.driver.id}</span>
+                    {:else}
+                      <span class="resource-page-detail-value">No driver assigned</span>
+                    {/if}
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Truck</span>
+                    {#if trip.truck}
+                      <a 
+                        href="/trucks/{trip.truck.id}" 
+                        class="resource-page-detail-value link"
+                      >
+                        Unit #{trip.truck.id}
+                      </a>
+                      <span class="sub-value">{trip.truck.make} {trip.truck.model}</span>
+                    {:else}
+                      <span class="resource-page-detail-value">No truck assigned</span>
+                    {/if}
+                  </div>
+                </div>
+
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Origin Facility</span>
+                    {#if trip.start_facility}
+                      <a 
+                        href="/facilities/{trip.start_facility.id}" 
+                        class="resource-page-detail-value link"
+                      >
+                        {trip.start_facility.name}
+                      </a>
+                      <span class="sub-value">{trip.start_facility.address.city}, {trip.start_facility.address.state}</span>
+                    {:else}
+                      <span class="resource-page-detail-value">No origin facility specified</span>
+                    {/if}
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Destination Facility</span>
+                    {#if trip.end_facility}
+                      <a 
+                        href="/facilities/{trip.end_facility.id}" 
+                        class="resource-page-detail-value link"
+                      >
+                        {trip.end_facility.name}
+                      </a>
+                      <span class="sub-value">{trip.end_facility.address.city}, {trip.end_facility.address.state}</span>
+                    {:else}
+                      <span class="resource-page-detail-value">No destination facility specified</span>
+                    {/if}
+                  </div>
+                </div>
               </div>
-            </div>
+            </Card>
+
+            <Card title="Record Details" icon={icons.chart}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Created</span>
+                    <span class="resource-page-detail-value">{formatDate(trip.created_at)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Last Updated</span>
+                    <span class="resource-page-detail-value">{formatDate(trip.updated_at)}</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
-        </Card>
-
-        <Card title="Trip Resources" icon={icons.truck}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Driver</span>
-                {#if trip.driver}
-                  <a 
-                    href="/drivers/{trip.driver.id}" 
-                    class="resource-page-detail-value link"
-                  >
-                    {trip.driver.first_name} {trip.driver.last_name}
-                  </a>
-                  <span class="sub-value">Employee #{trip.driver.id}</span>
-                {:else}
-                  <span class="resource-page-detail-value">No driver assigned</span>
+        {:else if activeTab === 'cargo'}
+          <div class="cargo-details">
+            <Card title="Cargo Information" icon={icons.box}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Description</span>
+                    <span class="resource-page-detail-value">{trip.cargo.description}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Weight</span>
+                    <span class="resource-page-detail-value">{formatNumber(trip.cargo.weight)} lbs</span>
+                  </div>
+                </div>
+                {#if trip.cargo.hazmat}
+                  <div class="hazmat-warning">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                      <path d="M12 2L1 21h22M12 6l7.53 13H4.47M11 10v4h2v-4m-2 6v2h2v-2"/>
+                    </svg>
+                    Hazardous Materials
+                  </div>
                 {/if}
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Truck</span>
-                {#if trip.truck}
-                  <a 
-                    href="/trucks/{trip.truck.id}" 
-                    class="resource-page-detail-value link"
-                  >
-                    Unit #{trip.truck.id}
-                  </a>
-                  <span class="sub-value">{trip.truck.make} {trip.truck.model}</span>
-                {:else}
-                  <span class="resource-page-detail-value">No truck assigned</span>
-                {/if}
-              </div>
-            </div>
-
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Origin Facility</span>
-                {#if trip.start_facility}
-                  <a 
-                    href="/facilities/{trip.start_facility.id}" 
-                    class="resource-page-detail-value link"
-                  >
-                    {trip.start_facility.name}
-                  </a>
-                  <span class="sub-value">{trip.start_facility.address.city}, {trip.start_facility.address.state}</span>
-                {:else}
-                  <span class="resource-page-detail-value">No origin facility specified</span>
-                {/if}
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Destination Facility</span>
-                {#if trip.end_facility}
-                  <a 
-                    href="/facilities/{trip.end_facility.id}" 
-                    class="resource-page-detail-value link"
-                  >
-                    {trip.end_facility.name}
-                  </a>
-                  <span class="sub-value">{trip.end_facility.address.city}, {trip.end_facility.address.state}</span>
-                {:else}
-                  <span class="resource-page-detail-value">No destination facility specified</span>
-                {/if}
-              </div>
-            </div>
+            </Card>
           </div>
-        </Card>
-
-        <Card title="Cargo Details" icon={icons.box}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Description</span>
-                <span class="resource-page-detail-value">{trip.cargo.description}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Weight</span>
-                <span class="resource-page-detail-value">{formatNumber(trip.cargo.weight)} lbs</span>
-              </div>
+        {:else if activeTab === 'notes'}
+          <div class="notes-section">
+            <div class="notes-header">
+              <h2>Trip Notes</h2>
+              <button class="button secondary" on:click={openAddNote}>
+                Add Note
+              </button>
             </div>
-            {#if trip.cargo.hazmat}
-              <div class="hazmat-warning">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                  <path d="M12 2L1 21h22M12 6l7.53 13H4.47M11 10v4h2v-4m-2 6v2h2v-2"/>
-                </svg>
-                Hazardous Materials
-              </div>
-            {/if}
-          </div>
-        </Card>
-
-        <Card title="Trip Notes" icon={icons.notes}>
-          <div class="resource-page-detail-group">
             <div class="notes-list">
               {#each trip.notes as note}
                 <div class="note">
@@ -309,23 +362,14 @@
               {/each}
             </div>
           </div>
-        </Card>
-
-        <Card title="Record Details" icon={icons.chart}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Created</span>
-                <span class="resource-page-detail-value">{formatDate(trip.created_at)}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Last Updated</span>
-                <span class="resource-page-detail-value">{formatDate(trip.updated_at)}</span>
-              </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
             </div>
           </div>
-        </Card>
-      </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 
@@ -507,5 +551,39 @@
 
   .link:hover {
     text-decoration: underline;
+  }
+
+  .notes-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .notes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .notes-header h2 {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .cargo-details,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
   }
 </style> 
