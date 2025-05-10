@@ -251,7 +251,10 @@
             {:else}
               <div class="maintenance-logs">
                 {#each data.maintenanceLogs as log}
-                  <div class="maintenance-log">
+                  <a 
+                    href="/maintenance/{log.id}" 
+                    class="maintenance-log"
+                  >
                     <div class="log-header">
                       <div class="log-type">
                         <span class="label">Service Type</span>
@@ -284,7 +287,7 @@
                         <p class="value">{log.notes}</p>
                       </div>
                     {/if}
-                  </div>
+                  </a>
                 {/each}
               </div>
             {/if}
@@ -415,6 +418,15 @@
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-all);
+    display: block;
+  }
+
+  .maintenance-log:hover {
+    border-color: var(--theme-color);
+    transform: translateY(-1px);
   }
 
   .log-header {
