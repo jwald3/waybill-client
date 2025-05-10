@@ -1,11 +1,12 @@
 import { fetchApi, type ApiResponse, fetchSingleItem, mutateApi } from './client';
 import type { Truck } from './trucks';
+import type { MaintenanceServiceType } from '$lib/types/maintenance';
 
 export interface MaintenanceLog {
   id: string;
   truck: Truck;
   date: string;
-  service_type: 'ROUTINE_MAINTENANCE' | 'REPAIR' | 'EMERGENCY';
+  service_type: MaintenanceServiceType;
   cost: number;
   notes: string;
   mechanic: string;
@@ -17,7 +18,7 @@ export interface MaintenanceLog {
 export interface CreateMaintenanceLogPayload {
   truck_id: string;
   date: string;
-  service_type: 'ROUTINE_MAINTENANCE' | 'REPAIR' | 'EMERGENCY';
+  service_type: MaintenanceServiceType;
   cost: number;
   notes: string;
   mechanic: string;
@@ -57,6 +58,10 @@ export async function createMaintenanceLog(
     return await mutateApi<MaintenanceLog>('/maintenance-logs', 'POST', payload, fetchFn);
   } catch (err) {
     console.error('Error creating maintenance log:', err);
+
+    console.log(payload);
+
+
     throw err;
   }
 } 

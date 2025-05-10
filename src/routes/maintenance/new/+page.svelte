@@ -7,6 +7,7 @@
   import type { Truck } from '$lib/api/trucks';
   import { createMaintenanceLog } from '$lib/api/maintenance';
   import { page } from '$app/stores';
+  import { MAINTENANCE_SERVICE_TYPES } from '$lib/types/maintenance';
   
   // Get truck_id from URL query parameter
   $: selectedTruckId = $page.url.searchParams.get('truck') || '';
@@ -24,11 +25,7 @@
   // Load trucks from API
   let trucksPromise = getTrucks();
 
-  const serviceTypes = [
-    'ROUTINE_MAINTENANCE',
-    'REPAIR',
-    'EMERGENCY'
-  ] as const;
+  const serviceTypes = MAINTENANCE_SERVICE_TYPES;
 
   function formatTruckLabel(truck: Truck): string {
     return `${truck.truck_number} - ${truck.year} ${truck.make} ${truck.model}`;
@@ -45,6 +42,7 @@
 
   async function handleSubmit() {
     try {
+      console.log(formData);
       await createMaintenanceLog(formData);
       await goto('/maintenance');
     } catch (error) {
