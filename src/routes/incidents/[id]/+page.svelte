@@ -5,11 +5,37 @@
   import { icons } from '$lib/icons';
   import { formatCurrency, formatDate } from '$lib/utils/format';
   import type { IncidentReport } from '$lib/api/incidents';
+  import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
   
   let isNavExpanded = true;
   
   export let data;
   const incident: IncidentReport | null = data.incident ?? null;
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.incidents },
+    { id: 'investigation', label: 'Investigation', icon: icons.chart },
+    { id: 'repairs', label: 'Repairs', icon: icons.maintenance },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
+
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 </script>
 
 <svelte:head>
@@ -67,105 +93,127 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Driver Information" icon={icons.drivers}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Driver Name</span>
-                <a href="/drivers/{incident.driver.id}" class="resource-page-detail-value highlight link">
-                  {incident.driver.first_name} {incident.driver.last_name}
-                </a>
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Driver Information" icon={icons.drivers}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Driver Name</span>
+                    <a href="/drivers/{incident.driver.id}" class="resource-page-detail-value highlight link">
+                      {incident.driver.first_name} {incident.driver.last_name}
+                    </a>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">License Number</span>
+                    <span class="resource-page-detail-value mono">{incident.driver.license_number}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Phone</span>
+                    <span class="resource-page-detail-value mono">{incident.driver.phone}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Email</span>
+                    <span class="resource-page-detail-value mono">{incident.driver.email}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">License Number</span>
-                <span class="resource-page-detail-value mono">{incident.driver.license_number}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Phone</span>
-                <span class="resource-page-detail-value mono">{incident.driver.phone}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Email</span>
-                <span class="resource-page-detail-value mono">{incident.driver.email}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Vehicle Details" icon={icons.truck}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Truck Number</span>
-                <a href="/trucks/{incident.truck.id}" class="resource-page-detail-value highlight link">
-                  {incident.truck.truck_number}
-                </a>
+            <Card title="Vehicle Details" icon={icons.truck}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Truck Number</span>
+                    <a href="/trucks/{incident.truck.id}" class="resource-page-detail-value highlight link">
+                      {incident.truck.truck_number}
+                    </a>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Vehicle</span>
+                    <span class="resource-page-detail-value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">VIN</span>
+                    <span class="resource-page-detail-value mono">{incident.truck.vin}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">License Plate</span>
+                    <span class="resource-page-detail-value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Vehicle</span>
-                <span class="resource-page-detail-value">{incident.truck.year} {incident.truck.make} {incident.truck.model}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">VIN</span>
-                <span class="resource-page-detail-value mono">{incident.truck.vin}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">License Plate</span>
-                <span class="resource-page-detail-value">{incident.truck.license_plate.number} ({incident.truck.license_plate.state})</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Incident Details" icon={icons.incidents}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item full-width">
-                <span class="resource-page-detail-label">Location</span>
-                <span class="resource-page-detail-value">{incident.location}</span>
+            <Card title="Incident Details" icon={icons.incidents}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item full-width">
+                    <span class="resource-page-detail-label">Location</span>
+                    <span class="resource-page-detail-value">{incident.location}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item full-width">
+                    <span class="resource-page-detail-label">Description</span>
+                    <p class="resource-page-detail-value description">{incident.description}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item full-width">
-                <span class="resource-page-detail-label">Description</span>
-                <p class="resource-page-detail-value description">{incident.description}</p>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Trip Information" icon={icons.routes}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Trip Number</span>
-                <a href="/trips/{incident.trip.id}" class="resource-page-detail-value mono link">
-                  {incident.trip.trip_number}
-                </a>
+            <Card title="Trip Information" icon={icons.routes}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Trip Number</span>
+                    <a href="/trips/{incident.trip.id}" class="resource-page-detail-value mono link">
+                      {incident.trip.trip_number}
+                    </a>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Trip Status</span>
+                    <StatusBadge status={incident.trip.status} type="trip" />
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Scheduled Departure</span>
+                    <span class="resource-page-detail-value">{formatDate(incident.trip.departure_time.scheduled)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Scheduled Arrival</span>
+                    <span class="resource-page-detail-value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Trip Status</span>
-                <StatusBadge status={incident.trip.status} type="trip" />
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Scheduled Departure</span>
-                <span class="resource-page-detail-value">{formatDate(incident.trip.departure_time.scheduled)}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Scheduled Arrival</span>
-                <span class="resource-page-detail-value">{formatDate(incident.trip.arrival_time.scheduled)}</span>
-              </div>
+            </Card>
+          </div>
+        {:else if activeTab === 'investigation'}
+          <div class="investigation-section">
+            <div class="empty-state">
+              <p>Investigation details coming soon.</p>
             </div>
           </div>
-        </Card>
-      </div>
+        {:else if activeTab === 'repairs'}
+          <div class="repairs-section">
+            <div class="empty-state">
+              <p>Repair records coming soon.</p>
+            </div>
+          </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
+            </div>
+          </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 </Layout>
@@ -360,5 +408,20 @@
   .link:hover {
     color: var(--theme-color-dark);
     text-decoration: underline;
+  }
+
+  .investigation-section,
+  .repairs-section,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
   }
 </style> 
