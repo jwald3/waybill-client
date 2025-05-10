@@ -104,6 +104,10 @@
     }
     return age;
   }
+
+  function formatNumber(num: number): string {
+    return new Intl.NumberFormat('en-US').format(num);
+  }
 </script>
 
 <svelte:head>
@@ -239,9 +243,45 @@
           </div>
         {:else if activeTab === 'trips'}
           <div class="trips-history">
-            <div class="empty-state">
-              <p>Trip history coming soon.</p>
-            </div>
+            {#if !data.trips?.length}
+              <div class="empty-state">
+                <p>No trips found for this driver.</p>
+              </div>
+            {:else}
+              <div class="trip-logs">
+                {#each data.trips as trip}
+                  <a href="/trips/{trip.id}" class="trip-log">
+                    <div class="trip-header">
+                      <div class="trip-number">
+                        <span class="label">Trip Number</span>
+                        <span class="value">{trip.trip_number}</span>
+                      </div>
+                      <div class="trip-date">
+                        <span class="label">Scheduled Departure</span>
+                        <span class="value">{formatDate(trip.departure_time.scheduled)}</span>
+                      </div>
+                      <StatusBadge status={trip.status} type="trip" />
+                    </div>
+
+                    <div class="trip-route">
+                      <span class="label">Route</span>
+                      <span class="value">{trip.start_facility.name} → {trip.end_facility.name}</span>
+                    </div>
+
+                    <div class="trip-metrics">
+                      <div class="metric">
+                        <span class="label">Distance</span>
+                        <span class="value">{formatNumber(trip.distance_miles)} miles</span>
+                      </div>
+                      <div class="metric">
+                        <span class="label">Fuel Usage</span>
+                        <span class="value">{formatNumber(trip.fuel_usage_gallons)} gal</span>
+                      </div>
+                    </div>
+                  </a>
+                {/each}
+              </div>
+            {/if}
           </div>
         {:else if activeTab === 'documents'}
           <div class="documents">
@@ -382,5 +422,49 @@
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .trip-logs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+
+  .trip-log {
+    padding: var(--spacing-lg);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-all);
+    display: block;
+  }
+
+  .trip-log:hover {
+    border-color: var(--theme-color);
+    transform: translateY(-1px);
+  }
+
+  .trip-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .trip-number {
+    flex: 1;
+  }
+
+  .trip-route {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .trip-metrics {
+    display: flex;
+    gap: var(--spacing-xl);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
   }
 </style> 

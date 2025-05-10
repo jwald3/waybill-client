@@ -77,12 +77,24 @@ interface FinishTripRequest {
 
 export async function getTrips(
   fetchFn: typeof fetch = fetch,
-  truckId?: string
+  truckId?: string,
+  driverId?: string
 ): Promise<ApiResponse<Trip>> {
   try {
-    const endpoint = truckId 
-      ? `/trips?truckID=${truckId}`
-      : '/trips';
+    let endpoint = '/trips';
+    const params = new URLSearchParams();
+    
+    if (truckId) {
+      params.append('truckID', truckId);
+    }
+    if (driverId) {
+      params.append('driverID', driverId);
+    }
+    
+    const queryString = params.toString();
+    if (queryString) {
+      endpoint += `?${queryString}`;
+    }
       
     const response = await fetchApi<Trip>(endpoint, fetchFn);
     return response;

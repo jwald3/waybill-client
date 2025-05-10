@@ -1,6 +1,7 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { getDriver } from '$lib/api/drivers';
+import { getTrips } from '$lib/api/trips';
 import { browser } from '$app/environment';
 
 export const ssr = false;
@@ -8,7 +9,7 @@ export const csr = true;
 
 export const load = (async ({ params, fetch, parent }) => {
   if (!browser) {
-    return { driver: null };
+    return { driver: null, trips: [] };
   }
 
   try {
@@ -24,8 +25,15 @@ export const load = (async ({ params, fetch, parent }) => {
       });
     };
 
-    const driver = await getDriver(params.id, customFetch);
-    return { driver };
+    const [driver, tripsResponse] = await Promise.all([
+      getDriver(params.id, customFetch),
+      getTrips(customFetch, undefined, params.id)
+    ]);
+
+    return { 
+      driver,
+      trips: tripsResponse.items
+    };
   } catch (err) {
     console.error('Failed to load driver:', err);
     
@@ -33,7 +41,7 @@ export const load = (async ({ params, fetch, parent }) => {
       if (browser) {
         window.location.href = '/login';
       }
-      return { driver: null };
+      return { driver: null, trips: [] };
     }
     
     throw error(err instanceof Error && err.message.includes('404') ? 404 : 500, {
