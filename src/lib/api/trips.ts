@@ -75,10 +75,16 @@ interface FinishTripRequest {
   arrival_time: string;
 }
 
-export async function getTrips(fetchFn: typeof fetch = fetch): Promise<ApiResponse<Trip>> {
+export async function getTrips(
+  fetchFn: typeof fetch = fetch,
+  truckId?: string
+): Promise<ApiResponse<Trip>> {
   try {
-    const response = await fetchApi<Trip>('/trips', fetchFn);
-
+    const endpoint = truckId 
+      ? `/trips?truckID=${truckId}`
+      : '/trips';
+      
+    const response = await fetchApi<Trip>(endpoint, fetchFn);
     return response;
   } catch (err) {
     console.error('[getTrips] Error details:', {
