@@ -24,3 +24,6 @@ vite.config.ts.timestamp-*
 
 /static/sample_data.txt
 /static/form_data.txt
+
+# Instructions
+instructions.md
