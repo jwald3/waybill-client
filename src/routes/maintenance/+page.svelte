@@ -9,6 +9,7 @@
   import type { PageData } from './$types';
   import Pagination from '$lib/components/Pagination.svelte';
   import HomepageSummaryCard from '$lib/components/HomepageSummaryCard.svelte';
+  import { MAINTENANCE_SERVICE_TYPES, type MaintenanceServiceType } from '$lib/types/maintenance';
 
   export let data: PageData;
 
@@ -20,15 +21,13 @@
   // Make stats calculation reactive based on maintenance data
   $: stats = maintenanceLogs ? {
     routine: maintenanceLogs.filter(r => r.service_type === 'ROUTINE_MAINTENANCE').length,
-    repair: maintenanceLogs.filter(r => r.service_type === 'REPAIR').length,
-    emergency: maintenanceLogs.filter(r => r.service_type === 'EMERGENCY').length,
+    repair: maintenanceLogs.filter(r => r.service_type === 'EMERGENCY_REPAIR').length,
     totalCost: formatLargeNumber(
       maintenanceLogs.reduce((sum, record) => sum + record.cost, 0)
     )
   } : {
     routine: 0,
     repair: 0,
-    emergency: 0,
     totalCost: formatLargeNumber(0)
   };
 
@@ -38,12 +37,12 @@
 
   // Search and filter state
   let searchQuery = '';
-  let selectedServiceType: string = 'ALL';
+  let selectedServiceType: 'ALL' | MaintenanceServiceType = 'ALL';
   let sortField: 'date' | 'cost' | 'truck_number' = 'date';
   let sortDirection: 'asc' | 'desc' = 'desc';
 
   // Service type options
-  const serviceTypes = ['ALL', 'ROUTINE_MAINTENANCE', 'REPAIR', 'EMERGENCY'];
+  const serviceTypes = ['ALL', ...MAINTENANCE_SERVICE_TYPES];
 
   function formatServiceTypeLabel(type: string): string {
     if (type === 'ALL') return 'All Types';
@@ -156,15 +155,9 @@
           subtitle="Services"
         />
         <HomepageSummaryCard
-          icon={icons.incidents}
-          title="Repairs"
-          value={stats.repair}
-          subtitle="Active repairs"
-        />
-        <HomepageSummaryCard
           icon={icons.maintenance}
-          title="Emergency Services"
-          value={stats.emergency}
+          title="Emergency Repairs"
+          value={stats.repair}
           subtitle="Critical issues"
         />
       </div>
@@ -180,7 +173,7 @@
           addNewHref="/maintenance/new"
           addNewLabel="Add Maintenance Log"
           onSearch={(value) => searchQuery = value}
-          onFilterChange={(value) => selectedServiceType = value}
+          onFilterChange={(value) => selectedServiceType = value as 'ALL' | MaintenanceServiceType}
           onSort={handleSort}
         />
 
