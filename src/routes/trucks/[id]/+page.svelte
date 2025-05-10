@@ -14,6 +14,10 @@
   import TruckStatusModal from '$lib/components/TruckStatusModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
   import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
   
   let isNavExpanded = true;
   
@@ -30,7 +34,23 @@
     { id: 'documents', label: 'Documents', icon: icons.document }
   ];
 
+  // Get initial tab from URL hash or default to 'overview'
   let activeTab = 'overview';
+  
+  onMount(() => {
+    // Get initial tab from URL hash on load
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  // Update URL when tab changes
+  $: if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 
   function openUpdateStatus() {
     if (!truck || truck.status === 'RETIRED') {
