@@ -12,6 +12,10 @@
   } from '$lib/api/drivers';
   import DriverStatusModal from '$lib/components/DriverStatusModal.svelte';
   import StatusBadge from '$lib/components/StatusBadge.svelte';
+  import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
 
   let isNavExpanded = true;
 
@@ -20,6 +24,27 @@
 
   let isUpdateStatusModalOpen = false;
   let currentDriverStatus: EmploymentStatus | null = null;
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.drivers },
+    { id: 'trips', label: 'Trip History', icon: icons.route },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
+
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 
   function openUpdateStatus() {
     if (!driver || !['ACTIVE', 'SUSPENDED'].includes(driver.employment_status)) {
@@ -138,78 +163,94 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Personal Information" icon={icons.drivers}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Full Name</span>
-                <span class="resource-page-detail-value highlight">{driver.first_name} {driver.last_name}</span>
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Personal Information" icon={icons.drivers}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Full Name</span>
+                    <span class="resource-page-detail-value highlight">{driver.first_name} {driver.last_name}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Date of Birth</span>
+                    <span class="resource-page-detail-value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Email</span>
+                    <span class="resource-page-detail-value mono">{driver.email}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Phone</span>
+                    <span class="resource-page-detail-value mono">{driver.phone}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Date of Birth</span>
-                <span class="resource-page-detail-value">{formatDate(driver.dob)} <span class="sub-value">({calculateAge(driver.dob)} years)</span></span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Email</span>
-                <span class="resource-page-detail-value mono">{driver.email}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Phone</span>
-                <span class="resource-page-detail-value mono">{driver.phone}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="License Information" icon={icons.notes}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">License Number</span>
-                <span class="resource-page-detail-value highlight mono">{driver.license_number}</span>
+            <Card title="License Information" icon={icons.notes}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">License Number</span>
+                    <span class="resource-page-detail-value highlight mono">{driver.license_number}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">State</span>
+                    <span class="resource-page-detail-value">{driver.license_state}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Expiration Date</span>
+                    <span class="resource-page-detail-value">{formatDate(driver.license_expiration)}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">State</span>
-                <span class="resource-page-detail-value">{driver.license_state}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Expiration Date</span>
-                <span class="resource-page-detail-value">{formatDate(driver.license_expiration)}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Contact Information" icon={icons.facilities}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item full-width">
-                <span class="resource-page-detail-label">Street Address</span>
-                <span class="resource-page-detail-value">{driver.address.street}</span>
+            <Card title="Contact Information" icon={icons.facilities}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item full-width">
+                    <span class="resource-page-detail-label">Street Address</span>
+                    <span class="resource-page-detail-value">{driver.address.street}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">City</span>
+                    <span class="resource-page-detail-value">{driver.address.city}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">State</span>
+                    <span class="resource-page-detail-value">{driver.address.state}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">ZIP Code</span>
+                    <span class="resource-page-detail-value mono">{driver.address.zip}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">City</span>
-                <span class="resource-page-detail-value">{driver.address.city}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">State</span>
-                <span class="resource-page-detail-value">{driver.address.state}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">ZIP Code</span>
-                <span class="resource-page-detail-value mono">{driver.address.zip}</span>
-              </div>
+            </Card>
+          </div>
+        {:else if activeTab === 'trips'}
+          <div class="trips-history">
+            <div class="empty-state">
+              <p>Trip history coming soon.</p>
             </div>
           </div>
-        </Card>
-      </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
+            </div>
+          </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 </Layout>
@@ -317,6 +358,19 @@
     align-items: center;
   }
 
+  .trips-history,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
+  }
 
   @media (max-width: 480px) {
     .header-controls {
