@@ -4,11 +4,36 @@
   import { icons } from '$lib/icons';
   import { formatCurrency, formatDate } from '$lib/utils/format';
   import type { MaintenanceLog } from '$lib/api/maintenance';
+  import TabGroup from '$lib/components/TabGroup.svelte';
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { goto } from '$app/navigation';
   
   let isNavExpanded = true;
   
   export let data;
   const maintenance: MaintenanceLog | null = data.maintenance ?? null;
+
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: icons.maintenance },
+    { id: 'parts', label: 'Parts & Labor', icon: icons.settings },
+    { id: 'documents', label: 'Documents', icon: icons.document }
+  ];
+
+  let activeTab = 'overview';
+
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash && tabs.some(tab => tab.id === hash)) {
+      activeTab = hash;
+    }
+  });
+
+  if (browser) {
+    const url = new URL(window.location.href);
+    url.hash = activeTab;
+    goto(url.toString(), { replaceState: true });
+  }
 
   function formatServiceType(type: string): string {
     return type.split('_')
@@ -82,78 +107,94 @@
         </div>
       </div>
 
-      <div class="resource-page-details-grid">
-        <Card title="Service Information" icon={icons.maintenance}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Service Date</span>
-                <span class="resource-page-detail-value highlight">{formatDate(maintenance.date)}</span>
+      <TabGroup {tabs} bind:activeTab>
+        {#if activeTab === 'overview'}
+          <div class="resource-page-details-grid">
+            <Card title="Service Information" icon={icons.maintenance}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Service Date</span>
+                    <span class="resource-page-detail-value highlight">{formatDate(maintenance.date)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Service Type</span>
+                    <span class="resource-page-detail-value">{formatServiceType(maintenance.service_type)}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Mechanic</span>
+                    <span class="resource-page-detail-value">{maintenance.mechanic}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Location</span>
+                    <span class="resource-page-detail-value">{maintenance.location}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item full-width">
+                    <span class="resource-page-detail-label">Service Notes</span>
+                    <span class="resource-page-detail-value notes">{maintenance.notes}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Service Type</span>
-                <span class="resource-page-detail-value">{formatServiceType(maintenance.service_type)}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Mechanic</span>
-                <span class="resource-page-detail-value">{maintenance.mechanic}</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Location</span>
-                <span class="resource-page-detail-value">{maintenance.location}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item full-width">
-                <span class="resource-page-detail-label">Service Notes</span>
-                <span class="resource-page-detail-value notes">{maintenance.notes}</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Vehicle Information" icon={icons.truck}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Vehicle</span>
-                <span class="resource-page-detail-value highlight">{maintenance.truck.make} {maintenance.truck.model} ({maintenance.truck.year})</span>
+            <Card title="Vehicle Information" icon={icons.truck}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Vehicle</span>
+                    <span class="resource-page-detail-value highlight">{maintenance.truck.make} {maintenance.truck.model} ({maintenance.truck.year})</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">VIN</span>
+                    <span class="resource-page-detail-value mono">{maintenance.truck.vin}</span>
+                  </div>
+                </div>
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Current Mileage</span>
+                    <span class="resource-page-detail-value">{formatNumber(maintenance.truck.mileage)} miles</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">License Plate</span>
+                    <span class="resource-page-detail-value mono">{maintenance.truck.license_plate.number} ({maintenance.truck.license_plate.state})</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">VIN</span>
-                <span class="resource-page-detail-value mono">{maintenance.truck.vin}</span>
-              </div>
-            </div>
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Current Mileage</span>
-                <span class="resource-page-detail-value">{formatNumber(maintenance.truck.mileage)} miles</span>
-              </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">License Plate</span>
-                <span class="resource-page-detail-value mono">{maintenance.truck.license_plate.number} ({maintenance.truck.license_plate.state})</span>
-              </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Record Details" icon={icons.chart}>
-          <div class="resource-page-detail-group">
-            <div class="resource-page-detail-row">
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Created</span>
-                <span class="resource-page-detail-value">{formatDate(maintenance.created_at)}</span>
+            <Card title="Record Details" icon={icons.chart}>
+              <div class="resource-page-detail-group">
+                <div class="resource-page-detail-row">
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Created</span>
+                    <span class="resource-page-detail-value">{formatDate(maintenance.created_at)}</span>
+                  </div>
+                  <div class="resource-page-detail-item">
+                    <span class="resource-page-detail-label">Last Updated</span>
+                    <span class="resource-page-detail-value">{formatDate(maintenance.updated_at)}</span>
+                  </div>
+                </div>
               </div>
-              <div class="resource-page-detail-item">
-                <span class="resource-page-detail-label">Last Updated</span>
-                <span class="resource-page-detail-value">{formatDate(maintenance.updated_at)}</span>
-              </div>
+            </Card>
+          </div>
+        {:else if activeTab === 'parts'}
+          <div class="parts-section">
+            <div class="empty-state">
+              <p>Parts and labor details coming soon.</p>
             </div>
           </div>
-        </Card>
-      </div>
+        {:else if activeTab === 'documents'}
+          <div class="documents">
+            <div class="empty-state">
+              <p>Document management coming soon.</p>
+            </div>
+          </div>
+        {/if}
+      </TabGroup>
     {/if}
   </div>
 </Layout>
@@ -329,5 +370,19 @@
       width: 100%;
       justify-content: center;
     }
+  }
+
+  .parts-section,
+  .documents {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-secondary);
   }
 </style> 
