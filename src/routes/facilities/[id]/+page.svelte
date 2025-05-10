@@ -17,7 +17,6 @@
   const tabs = [
     { id: 'overview', label: 'Overview', icon: icons.facilities },
     { id: 'inventory', label: 'Inventory', icon: icons.box },
-    { id: 'maintenance', label: 'Maintenance', icon: icons.maintenance },
     { id: 'documents', label: 'Documents', icon: icons.document }
   ];
 
